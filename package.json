@@ -1,0 +1,19 @@
+{
+  "name": "project2",
+  "version": "1.0.0",
+  "description": "resturant bucket list ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidgeht/untitled-project2.git"
+  },
+  "author": "David, Michael, Peng, Kirill",
+  "license": "MIT ",
+  "bugs": {
+    "url": "https://github.com/davidgeht/untitled-project2/issues"
+  },
+  "homepage": "https://github.com/davidgeht/untitled-project2#readme"
+}
