@@ -2,28 +2,29 @@
 
 const express = require("express");
 const path = require("path");
+const isAuthenticated = require("../isAuthenticated");
 
 
 var htmlRoutes = express.Router();
 
 htmlRoutes.get('/', function(req, res, next){
-    if (!req.body.user) {
-        res.redirect('/login');
-    }
-    else {res.redirect('/main')}
-    
+    res.redirect('/main')
 });
 
 htmlRoutes.get('/login', function(req, res, next){
-    res.send('LOGIN PAGE')
+    let loginPage = path.join(__dirname, "/public/views/login.html");
+    res.send(loginPage);
 });
 
 htmlRoutes.get('/signup', function(req, res, next){
-    res.send('SIGNUP PAGE')
+    let signupPage = path.join(__dirname, "/public/views/signup.html");
+    res.send(signupPage);
 });
 
-htmlRoutes.get('/main', function(req, res, next){
-    res.send('MAIN PAGE')
+htmlRoutes.get('/main', isAuthenticated(req, res, next), function(req, res, next){
+    let homeObj = {};
+    res.render('home', homeObj);
+    //res.send('MAIN PAGE');
 });
 
 htmlRoutes.get('/api/login', function(req, res, next){
