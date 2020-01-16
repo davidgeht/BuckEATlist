@@ -8,20 +8,20 @@ const isAuthenticated = require("../isAuthenticated");
 var htmlRoutes = express.Router();
 
 htmlRoutes.get('/', function(req, res, next){
-    res.redirect('/main')
+    res.redirect('/home')
 });
 
 htmlRoutes.get('/login', function(req, res, next){
-    let loginPage = path.join(__dirname, "/public/views/login.html");
-    res.send(loginPage);
+    let loginPage = path.join(__dirname, "../../public/views/login.html");
+    res.sendFile(loginPage);
 });
 
 htmlRoutes.get('/signup', function(req, res, next){
-    let signupPage = path.join(__dirname, "/public/views/signup.html");
-    res.send(signupPage);
+    let signupPage = path.join(__dirname, "../../public/views/signup.html");
+    res.sendFile(signupPage);
 });
 
-htmlRoutes.get('/main', isAuthenticated(req, res, next), function(req, res, next){
+htmlRoutes.get('/home', isAuthenticated, function(req, res, next){
     let homeObj = {};
     res.render('home', homeObj);
     //res.send('MAIN PAGE');
