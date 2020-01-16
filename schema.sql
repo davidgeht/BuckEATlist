@@ -1,0 +1,88 @@
+DROP DATABASE IF EXISTS et85mzsa1tojmca9;
+
+CREATE DATABASE et85mzsa1tojmca9;
+
+USE et85mzsa1tojmca9;
+
+CREATE TABLE Users (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  username varchar(255),
+  encypted_pw varchar(255),
+  emailaddress varchar(255),
+  firstname varchar(255),
+  lastname varchar(255),
+  fullname varchar(255),
+  created_at timestamp,
+  homecity_id int
+);
+
+CREATE TABLE Cities (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar(255),
+  province_id int,
+  created_at timestamp
+);
+
+CREATE TABLE Countries (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar(255),
+  continent_name varchar(255),
+  currency varchar(255),
+  created_at timestamp
+);
+
+CREATE TABLE Provinces (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar(255),
+  country_id int,
+  created_at timestamp
+);
+
+CREATE TABLE Bucketlist (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  user_id int,
+  rest_id int,
+  visited boolean
+);
+
+CREATE TABLE Resturant (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  name varchar(255),
+  yelp_id int,
+  rating int,
+  price int,
+  lang int,
+  lat int,
+  cuisine varchar(255),
+  menu varchar(255),
+  city_id int,
+  address varchar(255),
+  cost_for_2 int,
+  website varchar(255),
+  review_count int,
+  hoursOfOp varchar(255),
+  highlights varchar(255)
+);
+
+CREATE TABLE Image (
+  user_id int,
+  rest_id int,
+  created_at timestamp,
+  img_location varchar(255)
+);
+
+ALTER TABLE Users ADD FOREIGN KEY (homecity_id) REFERENCES Cities (id);
+
+ALTER TABLE Provinces ADD FOREIGN KEY (country_id) REFERENCES Countries (id);
+
+ALTER TABLE Cities ADD FOREIGN KEY (province_id) REFERENCES Provinces (id);
+
+ALTER TABLE Bucketlist ADD FOREIGN KEY (user_id) REFERENCES Users (id);
+
+ALTER TABLE Bucketlist ADD FOREIGN KEY (rest_id) REFERENCES Resturant (id);
+
+ALTER TABLE Resturant ADD FOREIGN KEY (city_id) REFERENCES Cities (id);
+
+ALTER TABLE Image ADD FOREIGN KEY (rest_id) REFERENCES Resturant (id);
+
+ALTER TABLE Image ADD FOREIGN KEY (user_id) REFERENCES Users (id);
