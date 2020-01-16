@@ -21,3 +21,9 @@ header.main{
     background-color: var(--btn-color-submit);
     color: white;
 }
+header logo{
+    padding-left: 20px;
+}
+header .profile{
+    padding-right: 10px;
+}
