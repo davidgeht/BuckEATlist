@@ -1,59 +1,101 @@
 const dotenv = require('dotenv').config();
-var zomato = require('zomato-api');
+const zomato = require('zomato-api');
 const api = process.env.apiKey;
-var client = zomato({
-    userKey: api
-});
-
-//search nearby restaurants//
-
-client.getGeocode({lat: 49.267941, lon: -123.247360})
-  .then(res => console.log(res.nearby_restaurants))
-  .catch(err => console.log(err));
-
-//search by location id, location type and establishment//
-
-client.search({
-    entity_id:"36932",//location id
-    entity_type:"group",//define the type of the location
-    establishment_type : "" //estblishment id obtained from establishments call
-}).then(res => console.log(res.restaurants))
-.catch(err => console.log(err));
-
-//search by cuisines type, id and location//
-
-client.search({
-    entity_id:"36932",//location id
-    entity_type:"group",//define the type of the location
-    cuisines: "55"  //list of cuisine id's or type separated by comma
-}).then(res => console.log(res.restaurants))
-.catch(err => console.log(err));
+const client = zomato({
+        userKey: api
+    })
 
 
-//search by cities to get city id//
-
-
-client.getCities({
-    q:"London", //query by city name
-    }).then(res => console.log(res.location_suggestions))
-    .catch(err => console.log(err));
-
-
-//search by name of the restaurant//
-
-client.search({
-    q:"Cafe", //search by the keyword of the restaurant
-}).then(res => console.log(res.restaurants))
-.catch(err => console.log(err));
-
-//search by id of the restaurant to get detail//
-
-client.getRestaurant({
-    res_id:"9186" // id of restaurant whose details are requested
-    }, function(err, result){
-        if(!err){
-          console.log(result);
-        }else {
-          console.log(err);
+class Zomato {
+        constructor(){
+            this.apiKey = api;
+            this.client = client;
         }
-    });
+        async getCitiesByStr(str) {
+            try {
+                res = await this.client.getCities({
+                    q:str, //query by city name
+                    });
+                return res.location_suggestions;
+            } catch (err) {
+                throw 'Error calling API: '+err;
+            }
+        }
+
+        //search nearby restaurants//
+
+        async getGeocode(num, num) {
+            try {
+                res = await this.client.getGeocode({
+                    lat:num,
+                    lon:num //query by geocode
+                    });
+                return res.nearby_restaurants;
+            } catch (err) {
+                throw 'Error calling API: '+err;
+            }
+        }
+
+        //search by location id, location type and establishment//
+
+
+        async search(str,str,str) {
+            try {
+                res = await this.client.search({
+                    entity_id:str,//location id
+                    entity_type:str,//define the type of the location
+                    establishment_type:str //estblishment id obtained from establishments call
+                    });
+                return res.restaurants;
+            } catch (err) {
+                throw 'Error calling API: '+err;
+            }
+        }
+
+        //search by cuisines type, id and location//
+   
+
+        async search(str, str, str) {
+            try {
+                res = await this.client.search({
+                    entity_id:str,//location id
+                    entity_type:str,//define the type of the location
+                    cuisines:str  //list of cuisine id's or type separated by comma
+                    });
+                return res.restaurants;
+            } catch (err) {
+                throw 'Error calling API: '+err;
+            }
+        }
+
+
+        //search by id of the restaurant to get detail//
+
+       
+        async getRestaurant(str) {
+            try {
+                res = await this.client.getRestaurant({
+                        res_id:str // id of restaurant whose details are requested
+                    });
+                return res;
+            } catch (err) {
+                throw 'Error calling API: '+err;
+            }
+        }
+
+        //search by name of the restaurant//
+  
+
+        async search(str) {
+            try {
+                res = await this.client.search({
+                    q:str //keyword to search restaurant
+                    });
+                return res.restaurants;
+            } catch (err) {
+                throw 'Error calling API: '+err;
+            }
+        }
+
+    }
+    module.exports = Zomato;
