@@ -2,14 +2,14 @@
 
 const express = require("express");
 const path = require("path");
-const User = require("TBD"); // TBD the model files
-const API = require("TBD") // TBD for API file
-const City = require("TBD"); // TBD the city file
-const Restaurant = require("TBD"); // TBD the model files
-
-let user = new User();
-let city = new City();
-let api = new API();
+//const User = require("TBD"); // TBD the model files
+const Zomato = require("../../api/zomato") // TBD for API file
+//const City = require("TBD"); // TBD the city file
+//const Restaurant = require("TBD"); // TBD the model files
+const passport = require("passport");
+//let user = new User();
+//let city = new City();
+let zomato = new Zomato();
 
 let checkUserExists = function(req, res, next){
     let email = req.body.email;
@@ -44,7 +44,7 @@ apiRoutes.get('/api/search/cities', async function(req, res, next){
 
 apiRoutes.get('/api/search/city', function(req, res, next){
     let searchSrt = req.body.searchStr;
-    let result = api.searchCity(searchSrt);
+    let result = zomato.searchCity(searchSrt);
 
 })
 
@@ -52,7 +52,7 @@ apiRoutes.get('/api/search/restaurants', function(req, res, next){
     
 })
 
-apiRoutes.get('/api/users/:id/buckeatlist/coords', function(req, res, next){
+apiRoutes.get('/api/users/:id/buckeatlist/', function(req, res, next){
     let id = req.params.id;
     let allRest = {};
     allRest = user.getBuckeatlistExt(id);
@@ -61,21 +61,25 @@ apiRoutes.get('/api/users/:id/buckeatlist/coords', function(req, res, next){
     res.json(coords);
 })
 
-apiRoutes.get('/api/search/location',function(req, res){
+apiRoutes.post('/api/search/location', async function(req, res){
+    //console.log(req);
     let searchStr = req.body.searchStr;
-    let allLocs = api.searchLocation(searchStr);
-    let allLocsSend = [];
-    for (i of allLocs){
-        let loc = {};
-        allLocsSend.push(loc);
-    }
-    res.json(allLocsSend);
+    console.log('Search is for ', searchStr);
+    let allLocs = await zomato.searchLocations(searchStr);
+    console.log('AllLocs');
+    console.log(allLocs);
+    // let allLocsSend = [];
+    // for (i of allLocs){
+    //     let loc = {};
+    //     allLocsSend.push(loc);
+    // }
+    res.json(allLocs);
 })
 
-apiRoutes.get('/api/search/:locId/:cuisineId',function(req, res){
+apiRoutes.get('/api/search/:locId/:cuisineId', async function(req, res){
     let locId = req.params.locId;
     let cuisineId = req.params.cuisineId;
-    let restaurants = api.searchRestaurants(locId, cuisineId);
+    let restaurants = await zomato.searchRestaurants(locId, cuisineId);
     res.json(restaurants);
 })
 
