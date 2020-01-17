@@ -23,6 +23,9 @@ htmlRoutes.get('/signup', function(req, res, next){
 
 htmlRoutes.get('/home', isAuthenticated, function(req, res, next){
     let homeObj = {};
+    homeObj.buckeatList = [];
+    homeObj.user = {};
+    homeObj.title = '';
     res.render('home', homeObj);
     //res.send('MAIN PAGE');
 });

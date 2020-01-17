@@ -26,15 +26,15 @@ apiRoutes.post('/api/login', passport.authenticate("local"), function(req, res){
     res.json(req.user);
 })
 
-apiRoutes.post('/api/signup', checkUserExists, function(req, res, next){
+apiRoutes.post('/api/signup', checkUserExists, async function(req, res, next){
     let {firstName, lastName, email, password} = req.body;
     password = password; //hash the password before saving;
-    user.addNew(firstName, lastName, email, password);
+    await user.addNew(firstName, lastName, email, password);
     res.status(200).send('User created successfully');
 })
 
-apiRoutes.get('/api/search/cities', function(req, res, next){
-    let cities = city.findLike(req.body.city);
+apiRoutes.get('/api/search/cities', async function(req, res, next){
+    let cities = await city.findLike(req.body.city);
     if (!cities) {
         res.send("No cities found");
     } else {
