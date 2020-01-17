@@ -1,6 +1,6 @@
 //fix margin for the full job column
 //$("#mapColumn").css("margin-right",$("#listColumn").css("width"));
-
+$("#map").css("height",$(window).innerHeight()-$("#navbar").outerHeight(true)-$("#mapColumn .navbar").outerHeight(true)-10); 
 //set job card column height
 $("#listColumn").css("height",$(document).innerHeight() - $("#navbar").outerHeight(true));
 
@@ -15,9 +15,9 @@ $(window).on('resize',function(){
 
 $(document).ready(async function (){
     
-    let id = await $.get('api/user').id; //better way to get logged in user?
+    let id = await $.get('/api/user').id; //better way to get logged in user?
 
-    $.get('api/users/{id}/buckeatlist/')
+    $.get('/api/users/{id}/buckeatlist/')
     .then(data=>{
         loadMapMarkers(data);
     }).catch(err=>{
