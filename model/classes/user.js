@@ -1,6 +1,5 @@
 const connection = require('../../config/connection');
 
-
 class User {
     constructor(){
         this.connection = connection
@@ -10,19 +9,18 @@ class User {
             let query =`SELECT * FROM Users`;
             this.connection.query(query,(err,res)=>{
                 if (err) throw err;
-                //connection.end();
                 resolve(res);
             });
         });
     };
-   getUserByID(id){
+
+     getUserByID(id){
         return new Promise((resolve,reject)=>{
             let query=`SELECT U.id, username, encrypted_pw, emailaddress, 
-            fullname, homecity_id from Users as u where U.id = ${id};`;
+            fullname, homecity_id from Users as u where U.id = '${id}';`;
 
             this.connection.query(query, (err,res)=> {
                 if(err) throw err;
-                //this.connection.end();
                 resolve(res);
             });
         });
@@ -50,19 +48,18 @@ class User {
 
             this.connection.query(query,(err,res)=>{
                 if (err) reject(err);
-                //this.connection.end();
                 resolve(res);
             })
         })
     }
-   emailExists(email){
+
+     emailExists(email){
         return new Promise((resolve, reject)=>{
             let query=`SELECT * FROM Users WHERE emailaddress = '${email}';`
 
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
                 console.log('res = ', res);
-                //this.connection.end();
                 let response;
                 if(res.length >= 1){
                     response = true
@@ -74,17 +71,14 @@ class User {
         })
     }
 
-    verifyCredentials(login,password){
-        return new Promise((resolve, reject)=>{
-            let query=`SELECT * FROM USER WHERE username = ${login} AND encrypted_ps = ${password};`;
-            this.connection.query(query,(err,res)=>{
-                if (err) throw err;
-                //this.connection.end();
-                if(res === !null){
-                    return true;
-                }else{
-                    return false; };  
+    getUserByEmail(email){
+        return new Promise((resolve,reject)=>{
+            let query=`SELECT * FROM USER WHERE emailaddress='${email}';`;
 
+            this.connection.query(query,(err,res)=>{
+                if(err) throw err;
+                this.connection.end();
+                resolve(res)
             })
         })
     }
