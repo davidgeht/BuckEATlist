@@ -16,7 +16,7 @@ $(document).ready(function(){
         }
 
         let loginObj = {
-            email: email,
+            username: email,
             password: pw
         };
         

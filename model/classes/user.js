@@ -1,71 +1,85 @@
+const connection = require('../../config/connection');
+
 
 class User {
-    constructor(id, username,encrypted_pw,emailaddress, firstname,lastname, fullname, homecity_id){
-        this.id=id,
-        this.username=username,
-        this.encrypted_pw=encrypted_pw,
-        this.emailaddress=emailaddress,
-        this.firstname=firstname,
-        this.lastname=lastname,
-        this.fullname=fullname,
-        this.homecity_id=homecity_id
+    constructor(){
+        this.connection = connection
     }
-    async getAllUsers(){
+    getAllUsers(){
         return new Promise((resolve,reject)=>{
             let query =`SELECT * FROM Users`;
             this.connection.query(query,(err,res)=>{
                 if (err) throw err;
-                connection.end();
+                //connection.end();
                 resolve(res);
             });
         });
     };
-   async getUserByID(id){
+   getUserByID(id){
         return new Promise((resolve,reject)=>{
             let query=`SELECT U.id, username, encrypted_pw, emailaddress, 
             fullname, homecity_id from Users as u where U.id = ${id};`;
 
             this.connection.query(query, (err,res)=> {
                 if(err) throw err;
-                this.connection.end();
+                //this.connection.end();
                 resolve(res);
             });
         });
     }
-    async addNew(username,firstName, lastName, email, password){
+
+    getUserByEmail(email){
+        return new Promise((resolve,reject)=>{
+            let query=`SELECT U.id, username, encypted_pw, emailaddress, 
+            fullname, homecity_id from Users as u where U.username = '${email}';`;
+
+            this.connection.query(query, (err,res)=> {
+                if(err) throw err;
+                //this.connection.end();
+                resolve(res);
+            });
+        });
+    }
+
+
+    addNew(firstName, lastName, email, password){
         return new Promise((resolve, reject)=>{
 
-            let query =`INSERT into Users(username, encrypted_pw, emailaddress, firstname, lastname) 
-            VALUES ('${username}','${password}','${email}','${firstName}','${lastName}');`;
+            let query =`INSERT into Users(username, encypted_pw, emailaddress, firstname, lastname) 
+            VALUES ('${email}','${password}','${email}','${firstName}','${lastName}');`;
 
             this.connection.query(query,(err,res)=>{
-                if (err) throw err;
-                this.connection.end();
+                if (err) reject(err);
+                //this.connection.end();
                 resolve(res);
-
             })
         })
     }
-   async emailExists(email){
+   emailExists(email){
         return new Promise((resolve, reject)=>{
-            let query=`SELECT (*) FROM Users WHERE emailaddress = ${email};`
+            let query=`SELECT * FROM Users WHERE emailaddress = '${email}';`
 
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
-                this.connection.end();
-                if(res === !null){
-                    return true
-                }else{false};
-                resolve(res)
+                console.log('res = ', res);
+                //this.connection.end();
+                let response;
+                if(res.length >= 1){
+                    response = true
+                }else{
+                    response = false
+                };
+                resolve(response)
             })
         })
     }
-    async verifyCredentials(login,password){
+
+    verifyCredentials(login,password){
         return new Promise((resolve, reject)=>{
-            let query=`SELECT (*) FROM USER WHERE username = ${login} AND encrypted_ps = ${password};`;
+            let query=`SELECT * FROM USER WHERE username = ${login} AND encrypted_ps = ${password};`;
             this.connection.query(query,(err,res)=>{
                 if (err) throw err;
-                this.connection.end();
+                //this.connection.end();
                 if(res === !null){
                     return true;
                 }else{

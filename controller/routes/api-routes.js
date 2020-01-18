@@ -1,25 +1,40 @@
 // Controller code
 
 const express = require("express");
+const bcrypt = require("bcryptjs");
 const path = require("path");
-//const User = require("TBD"); // TBD the model files
+const User = require("../../model/classes/user"); // TBD the model files
 const Zomato = require("../../api/zomato"); // TBD for API file
 const Yelp = require("../../api/yelp");
 //const City = require("TBD"); // TBD the city file
 //const Restaurant = require("TBD"); // TBD the model files
-const passport = require("passport");
-//let user = new User();
+const passport = require("../../config/authConfigLocal");
+const saltRounds = 10;
+let user = new User();
 //let city = new City();
 let zomato = new Zomato();
 let yelp = new Yelp();
 
 let checkUserExists = function(req, res, next){
     let email = req.body.email;
-    if (!user.emailExists(email)) {
-        return next();
-    } else {
-        res.send('ERROR: User with this email already exists');
-    }
+    let emailExists = user.emailExists(email);
+    emailExists.then(function(response){
+        console.log('response = ',response);
+        if (!response) {
+            next();
+        } else {
+            console.log('sending error');
+            res.status('400').send('ERROR: User with this email already exists');
+        }
+    })
+    .catch(err => {
+        throw err
+    })
+}
+
+let hash = async function(password) {
+    let hash = await bcrypt.hash(password, saltRounds);
+    return hash;
 }
 
 let test = async function(){
@@ -33,14 +48,16 @@ let test = async function(){
 var apiRoutes = express.Router();
 
 apiRoutes.post('/api/login', passport.authenticate("local"), function(req, res){
-    res.json(req.user);
+    res.status(200).send('User authenticated successfully');
 })
 
-apiRoutes.post('/api/signup', checkUserExists, async function(req, res, next){
+apiRoutes.post('/api/signup', checkUserExists, async function(req, res){
+    console.log('ready to insert');
     let {firstName, lastName, email, password} = req.body;
-    password = password; //hash the password before saving;
-    await user.addNew(firstName, lastName, email, password);
-    res.status(200).send('User created successfully');
+    let hashed = await hash(password); //hash the password before saving;
+    user.addNew(firstName, lastName, email, hashed)
+    .then(function(response) {res.send('200')})
+    .catch(function(err) {res.status(500).send('There was an error creating user: '+err)});
 })
 
 apiRoutes.get('/api/search/cities', async function(req, res, next){
@@ -65,7 +82,7 @@ apiRoutes.get('/api/search/restaurants', function(req, res, next){
 apiRoutes.get('/api/users/:id/buckeatlist/', function(req, res, next){
     let id = req.params.id;
     let allRest = {};
-    allRest = user.getBuckeatlistExt(id);
+    //allRest = user.getBuckeatlistExt(id);
     let coords = {};
     // TBD get coordinates only from the result
     res.json(coords);
