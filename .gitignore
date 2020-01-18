@@ -102,3 +102,8 @@ dist
 
 # TernJS port file
 .tern-port
+
+#dev testing server file for UI
+testserver.js
+# random mac file
+.DS_Store

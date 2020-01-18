@@ -1,0 +1,38 @@
+<link rel="stylesheet" type="text/css" href="../css/home.css"/>
+<div class="row">    
+    <div class="col" id="mapColumn">
+        <nav class="navbar navbar-expand flex-md-row justify-content-start navbar-light bg-light">
+            <div>
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active"><a class="nav-link" href="#">My buckEATlist</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/noms-map">My Noms Map</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/search">Search</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div id="map"></div>
+    </div>
+    <div class="col-md-4"id="listColumn">
+        <h3>My buckEATlist</h3>        
+        {{#each restaurants as |restaurant|}}  
+            <span>{{this}}</span>          
+            <div class="restaurantContrainer row align-items-center">                               
+                <span class="restName col">{{name}}</span>
+                <div class="d-flex flex-row">
+                    <button type="button" class="btn btn-success info" data-toggle="modal" data-target="#restInfoModal" data-yelpid="{{yelp_id}}">Info</button>
+                    <button class="btn btn-success checkoff" data-id="{{id}}">Check off list</button>
+                    <button class="btn btn-danger remove" data-id="{{id}}"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+        {{else}}
+            <span>you have no restaurants, go add some!</span>
+        {{/each}}         
+    </div>
+</div>
+<script src="../js/map.js" type="text/javascript" defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjXmP2cdd3qe_9TnbZfMldDE7_K1MtPwk&callback=initMap" defer></script>
+<script src="../js/home.js" type="text/javascript" defer></script>
+
+
+
+  
