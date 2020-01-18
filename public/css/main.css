@@ -1,0 +1,29 @@
+:root{
+    --btn-color-submit: green;
+    --bg-color-header: lightgrey;
+    --txt-color-global: #3a3a3a;
+}
+
+.row{
+    margin:0;
+}
+body {
+    color: var(--txt-color-global);
+}
+header.main{
+    padding: 10px 0;
+    background-color: var(--bg-color-header);
+    border-bottom: 3px solid gold;
+    text-align: center; 
+    margin-bottom:20px;
+}
+.btn.btn-submit{
+    background-color: var(--btn-color-submit);
+    color: white;
+}
+header logo{
+    padding-left: 20px;
+}
+header .profile{
+    padding-right: 10px;
+}

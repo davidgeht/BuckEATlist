@@ -1,26 +1,24 @@
 class Resturant {
-    constructor(id, name, zomato_id, rating, price, lang, lat, cuisine, menu, city_id, address, cost_for_2, website, review_count, hoursOfOp, highlights){
+    constructor(id, name, yelp_id, rating, price, lang, lat, cuisine, city_id, address, website, review_count){
         this.id=id,
         this.name=name,
-        this.zomato_id=zomato_id,
+        this.yelp_id=yelp_id,
         this.rating=rating,
         this.price= price,
         this.lang=lang,
+        this.lat=lat,
         this.cuisine=cuisine,
-        this.menu=menu,
         this.city_id=city_id,
         this.address=address,
-        this.cost_for_2=cost_for_2,
         this.website=website,
         this.review_count=review_count,
         this.hoursOfOp=hoursOfOp,
-        this.highlights=highlights
     }
 
-    addNew(name, zomato_id,rating, price, lang, lat, cuisine, menu, city_id, address, cost_for_2, website, review_count, hoursOfOp, highlights){
+    addNew(name,yelp_id,rating, price, lang, lat, cuisine, city_id, address, website, review_count, hoursOfOp,){
         return new Promise((resolve,reject)=>{
             let query =`INSERT INTO Resturant(name, zomato_id,rating, price, lang, lat, cuisine, menu, city_id, address, cost_for_2, website, review_count, hoursOfOp, highlights)
-            VALUES('${name}','${zomato_id}','${rating}','${price}','${lang}','${lat}','${cuisine}','${menu}','${city_id}','${address}','${cost_for_2}','${website}','${review_count}','${hoursOfOp}','${highlights}');`;
+            VALUES('${name}','${yelp_id}','${rating}','${price}','${lang}','${lat}','${cuisine}','${city_id}','${address}','${website}','${review_count}','${hoursOfOp}');`;
             connection.query(query,(err,res)=>{
                 if(err) throw err;
                 connection.end();

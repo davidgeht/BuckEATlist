@@ -47,20 +47,17 @@ CREATE TABLE Bucketlist (
 CREATE TABLE Resturant (
   id int PRIMARY KEY AUTO_INCREMENT,
   name varchar(255),
-  zomato_id int,
+  yelp_id int,
   rating int,
   price int,
   lang int,
   lat int,
   cuisine varchar(255),
-  menu varchar(255),
   city_id int,
   address varchar(255),
-  cost_for_2 int,
   website varchar(255),
   review_count int,
-  hoursOfOp varchar(255),
-  highlights varchar(255)
+  hoursOfOp varchar(255)
 );
 
 CREATE TABLE Image (

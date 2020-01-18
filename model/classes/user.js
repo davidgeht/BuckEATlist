@@ -20,7 +20,7 @@ class User {
             });
         });
     };
-    getUserByID(id){
+   async getUserByID(id){
         return new Promise((resolve,reject)=>{
             let query=`SELECT U.id, username, encrypted_pw, emailaddress, 
             fullname, homecity_id from Users as u where U.id = ${id};`;
@@ -32,7 +32,7 @@ class User {
             });
         });
     }
-    addNew(username,firstName, lastName, email, password){
+    async addNew(username,firstName, lastName, email, password){
         return new Promise((resolve, reject)=>{
 
             let query =`INSERT into Users(username, encrypted_pw, emailaddress, firstname, lastname) 
@@ -46,7 +46,7 @@ class User {
             })
         })
     }
-    emailExists(email){
+   async emailExists(email){
         return new Promise((resolve, reject)=>{
             let query=`SELECT (*) FROM Users WHERE emailaddress = ${email};`
 
@@ -60,7 +60,7 @@ class User {
             })
         })
     }
-    verifyCredentials(login,password){
+    async verifyCredentials(login,password){
         return new Promise((resolve, reject)=>{
             let query=`SELECT (*) FROM USER WHERE username = ${login} AND encrypted_ps = ${password};`;
             this.connection.query(query,(err,res)=>{
