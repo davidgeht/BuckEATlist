@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS et85mzsa1tojmca9;
+DROP DATABASE IF EXISTS buckeatlist_db ;
 
-CREATE DATABASE et85mzsa1tojmca9;
+CREATE DATABASE buckeatlist_db;
 
-USE et85mzsa1tojmca9;
+USE buckeatlist_db;
 
 CREATE TABLE Users (
   id int PRIMARY KEY AUTO_INCREMENT,
@@ -26,7 +26,6 @@ CREATE TABLE Cities (
 CREATE TABLE Countries (
   id int PRIMARY KEY AUTO_INCREMENT,
   name varchar(255),
-  continent_name varchar(255),
   currency varchar(255),
   created_at timestamp
 );
@@ -54,17 +53,15 @@ CREATE TABLE Resturant (
   lang int,
   lat int,
   cuisine varchar(255),
-  menu varchar(255),
   city_id int,
   address varchar(255),
-  cost_for_2 int,
   website varchar(255),
   review_count int,
-  hoursOfOp varchar(255),
-  highlights varchar(255)
+  hoursOfOp varchar(255)
 );
 
 CREATE TABLE Image (
+  id int PRIMARY KEY AUTO_INCREMENT,
   user_id int,
   rest_id int,
   created_at timestamp,
