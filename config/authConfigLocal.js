@@ -1,52 +1,38 @@
-var passport = require("passport");
-var LocalStrategy = require("passport-local").Strategy;
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const User = require("../model/classes/user"); //TBD
+const bcrypt = require("bcryptjs");
 
+let user = new User();
 //var db = require("../models"); TBD
 
 passport.use(new LocalStrategy(
     function(username, password, done) {
-      User.findOne({ username: username }, function (err, user) {
-        if (err) { return done(err); }
-        if ((!user) || (!user.verifyPassword(password))) { return done(null, false); } // TBD the ORM methods
-        return done(null, user);
-      });
-    }
-  ));
+      user.getUserByEmail(username)
+      .then(async function(userInfo){
+        let result;
+        if (userInfo.length < 1) {
+          result = false;
+        } else {
+          console.log(userInfo);
+          console.log(userInfo[0].encypted_pw);
+          result = await bcrypt.compare(password, userInfo[0].encypted_pw);
+          console.log(result);
+        }
+        if (!result) {
+          return done(null, false, {message: 'Incorrect email or password'});
+          } else {
+            return done(null, user);
+          }
+      })
+      .catch(function(err){
+        throw err;
+      })
+    })); 
 
 
+// TBD do I need this?
 
-passport.use(new LocalStrategy(
-  {
-    usernameField: "email"
-  },
-  function(email, password, done) {
-    // When a user tries to sign in this code runs
-    db.User.findOne({
-      where: {
-        email: email
-      }
-    }).then(function(dbUser) {
-      // If there's no user with the given email
-      if (!dbUser) {
-        return done(null, false, {
-          message: "Incorrect email."
-        });
-      }
-      // If there is a user with the given email, but the password the user gives us is incorrect
-      else if (!dbUser.validPassword(password)) {
-        return done(null, false, {
-          message: "Incorrect password."
-        });
-      }
-      // If none of the above, return the user
-      return done(null, dbUser);
-    });
-  }
-));
-
-// In order to help keep authentication state across HTTP requests,
-// Sequelize needs to serialize and deserialize the user
-// Just consider this part boilerplate needed to make it all work
 passport.serializeUser(function(user, cb) {
   cb(null, user);
 });

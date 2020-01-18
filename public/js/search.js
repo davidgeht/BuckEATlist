@@ -12,7 +12,7 @@ $("#searchForm").submit( event => {
         location: location
     };
     
-    $.post('/api/search/location',body).then(function(data){
+    $.post('/api/search/business',body).then(function(data){
         console.log(data);
         $("#results").text(JSON.stringify(data,null,2));
     });
