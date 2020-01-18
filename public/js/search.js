@@ -14,8 +14,9 @@ $("#searchForm").submit( event => {
         radius: 500    
     };
     
-    $.post('/api/search/restaurantsnearby',body).then(function(data){        
-        
-    });
+    $.post('/api/search/restaurantsnearby',body)
+    .then(function(data){        
+    
+    });     
    
 });

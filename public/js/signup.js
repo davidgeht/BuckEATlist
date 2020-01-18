@@ -1,5 +1,4 @@
 var errorMessage = "";
-
 $("#signupForm").on("submit", event => {
     event.preventDefault();
     console.log("hi");
@@ -15,7 +14,6 @@ $("#signupForm").on("submit", event => {
         alert.show();
         return;
     }        
-
     let signupObj = {
         email: email,
         password: pw,
