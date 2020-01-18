@@ -3,13 +3,15 @@
 const express = require("express");
 const path = require("path");
 //const User = require("TBD"); // TBD the model files
-const Zomato = require("../../api/zomato") // TBD for API file
+const Zomato = require("../../api/zomato"); // TBD for API file
+const Yelp = require("../../api/yelp");
 //const City = require("TBD"); // TBD the city file
 //const Restaurant = require("TBD"); // TBD the model files
 const passport = require("passport");
 //let user = new User();
 //let city = new City();
 let zomato = new Zomato();
+let yelp = new Yelp();
 
 let checkUserExists = function(req, res, next){
     let email = req.body.email;
@@ -18,6 +20,14 @@ let checkUserExists = function(req, res, next){
     } else {
         res.send('ERROR: User with this email already exists');
     }
+}
+
+let test = async function(){
+    let result1 = await zomato.searchRestaurantsByCoord(-79.413449,43.778126,100);
+    console.log('result1');
+    console.log(result1.data.restaurants);
+
+
 }
 
 var apiRoutes = express.Router();
@@ -62,18 +72,89 @@ apiRoutes.get('/api/users/:id/buckeatlist/', function(req, res, next){
 })
 
 apiRoutes.post('/api/search/location', async function(req, res){
-    //console.log(req);
-    let searchStr = req.body.searchStr;
-    console.log('Search is for ', searchStr);
-    let allLocs = await zomato.searchLocations(searchStr);
-    console.log('AllLocs');
-    console.log(allLocs);
-    // let allLocsSend = [];
-    // for (i of allLocs){
-    //     let loc = {};
-    //     allLocsSend.push(loc);
+    let searchStr = req.body.location;
+    let allCities = await zomato.searchCities(searchStr);
+    let response = [];
+    for (city of allCities){
+        let c = {
+            id: city.id,
+            name: city.name,
+            countryId: city.country_id,
+            countryName: city.country_name,
+            countryFlagUrl: city.country_flag_url,
+            stateId: city.state_id,
+            stateCode: city.state_code
+        };
+        response.push(c);
+    }
+    test();
+    res.json(response);
+})
+
+apiRoutes.post('/api/search/restaurants', async function(req, res){
+    let location = req.body.location;
+    let response = await yelp.searchRestoByLocation(location);
+    // let response = [];
+    // for (city of allCities){
+    //     let c = {
+    //         id: city.id,
+    //         name: city.name,
+    //         countryId: city.country_id,
+    //         countryName: city.country_name,
+    //         countryFlagUrl: city.country_flag_url,
+    //         stateId: city.state_id,
+    //         stateCode: city.state_code
+    //     };
+    //     response.push(c);
     // }
-    res.json(allLocs);
+    // test();
+    console.log(response.data);
+    res.json(response.data);
+})
+
+apiRoutes.post('/api/search/nearby', async function(req, res){
+    let lat = 43.77809705059161 // req.body.lat;
+    let lon = -79.41342294216157 // req.body.lon;
+    let radius = 500;
+    let response = await yelp.searchRestoByCoord(lat, lon, radius);
+    // let response = [];
+    // for (city of allCities){
+    //     let c = {
+    //         id: city.id,
+    //         name: city.name,
+    //         countryId: city.country_id,
+    //         countryName: city.country_name,
+    //         countryFlagUrl: city.country_flag_url,
+    //         stateId: city.state_id,
+    //         stateCode: city.state_code
+    //     };
+    //     response.push(c);
+    // }
+    // test();
+    console.log(response.data);
+    res.json(response.data);
+})
+
+
+apiRoutes.post('/api/search/business', async function(req, res){
+    let businessId = req.body.location // req.body.businessId;
+    let response = await yelp.getRestoDetail(businessId);
+    // let response = [];
+    // for (city of allCities){
+    //     let c = {
+    //         id: city.id,
+    //         name: city.name,
+    //         countryId: city.country_id,
+    //         countryName: city.country_name,
+    //         countryFlagUrl: city.country_flag_url,
+    //         stateId: city.state_id,
+    //         stateCode: city.state_code
+    //     };
+    //     response.push(c);
+    // }
+    // test();
+    console.log(response.data);
+    res.json(response.data);
 })
 
 apiRoutes.get('/api/search/:locId/:cuisineId', async function(req, res){
@@ -82,5 +163,7 @@ apiRoutes.get('/api/search/:locId/:cuisineId', async function(req, res){
     let restaurants = await zomato.searchRestaurants(locId, cuisineId);
     res.json(restaurants);
 })
+
+
 
 module.exports = apiRoutes;
