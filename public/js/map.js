@@ -1,17 +1,5 @@
 var map;
-var marker;
-var geoCoder;
-var latLngC;
-var defaultLat = "";
-var defaultLng = "";
 
-var mUpdateAddress = false;
-var mUpdateLatitude = false;
-var mUpdateLongitude = false;
-var mUpdateDrag = false;
-
-
-var map;
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: -34.397, lng: 150.644},
@@ -19,130 +7,138 @@ function initMap() {
     });
 }
 
+function setMarkers(restuarantList, map) {
+    let markers = [];
+    let restuarants = [];   
+    let image = {
+        //url: "/Images/office-building-marker.png"
+    };
 
-// function initialize() {   
+    if (restuarantList.length > 0) {
+        restuarants = restuarantList;
+    }    
+    
+    createMarkers(restuarants, map);
 
-//     latLngC = new google.maps.LatLng(defaultLat, defaultLng);
+    async function createMarkers(restuarants, map) {
+        for (const restuarant of restuarants) {
+            let imageSource = '';
+            let mlat = parseFloat(restuarant.coordinates.latitude);
+            let mlng = parseFloat(restuarant.coordinates.longitude);
+            let position = { lat: mlat, lng: mlng };
 
-//     var mapOptions = {
-//         center: latLngC,
-//         zoom: 18,
-//         mapTypeId: google.maps.MapTypeId.ROADMAP,
-//     };
+            let infowindow = new google.maps.InfoWindow({ minWidth: 400 });
 
-//     map = new google.maps.Map(document.getElementById('source_map'),
-// mapOptions);
+            let marker = new google.maps.Marker({
+                position: position,
+                map: map,
+                //icon: image,
+                title: restuarant.name,                
+                property_id: restuarant.id
+            });
 
-//     var marker = new google.maps.Marker({
-//         position: latLngC,
-//         map: map,
-//         draggable: true
-//     });
+            await google.maps.event.addListener(marker, 'click', (function (marker, thisRestaurant) {
 
+                return function () {
+                    //get info window content for particular restaurant
+                    if (thisRestaurant.image_url !== null) {
+                        imageSource = thisRestaurant.image_url;
+                    } else {
+                        imageSource = "";//'/Images/info_window_fallback.png';
+                    }
 
-//     var places1 = new google.maps.places.Autocomplete(document.getElementById('txtPropertyAddress'));
-//     google.maps.event.addListener(places1, 'place_changed', function () {
-//         var place1 = places1.getPlace();
+                    let categoriesStr = thisRestaurant.categories.map(e =>{                        
+                        return e.title;
+                    }).join(", ");                   
 
-//         var src_addr = place1.formatted_address;
-//         var src_lat = place1.geometry.location.lat();
-//         var src_long = place1.geometry.location.lng();
+                    let contentString =
+                    `<div class="maps-info-pane"> 
+                        <h2 class="resturant-name"> ${thisRestaurant.name}</h2>
+                        <div class="">
+                            <div class="" style="background-image: url(\'${imageSource}\')"></div>
+                            <div class="property-info">
+                                <p class="address"> ${thisRestaurant.location.address1}</p>                                
+                                <p class="">Cuisine: <strong> ${categoriesStr}</strong></p>
+                                <p class="">Price: <strong> ${thisRestaurant.price}</strong></p>
+                                <button class="btn btn-success" data-id="${thisRestaurant.yelp_id}">Show Details</button>
+                            </div>
+                        </div>
+                    </div>`;
 
-//         var mesg1 = "Address: " + src_addr;
-//         mesg1 += "\nLatitude: " + src_lat;
-//         mesg1 += "\nLongitude: " + src_long;
-//         //alert(mesg1);
+                    infowindow.setContent(contentString);
+                    infowindow.open(map, marker);
+                }
+            })(marker, restuarant));
+            markers.push(marker);
+        }     
+        
+        let listener = await google.maps.event.addListener(map, "idle", function () {
+            fitMarkersInBounds(map, markers);
+            google.maps.event.removeListener(listener);
+        });
 
-//         document.getElementById('src_lat').value = src_lat;
-//         document.getElementById('src_long').value = src_long;        
+        panToRestaurantClick(map, markers); //When restaurant div is clicked, move tha map's focus and zoom into it
+    }
+}
 
-//         $('.txtLatitude').val(src_lat);
-//         $('.txtLongitude').val(src_long);
-//     });
+function fitMarkersInBounds(map, markers) {
+    let propertiesLatLng = [];
+    let bounds = new google.maps.LatLngBounds();
+    
+    let coordArray = [];
+    
+    let latArr = coordArray.map(function (p) { return p.lat });
+    let lngArr = coordArray.map(function (p) { return p.lng });
 
-//     //Add marker upon place change
-//     //google.maps.event.addDomListener(places1, 'place_changed', addMarker);            
-//     google.maps.event.addDomListener(places1, 'place_changed', function () { addMarker(map); });
+    let minCoords = {
+        lat: Math.min.apply(null, latArr),
+        lng: Math.min.apply(null, lngArr)
+    };
+    let maxCoords = {
+        lat: Math.max.apply(null, latArr),
+        lng: Math.max.apply(null, lngArr)
+    };
 
-// }
+    bounds.extend(minCoords);
+    bounds.extend(maxCoords);
 
-// google.maps.event.addDomListener(window, 'resize', initialize);
-// google.maps.event.addDomListener(window, 'load', initialize);
+    if (markers.length === 1) {
+        map.panTo(markers[0].getPosition());
+        map.setZoom(14);
 
-// //Function to add marker upon clicking on a location in map
-// function addMarker(map) {
-//     var lat = document.getElementById('src_lat').value;
-//     var loong = document.getElementById('src_long').value;
-//     if (!lat || !loong) return;
+    } else if ($(window).width() > 550) {
+        map.fitBounds(bounds,
+            { //padding
+                top: 30,
+                left: panelWidth,
+                bottom: 10,
+                right: 10
+            });
+        map.panToBounds(bounds);
+    } else {
+        map.fitBounds(bounds);
+    }
+}
 
-//     var coordinate = new google.maps.LatLng(lat, loong);
+function panToRestaurantClick(map, markers) {
+    let elements = document.getElementsByClassName("restaurantContrainer");
 
-//     if (marker) {
-//         //if marker already was created change positon
-//         marker.setPosition(coordinate);
-//         map.setCenter(coordinate);
-//         map.setZoom(18);
+    let panelWidth = $("#listColumn").outerWidth();
+    let mapWidth = $("#map").outerWidth();
+    
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].setAttribute("markerIndex", i);
 
-//         google.maps.event.addListener(marker, 'dragend', function (x) {
-
-//             mUpdateLatitude = false;
-//             mUpdateDrag = true;
-//             mUpdateAddress = false;
-//             mUpdateLongitude = false;
-
-//             document.getElementById('src_lat').value = x.latLng.lat();
-//             document.getElementById('src_long').value = x.latLng.lng();
-//             //document.getElementById('pickup_location').innerHTML = x.latLng.lat() + ' , ' + x.latLng.lng();
-
-//             $('.txtLatitude').val(x.latLng.lat());
-//             $('.txtLongitude').val(x.latLng.lng());
-
-//             var geocoder = new google.maps.Geocoder;
-//             var infowindow = new google.maps.InfoWindow;
-//             geocodeLatLng(geocoder, map, infowindow, x.latLng.lat(), x.latLng.lng(), 'txtPropertyAddress');
-
-//             refreshValues();
-//         });
-//     }
-//     else {
-//         //create a marker
-//         marker = new google.maps.Marker({
-//             position: coordinate,
-//             map: map,
-//             draggable: true
-//         });
-//         map.setCenter(coordinate);
-//         map.setZoom(18);
-
-//         google.maps.event.addListener(marker, 'dragend', function (x) {
-
-//             mUpdateLatitude = false;
-//             mUpdateDrag = true;
-//             mUpdateAddress = false;
-//             mUpdateLongitude = false;
-
-//             document.getElementById('src_lat').value = x.latLng.lat();
-//             document.getElementById('src_long').value = x.latLng.lng();
-//             //document.getElementById('pickup_location').innerHTML = x.latLng.lat() + ' , ' + x.latLng.lng();
-
-//             $('.txtLatitude').val(x.latLng.lat());
-//             $('.txtLongitude').val(x.latLng.lng());
-
-//             var geocoder = new google.maps.Geocoder;
-//             var infowindow = new google.maps.InfoWindow;
-//             geocodeLatLng(geocoder, map, infowindow, x.latLng.lat(), x.latLng.lng(), 'txtPropertyAddress');
-
-//             refreshValues();
-//         });
-//     }
-// }
-
-// function refreshValues() {
-//     mUpdateLatitude = false;
-//     mUpdateDrag = false;
-//     mUpdateAddress = false;
-//     mUpdateLongitude = false;
-// }
+        elements[i].addEventListener("click", function (e) {
+            google.maps.event.trigger(markers[e.currentTarget.getAttribute("markerIndex")], 'click');
+            map.setZoom(15);
+            map.panTo(markers[e.currentTarget.getAttribute("markerIndex")].getPosition());
+            // if ($(window).width() > 550) {
+            //     map.panBy(((mapWidth / 2) - ((mapWidth - panelWidth) / 2)), 0);
+            // }
+        });
+    }
+}
 
 
 

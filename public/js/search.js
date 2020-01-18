@@ -3,18 +3,19 @@ $("#searchForm").submit( event => {
     console.log("hi");
     let location = $("#locationInput").val().trim();     
 
-    if(!location){
+    // if(!location){
         
-        return false;
-    }
+    //     return false;
+    // }
 
     let body = {
-        location: location
+        latitude: 43.779256,
+        longitude: -79.415713,
+        radius: 500    
     };
     
-    $.post('/api/search/location',body).then(function(data){
-        console.log(data);
-        $("#results").text(JSON.stringify(data,null,2));
+    $.post('/api/search/restaurantsnearby',body).then(function(data){        
+        
     });
    
 });

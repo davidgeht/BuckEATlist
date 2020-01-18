@@ -1,73 +1,42 @@
 var errorMessage = "";
 
-$(document).ready(function(){
+$("#signupForm").on("submit", event => {
+    event.preventDefault();
+    console.log("hi");
+    let email = $("#email-input").val().trim();
+    let pw = $("#password-input").val().trim();
+    let firstName = $("#firstname-input").val().trim();
+    let lastName = $("#lastname-input").val().trim();
+    
+    let alert = $("#alert");
 
-    $("form.signup").on("submit", event => {
-        event.preventdefault();
+    if(!email || !pw || !firstName || !lastName){
+        alert.text("Please enter all required information");
+        alert.show();
+        return;
+    }        
 
-        let email = $("#email-input").value().trim();
-        let pw = $("#password-input").value().trim();
-        let firstName = $("#firstname-input").value().trim();
-        let lastName = $("#lastname-input").value().trim();
-        
-        let alert = $("#alert");
+    let signupObj = {
+        email: email,
+        password: pw,
+        firstName: firstName,
+        lastName: lastName
+    };
+    
+    errorMessage = ValidateInput(signupObj);
 
-        if(!email || !pw || !firstName || !lastName){
-            alert.text("Please enter all required information");
-            alert.show();
-            return false;
-        }        
+    if(errorMessage.length > 0){
+        alert.html(errorMessage);
+        alert.show();
+        return;
+    }
 
-        let signupObj = {
-            email: email,
-            password: pw,
-            firstName: firstName,
-            lastName: lastName
-        };
-        
-        if(!ValidateInput(signupObj)){
-            alert.text(errorMessage);
-            alert.show();
-        }
-        
-        $.post("/api/signup", signupObj)
-        .then(function () {
-            window.location.replace("/home");        
-        }).catch(err => {
-            alert.text(err);
-            alert.show();
-        });           
-    });
+    $.post("/api/signup", signupObj)
+    .then(function (res) {
+        window.location.replace("/login");        
+    }).catch(err => {
+        alert.text(err.responseText);
+        alert.show();
+    });           
 });
 
-function ValidateInput(obj){
-    
-    const emailRegex = /\A[a-z0-9!#$%&'*+/=?^_‘{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_‘{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\z/;
-    const nameRegx = /\b[A-Za-z- ]+\b/;
-    const pwRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
-
-    const {firstName, lastName, email, password} = obj;
-            
-    result = true;
-
-    if(!emailRegex.test(email)){
-        errorMessage += "invalid email address\n";
-        result = false;
-    }
-    if(nameRegx.test(firstName)){
-        errorMessage += "invalid first name (unallowed characters)\n";
-        result = false;
-    }
-    if(nameRegx.test(lastName)){
-        errorMessage += "invalid first name (unallowed characters)\n";
-        result = false;
-    }
-
-    if(pwRegex.test(password)){
-        errorMessage += "passwords need at least 1 lower case letter, 1 upper case letter, 1 number and is at least 6 characters long";
-        result = false;
-    }
-
-    return result
-    
-}
