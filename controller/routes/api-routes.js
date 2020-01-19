@@ -84,12 +84,17 @@ apiRoutes.get('/api/search/restaurants', function(req, res, next){
     
 });
 
-apiRoutes.get('/api/search/restaurantsNearby', function(req, res, next){
-    
+apiRoutes.post('/api/search/restaurantsNearby', async function(req, res, next){
+    let lat = req.body.latitude;
+    let lon = req.body.longitude;
+    let radius = req.body.radius;
+    let results = await yelp.searchRestoByCoord(lat, lon, radius);    
+    res.json(results.data.businesses);
 });
 
-apiRoutes.get('/api/buckeatlist/add', function(req, res){
-    console.log(req.user);
+apiRoutes.post('/api/buckeatlist/add', function(req, res){
+    //console.log(req.user);
+    console.log(req.body);
     // let restaurantId = req.id;
     // let userId = req.userId;
     // bucketlist.addNew(userId, restaurantId, 0)

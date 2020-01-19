@@ -14,16 +14,16 @@ passport.use(new LocalStrategy(
         if (userInfo.length < 1) {
           result = false;
         } else {
-          console.log(userInfo);
-          console.log(userInfo[0].encypted_pw);
+          // console.log(userInfo);
+          // console.log(userInfo[0].encypted_pw);
           result = await bcrypt.compare(password, userInfo[0].encypted_pw);
-          console.log(result);
+          // console.log(result);
         }
         if (!result) {
-          console.log('got into !result');
+          //console.log('got into !result');
           done(null, false, {message: 'Incorrect email or password'});
           } else {
-            console.log('userInfo[0] passed to done: ', userInfo[0]);
+            //console.log('userInfo[0] passed to done: ', userInfo[0]);
             done(null, userInfo[0]);
           } 
       })
@@ -35,16 +35,16 @@ passport.use(new LocalStrategy(
 
 
 passport.serializeUser(function(user, done) {
-  console.log('user.id in serialize: ', user.id)
+  //console.log('user.id in serialize: ', user.id)
   done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
-  console.log('id in deserialize: ', id);
+  //console.log('id in deserialize: ', id);
   user.getUserByID(id)
   .then(function(result){
     let userObj = result[0];
-    console.log('ready to send userObj: ', userObj)
+    //console.log('ready to send userObj: ', userObj)
     done(null, userObj);
   })
   .catch()

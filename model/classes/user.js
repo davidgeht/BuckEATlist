@@ -16,13 +16,8 @@ class User {
 
      getUserByID(id){
         return new Promise((resolve,reject)=>{
-<<<<<<< HEAD
             let query=`SELECT U.id, username, encypted_pw, emailaddress, 
-            fullname, homecity_id from Users as u where U.id = ${id};`;
-=======
-            let query=`SELECT U.id, username, encrypted_pw, emailaddress, 
             fullname, homecity_id from Users as u where U.id = '${id}';`;
->>>>>>> e6df7c383969885523c064cab29c086c46ed0132
 
             this.connection.query(query, (err,res)=> {
                 if(err) throw err;
@@ -78,11 +73,11 @@ class User {
 
     getUserByEmail(email){
         return new Promise((resolve,reject)=>{
-            let query=`SELECT * FROM USER WHERE emailaddress='${email}';`;
+            let query=`SELECT * FROM USERS WHERE emailaddress='${email}';`;
 
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
-                this.connection.end();
+                //this.connection.end();
                 resolve(res)
             })
         })
