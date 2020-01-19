@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 const path = require("path");
 const User = require("../../model/classes/user"); // TBD the model files
 const Bucketlist = require("../../model/classes/bucketlist");
-const Resturant = require("../../model/classes/resturant");
+const Restaurant = require("../../model/classes/restaurant");
 const Zomato = require("../../api/zomato"); // TBD for API file
 const Yelp = require("../../api/yelp");
 //const City = require("TBD"); // TBD the city file
@@ -17,7 +17,7 @@ let bucketlist = new Bucketlist();
 //let city = new City();
 let zomato = new Zomato();
 let yelp = new Yelp();
-let restaurant = new Resturant();
+let restaurant = new Restaurant();
 
 let checkUserExists = function(req, res, next){
     let email = req.body.email;
