@@ -4,14 +4,10 @@ class Restaurant {
     constructor(connection){
         this.connection=connection
     }
-<<<<<<< HEAD:model/classes/resturant.js
-    addNew(name,yelp_id,rating, price, lang, lat, cuisine, city_id, address, website, review_count, hoursOfOp){
-=======
-    addNew(name,yelp_id,rating, price, long, lat, city_name, address, website, review_count){
->>>>>>> 9027c42dc5a9868a8413874cdb8b4aa84332daf0:model/classes/restaurant.js
+    addNew(name,yelp_id,rating, price, lon, lat, city_name, address, website, review_count){
         return new Promise((resolve,reject)=>{
             let query =`INSERT INTO Restaurant(name, yelp_id,rating, price, long, lat, city_name, address,website, review_count)
-            VALUES('${name}','${yelp_id}','${rating}','${price}','${long}','${lat}', '${city_name}','${address}','${website}','${review_count}');`;
+            VALUES('${name}','${yelp_id}','${rating}','${price}','${lon}','${lat}', '${city_name}','${address}','${website}','${review_count}');`;
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
                 // this.connection.end();
