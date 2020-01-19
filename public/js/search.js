@@ -97,7 +97,7 @@ function renderResults(data){
                
         $.post(`/api/buckeatlist/add`, restaurant)
         .then(res=>{
-
+            $(event.currentTarget).attr('disabled', true);
         });            
     });
     
