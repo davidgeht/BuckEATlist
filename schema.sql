@@ -6,14 +6,11 @@ USE buckeatlist_db;
 
 CREATE TABLE Users (
   id int PRIMARY KEY AUTO_INCREMENT,
-  username varchar(255),
-  encypted_pw varchar(255),
+  encrypted_pw varchar(255),
   emailaddress varchar(255),
   firstname varchar(255),
   lastname varchar(255),
-  fullname varchar(255),
   created_at timestamp,
-  homecity_id int
 );
 
 CREATE TABLE Cities (
@@ -34,7 +31,7 @@ CREATE TABLE Provinces (
   id int PRIMARY KEY AUTO_INCREMENT,
   name varchar(255),
   country_id int,
-  created_at timestamp
+  created_at timestam
 );
 
 CREATE TABLE Bucketlist (
@@ -67,6 +64,12 @@ CREATE TABLE Image (
   created_at timestamp,
   img_location varchar(255)
 );
+
+CREATE TABLE Categories (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  title varchar,
+  alias varchar
+  );
 
 ALTER TABLE Users ADD FOREIGN KEY (homecity_id) REFERENCES Cities (id);
 
