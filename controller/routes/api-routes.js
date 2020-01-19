@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const path = require("path");
 const User = require("../../model/classes/user"); // TBD the model files
 const Bucketlist = require("../../model/classes/bucketlist");
+const Resturant = require("../../model/classes/resturant");
 const Zomato = require("../../api/zomato"); // TBD for API file
 const Yelp = require("../../api/yelp");
 //const City = require("TBD"); // TBD the city file
@@ -16,6 +17,7 @@ let bucketlist = new Bucketlist();
 //let city = new City();
 let zomato = new Zomato();
 let yelp = new Yelp();
+let restaurant = new Resturant();
 
 let checkUserExists = function(req, res, next){
     let email = req.body.email;
@@ -84,17 +86,35 @@ apiRoutes.get('/api/search/restaurants', function(req, res, next){
     
 });
 
-apiRoutes.get('/api/search/restaurantsNearby', function(req, res, next){
-    
+apiRoutes.post('/api/search/restaurantsNearby', async function(req, res, next){
+    let lat = req.body.latitude;
+    let lon = req.body.longitude;
+    let radius = req.body.radius;
+    let results = await yelp.searchRestoByCoord(lat, lon, radius);
+    //console.log(results.data);
+    res.json(results.data.businesses);
 });
 
-apiRoutes.get('/api/buckeatlist/add', function(req, res){
+apiRoutes.post('/api/buckeatlist/add', async function(req, res){
     console.log(req.user);
-    // let restaurantId = req.id;
-    // let userId = req.userId;
-    // bucketlist.addNew(userId, restaurantId, 0)
-    // .then(function(response){res.status('200').send('Item added')})
-    // .catch(function(error){res.status('500').send(error)});
+    let restaurantId = req.body.id;
+    let userId = req.user.id;
+    let name = req.body.name;
+    let yelpId = req.body.id;
+    let rating = req.body.rating;
+    let price = req.body.price;
+    let lon = req.body.coordinates.longitude;
+    let lat = req.body.coordinates.latitude;
+    let cuisine = JSON.stringify(req.body.categories);
+    let city = req.body.location.city;
+    let address = JSON.stringify(req.body.location);
+    let website = req.body.url;
+    let reviewCount = req.body.review_count;
+    await restaurant.addNew(name, yelpId, rating, price, lon, lat, cuisine, city, address, website, reviewCount, 0)
+    let newRecord = await restaurant.getAllByYelpId(yelpId);
+    let id = newRecord.id;
+    await bucketlist.addNew(userId, id, 0);
+    res.status('200').send('Item added');
 });
 
 

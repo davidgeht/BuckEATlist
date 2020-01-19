@@ -4,7 +4,7 @@ class Resturant {
     constructor(connection){
         this.connection=connection
     }
-    addNew(name,yelp_id,rating, price, lang, lat, cuisine, city_id, address, website, review_count, hoursOfOp,){
+    addNew(name,yelp_id,rating, price, lang, lat, cuisine, city_id, address, website, review_count, hoursOfOp){
         return new Promise((resolve,reject)=>{
             let query =`INSERT INTO Resturant(name, yelp_id,rating, price, lang, lat, cuisine, menu, city_id, address,website, review_count, hoursOfOp)
             VALUES('${name}','${yelp_id}','${rating}','${price}','${lang}','${lat}','${cuisine}','${city_id}','${address}','${website}','${review_count}','${hoursOfOp}');`;
@@ -94,7 +94,17 @@ class Resturant {
 
     }
 
+    getAllByYelpId(yelpId){
+        return new Promise((resolve,reject)=>{
+            let query=`SELECT * FROM Resturant WHERE yelp_id='${yelpId}';`;
+            this.connection.query(query,(err,res)=>{
+                if(err) throw err;
+                this.connection.end();
+                resolve(res);
+            })
 
+        })
+    }
 
 
 

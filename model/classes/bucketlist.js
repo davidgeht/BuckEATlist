@@ -1,12 +1,8 @@
 const connection =require("../../config/connection");
+
 class Bucketlist{
-<<<<<<< HEAD
     constructor(){
-        
-=======
-    constructor(connection){
-        this.connection=connection
->>>>>>> e6df7c383969885523c064cab29c086c46ed0132
+        this.connection = connection;
     }
     addNew(user_id,rest_id,visited){
         return new Promise((resolve,reject)=>{
@@ -45,7 +41,7 @@ class Bucketlist{
     updateRes(id){
         return new Promise((resolve, reject)=>{
             let query =`UPDATE Bucketlist SET visited = 1 WHERE id='${id}';`;
-            his.connection.query(query,(err,res)=>{
+            this.connection.query(query,(err,res)=>{
                 if (err) throw err;
                 // this.connection.end();
                 resolve(res);

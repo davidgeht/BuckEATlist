@@ -14,16 +14,16 @@ passport.use(new LocalStrategy(
         if (userInfo.length < 1) {
           result = false;
         } else {
-          console.log(userInfo);
-          console.log(userInfo[0].encypted_pw);
+          //console.log(userInfo);
+          //console.log(userInfo[0].encypted_pw);
           result = await bcrypt.compare(password, userInfo[0].encypted_pw);
-          console.log(result);
+          //console.log(result);
         }
         if (!result) {
-          console.log('got into !result');
+          //console.log('got into !result');
           done(null, false, {message: 'Incorrect email or password'});
           } else {
-            console.log('userInfo[0] passed to done: ', userInfo[0]);
+            //console.log('userInfo[0] passed to done: ', userInfo[0]);
             done(null, userInfo[0]);
           } 
       })
