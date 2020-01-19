@@ -110,7 +110,7 @@ apiRoutes.post('/api/buckeatlist/add', async function(req, res){
     let address = JSON.stringify(req.body.location);
     let website = req.body.url;
     let reviewCount = req.body.review_count;
-    await restaurant.addNew(name, yelpId, rating, price, lon, lat, cuisine, city, address, website, reviewCount, 0)
+    await restaurant.addNew(name, yelpId, rating, price, lon, lat, city, address, website, reviewCount)
     let newRecord = await restaurant.getAllByYelpId(yelpId);
     let id = newRecord.id;
     await bucketlist.addNew(userId, id, 0);
