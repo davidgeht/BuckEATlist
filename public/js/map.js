@@ -1,6 +1,20 @@
 var map;
 
+
+function initMapWithPosition(position){
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: position.coords.latitude, lng: position.coords.longitude},
+        zoom: 13
+    });
+}
+
 function initMap() {
+
+    let center = {lat: 43.651070, lng: -79.347015};  
+    if(navigator.geolocation){
+        console.log(navigator.geolocation.getCurrentPosition(initMapWithPosition)); 
+        return;
+    }
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 43.651070, lng: -79.347015},
         zoom: 8
@@ -90,37 +104,23 @@ function fitMarkersInBounds(map, markers) {
     for(const marker of markers){
         bounds.extend(marker.position);
     }
+    if(markers.length > 0){
+        if (markers.length === 1) {
+            map.panTo(markers[0].getPosition());
+            map.setZoom(14);
 
-    // let latArr = coordArray.map(function (p) { return p.lat });
-    // let lngArr = coordArray.map(function (p) { return p.lng });
-
-    // let minCoords = {
-    //     lat: Math.min.apply(null, latArr),
-    //     lng: Math.min.apply(null, lngArr)
-    // };
-    // let maxCoords = {
-    //     lat: Math.max.apply(null, latArr),
-    //     lng: Math.max.apply(null, lngArr)
-    // };
-
-    // bounds.extend(minCoords);
-    // bounds.extend(maxCoords);
-
-    if (markers.length === 1) {
-        map.panTo(markers[0].getPosition());
-        map.setZoom(14);
-
-    } else if ($(window).width() > 550) {
-        map.fitBounds(bounds,
-            { //padding
-                top: 30,
-                left: 10, //panelWidth
-                bottom: 10,
-                right: 10
-            });
-        map.panToBounds(bounds);
-    } else {
-        map.fitBounds(bounds);
+        } else if ($(window).width() > 550) {
+            map.fitBounds(bounds,
+                { //padding
+                    top: 30,
+                    left: 10, //panelWidth
+                    bottom: 10,
+                    right: 10
+                });
+            map.panToBounds(bounds);
+        } else {
+            map.fitBounds(bounds);
+        }
     }
 }
 

@@ -39,7 +39,7 @@ $(document).ready(async function (){
         event.stopPropagation();
         let yelp_id = $(event.currentTarget).data("yelpid");
         console.log(yelp_id);
-        $.post(`/api/restaurants/${yelp_id}`)
+        $.get(`/api/restaurants/${yelp_id}`)
         .then(data =>{
 
             populateRestaurantModal(data);

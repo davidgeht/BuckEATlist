@@ -14,7 +14,7 @@ class User {
         });
     };
 
-     getUserByID(id){
+    getUserByID(id){
         return new Promise((resolve,reject)=>{
             let query=`SELECT * from Users where id = ${id};`;
 
@@ -41,7 +41,7 @@ class User {
         return new Promise((resolve, reject)=>{
 
             let query =`INSERT into Users(username, encypted_pw, emailaddress, firstname, lastname, fullname) 
-            VALUES ('${email}','${password}','${email}','${firstName}','${lastName}','${firstname} ${lastName}');`;
+            VALUES ('${email}','${password}','${email}','${firstName}','${lastName}','${firstName} ${lastName}');`;
 
             this.connection.query(query,(err,res)=>{
                 if (err) reject(err);
@@ -50,7 +50,7 @@ class User {
         })
     }
 
-     emailExists(email){
+    emailExists(email){
         return new Promise((resolve, reject)=>{
             let query=`SELECT * FROM Users WHERE emailaddress = '${email}';`
 
@@ -63,9 +63,9 @@ class User {
                 }else{
                     response = false;
                 };
-                resolve(response)
-            })
-        })
+                resolve(response);
+            });
+        });
     }
   
 }
