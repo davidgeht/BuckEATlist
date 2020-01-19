@@ -5,7 +5,7 @@ class Bucketlist{
     }
     addNew(user_id,rest_id,visited){
         return new Promise((resolve,reject)=>{
-            let query=`INSERT into Bucketlist(user_id,rest_id,visited)VALUES('${user_id}','${rest_id}','${visited}');`;
+            let query=`INSERT into Bucketlist(user_id,rest_id,visited)VALUES(${user_id},${rest_id},${visited});`;
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
                 // this.connection.end();

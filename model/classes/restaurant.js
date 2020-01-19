@@ -1,13 +1,13 @@
-const connection =require("../../config/connection");
+const connection = require("../../config/connection");
 
 class Restaurant {
     constructor(connection){
-        this.connection=connection
+        //this.connection=connection
     }
     addNew(name,yelp_id,rating, price, long, lat, city_name, address, website, review_count){
         return new Promise((resolve,reject)=>{
-            let query =`INSERT INTO Restaurant(name, yelp_id,rating, price, long, lat, city_name, address,website, review_count)
-            VALUES('${name}','${yelp_id}','${rating}','${price}','${long}','${lat}', '${city_name}','${address}','${website}','${review_count}');`;
+            let query =`INSERT INTO Restaurant(name, yelp_id,rating, price, lon, lat, city_name, address,website, review_count)
+            VALUES('${name}','${yelp_id}',${rating},'${price}',${lon},${lat}, '${city_name}','${address}','${website}',${review_count});`;
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
                 // this.connection.end();
@@ -30,7 +30,7 @@ class Restaurant {
     }
     GetAllByLikeName(name){
         return new Promise((resolve,reject)=>{
-            let query=`SELECT * FROM Restaurant WHERE name LIKE %'${name}'%;`;
+            let query=`SELECT * FROM Restaurant WHERE name LIKE '%${name}%';`;
             this.connection.query(query,(err,res)=>{
                 if (err) throw err;
                 this.connection.end();

@@ -48,10 +48,10 @@ CREATE TABLE Bucketlist (
 CREATE TABLE Restaurant (
   id int PRIMARY KEY AUTO_INCREMENT,
   name varchar(255),
-  yelp_id varchar,
+  yelp_id varchar (255),
   rating float,
   price varchar(64),
-  long float,
+  lon float,
   lat float, 
   city_name varchar(255),
   address varchar(10000),
@@ -75,13 +75,9 @@ CREATE TABLE Cuisine (
   created_at timestamp default CURRENT_TIMESTAMP
 );
 
-ALTER TABLE Users ADD FOREIGN KEY (homecity_id) REFERENCES Cities (id);
-
 ALTER TABLE Bucketlist ADD FOREIGN KEY (user_id) REFERENCES Users (id);
 
 ALTER TABLE Bucketlist ADD FOREIGN KEY (rest_id) REFERENCES Restaurant (id);
-
-ALTER TABLE Restaurant ADD FOREIGN KEY (city_id) REFERENCES Cities (id);
 
 ALTER TABLE Cuisine ADD FOREIGN KEY (rest_id) REFERENCES Restaurant (id);
 

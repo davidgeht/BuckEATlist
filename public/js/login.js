@@ -28,7 +28,8 @@ $(document).ready(function(){
             console.log(err.status);
             if (err.status === 401) {
                 //console.log('ready to send error')
-                window.alert('Invalid user or password');
+                alert.text('Invalid user or password');
+                alert.show();
             }
         });
     });

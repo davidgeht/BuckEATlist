@@ -31,7 +31,8 @@ function renderResults(data){
         <span>0 results found</span>`;
     }
 
-    for(const restaurant of data){        
+    for(const restaurant of data){ 
+        
         contentStr += `<div class="restaurantContrainer row align-items-center">\n
         <span class="restName">${restaurant.name}</span>\n           
         <button class="addToList" data-restaurant='${JSON.stringify(restaurant)}' data-yelpid="${restaurant.id}"><i class="fas fa-plus"></i></button>\n            
