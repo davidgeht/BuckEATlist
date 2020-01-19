@@ -12,8 +12,17 @@
         </nav>
         <form class="col-4" id="searchForm">
             <div class="form-group">
-                <label for="location">Search Term</label>
+                <label for="location">What</label>
+                <input type="text" class="form-control" id="nameInput" placeholder="Joe's">
+                {{!-- <label for="location">Type</label>
+                <input type="text" class="form-control" id="typeInput" placeholder="Ukrainian"> --}}
+                <label for="location">Where</label>
                 <input type="text" class="form-control" id="locationInput" placeholder="Toronto, ON">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="nearbyChbox">
+                    <label class="form-check-label" for="nearbyChbox">Search near me</label>
+                </div>
+                {{!-- <button type="submit" class="btn btn-submit" id="btnSearchNearby">Search Nearby</button> --}}
             </div>            
             <button type="submit" class="btn btn-submit" id="btnSearchSubmit">Search</button>
         </form>
