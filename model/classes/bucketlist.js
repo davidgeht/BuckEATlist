@@ -6,7 +6,7 @@ class Bucketlist{
     }
     addNew(user_id,rest_id,visited){
         return new Promise((resolve,reject)=>{
-            let query=`INSERT into Bucketlist(user_id,rest_id,visited)VALUES(${user_id}, ${rest_id},${visited});`;
+            let query=`INSERT into Bucketlist (user_id,rest_id,visited)VALUES(${user_id}, ${rest_id},${visited});`;
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
                 // this.connection.end();
@@ -17,7 +17,7 @@ class Bucketlist{
     getBucketList(user_id){
         return new Promise((resolve, reject)=>{
             let query =`SELECT yelp_id FROM Bucketlist b 
-            JOIN restaurant r ON b.rest_id = r.id
+            JOIN Restaurant r ON b.rest_id = r.id
             WHERE b.user_id ='${user_id}' AND b.visited = 0;`
 
             this.connection.query(query,(err,res)=>{
@@ -31,8 +31,8 @@ class Bucketlist{
 
     getBucketListExpanded(user_id){
         return new Promise((resolve, reject)=>{
-            let query =`SELECT B.id, rest_id, visited, added_at, name, yelp_id, rating, price, lon, lat, city_name, address, website, review_count FROM bucketlist as B
-            left join restaurant as R on B.rest_id = R.id
+            let query =`SELECT B.id, rest_id, visited, added_at, name, yelp_id, rating, price, lon, lat, city_name, address, website, review_count FROM Bucketlist as B
+            left join Restaurant as R on B.rest_id = R.id
             WHERE user_id = ${user_id} AND visited = 0;`;
 
             this.connection.query(query,(err,res)=>{
