@@ -15,8 +15,8 @@ passport.use(new LocalStrategy(
           result = false;
         } else {
           //console.log(userInfo);
-          //console.log(userInfo[0].encypted_pw);
-          result = await bcrypt.compare(password, userInfo[0].encypted_pw);
+          //console.log(userInfo[0].encrypted_pw);
+          result = await bcrypt.compare(password, userInfo[0].encrypted_pw);
           //console.log(result);
         }
         if (!result) {
