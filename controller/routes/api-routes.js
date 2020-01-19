@@ -90,10 +90,24 @@ apiRoutes.post('/api/search/restaurantsNearby', async function(req, res, next){
     let lat = req.body.latitude;
     let lon = req.body.longitude;
     let radius = req.body.radius;
-    let results = await yelp.searchRestoByCoord(lat, lon, radius);
+    let restos = await yelp.searchRestoByCoord(lat, lon, radius);
+    let results = restos.data.businesses;
     // TODO: make a call for the user, and verify if he alrady has a resto in the bucketlist. Add a boolean to the output.
+    let userId = req.user.id;   
+    let userBuckL = await bucketlist.getBucketList(userId);
+    let buckIds = [];
+    for (buckItem of userBuckL) {
+        buckIds.push(buckItem.yelp_id)
+    }
+    for (result of results) {
+        if (buckIds.includes(result.id)) {
+            result.inBucketlist = true;
+        } else {
+            result.inBucketlist = false;
+        }
+    }
     //console.log(results.data);
-    res.json(results.data.businesses);
+    res.json(results);
 });
 
 apiRoutes.post('/api/buckeatlist/add', async function(req, res){
