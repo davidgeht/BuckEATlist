@@ -18,3 +18,5 @@ client.getLocations({query: 'London'})
 client.getLocations({query: 'Tokyo'})
 .then(res => console.log(res))
 .catch(err => console.log(err));
+
+

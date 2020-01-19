@@ -1,11 +1,12 @@
-const connection = require("../../config/connection");
+const connection =require("../../config/connection");
+
 class Bucketlist{
-    constructor(connection){
+    constructor(){
         this.connection = connection;
     }
     addNew(user_id,rest_id,visited){
         return new Promise((resolve,reject)=>{
-            let query=`INSERT into Bucketlist(user_id,rest_id,visited)VALUES('${user_id}','${rest_id}','${visited}');`;
+            let query=`INSERT into Bucketlist(user_id,rest_id,visited)VALUES(${user_id}, ${rest_id},${visited});`;
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
                 // this.connection.end();
@@ -40,7 +41,7 @@ class Bucketlist{
     updateRes(id){
         return new Promise((resolve, reject)=>{
             let query =`UPDATE Bucketlist SET visited = 1 WHERE id='${id}';`;
-            his.connection.query(query,(err,res)=>{
+            this.connection.query(query,(err,res)=>{
                 if (err) throw err;
                 // this.connection.end();
                 resolve(res);
