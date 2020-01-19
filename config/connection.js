@@ -11,7 +11,7 @@ if(process.env.JAWSDB_URL){
         host: "localhost",
         port: 3306,
         user: "root",
-        password: "12345",
+        password: "mqEl3Ar4pQi^JcE4",
         database: "buckeatlist_db"
       });
     };

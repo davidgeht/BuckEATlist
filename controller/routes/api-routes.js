@@ -23,7 +23,7 @@ let checkUserExists = function(req, res, next){
     let email = req.body.email;
     let emailExists = user.emailExists(email);
     emailExists.then(function(response){
-        console.log('response = ',response);
+        //console.log('response = ',response);
         if (!response) {
             next();
         } else {
@@ -108,10 +108,9 @@ apiRoutes.post('/api/search/restaurantsNearby', async function(req, res, next){
 });
 
 apiRoutes.post('/api/buckeatlist/add', async function(req, res){
-    console.log(req.user);
-    let restaurantId = req.body.id;
+    
     let userId = req.user.id;
-    let name = req.body.name;
+    let name = req.body.name.replace("'","''");
     let yelpId = req.body.id;
     let rating = req.body.rating;
     let price = req.body.price;
@@ -139,11 +138,11 @@ apiRoutes.post('/api/buckeatlist/add', async function(req, res){
 });
 
 
-apiRoutes.get('/api/users/buckeatlist/', function(req, res){
+apiRoutes.get('/api/users/buckeatlist', function(req, res){
     let userId = req.user.id;
-    bucketlist.getBucketList(userId)
+    bucketlist.getBucketListExpanded(userId)
     .then(function(allRest){
-        console.log(allRest)
+        //console.log(allRest)
         res.send(allRest);
     })
     .catch(function(error){})

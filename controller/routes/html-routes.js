@@ -3,8 +3,9 @@
 const express = require("express");
 const path = require("path");
 const isAuthenticated = require("../isAuthenticated");
+const Bucketlist = require("../../model/classes/bucketlist");
 
-
+let mbuckeatlist = new Bucketlist();
 var htmlRoutes = express.Router();
 
 htmlRoutes.get('/', function(req, res){
@@ -22,32 +23,21 @@ htmlRoutes.get('/signup', function(req, res){
 });
 
 htmlRoutes.get('/home', isAuthenticated, 
-function(req, res, next){
+async function(req, res, next){
     let homeObj = {};
-    homeObj.buckeatList = [];
-    homeObj.user = {};
-    homeObj.title = '';
-    console.log('trying to call homepage')
+    console.log(req.user);
+    homeObj.restaurants = await mbuckeatlist.getBucketListExpanded(req.user.id);
+    homeObj.username = req.user.firstname;
+    homeObj.title = 'My buckEATlist';
+    console.log('trying to call homepage');
     res.render('home', homeObj);
-    //res.send('MAIN PAGE');
+    
 });
 
 htmlRoutes.get('/search', isAuthenticated, 
 function(req, res, next){
     res.render('search');
-    //res.send('MAIN PAGE');
+    
 });
-
-htmlRoutes.get('/api/login', function(req, res, next){
-    
-})
-
-htmlRoutes.get('/api/login', function(req, res, next){
-    
-})
-
-htmlRoutes.get('/api/login', function(req, res, next){
-    
-})
 
 module.exports = htmlRoutes;

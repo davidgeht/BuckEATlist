@@ -27,7 +27,9 @@ $(document).ready(function(){
         }).catch(err => {
             console.log(err.status);
             if (err.status === 401) {
-                window.alert('Invalid user or password');
+                //console.log('ready to send error')
+                alert.text('Invalid user or password');
+                alert.show();
             }
         });
     });
