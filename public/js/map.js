@@ -9,10 +9,9 @@ function initMapWithPosition(position){
 }
 
 function initMap() {
-
-    let center = {lat: 43.651070, lng: -79.347015};  
+     
     if(navigator.geolocation){
-        console.log(navigator.geolocation.getCurrentPosition(initMapWithPosition)); 
+        (navigator.geolocation.getCurrentPosition(initMapWithPosition)); 
         return;
     }
     map = new google.maps.Map(document.getElementById('map'), {
@@ -21,78 +20,90 @@ function initMap() {
     });
 }
 
-function setMarkers(restuarantList, map) {
-    let markers = [];
+function setMarkers(restuarantList, map, isBucket) {
+   
     let restaurants = [];   
-    let image = {
-        //url: "/Images/office-building-marker.png"
-    };
-
+    let image = {};
+    if(isBucket){
+        image = {
+            url: "../content/images/bucket-map-icon.png"
+        };
+    }else{
+        image ={
+            url: "../content/images/bucket-map-icon.png"
+        };
+    }
     if (restuarantList.length > 0) {
-        restaurants = restuarantList;
-    }    
+        restaurants = restuarantList;        
     
-    createMarkers(restaurants, map);
+        createMarkers(restaurants, map, image);
+    }
 
-    async function createMarkers(restaurants, map) {
-        for (const restuarant of restaurants) {
-            let imageSource = '';
-            let mlat = parseFloat(restuarant.lat);
-            let mlng = parseFloat(restuarant.lon);
-            let position = { lat: mlat, lng: mlng };
+    
+}
 
-            let infowindow = new google.maps.InfoWindow({ minWidth: 400 });
+async function createMarkers(restaurants, map, image) {
+    let markers = [];
+    for (const restuarant of restaurants) {
+        let imageSource = '';
+        let mlat = parseFloat(restuarant.lat);
+        let mlng = parseFloat(restuarant.lon);
+        let position = { lat: mlat, lng: mlng };
 
-            let marker = new google.maps.Marker({
-                position: position,
-                map: map,
-                //icon: image,
-                title: restuarant.name,                
-                property_id: restuarant.id
-            });
+        let infowindow = new google.maps.InfoWindow({ minWidth: 400 });
 
-            await google.maps.event.addListener(marker, 'click', (function (marker, thisRestaurant) {
-
-                return function () {
-                    //get info window content for particular restaurant
-                    if (thisRestaurant.image_url !== null) {
-                        imageSource = thisRestaurant.image_url;
-                    } else {
-                        imageSource = "";//'/Images/info_window_fallback.png';
-                    }
-
-                    let categoriesStr = thisRestaurant.categories.map(e =>{                        
-                        return e.title;
-                    }).join(", ");                   
-
-                    let contentString =
-                    `<div class="maps-info-pane"> 
-                        <h2 class="restaurant-name"> ${thisRestaurant.name}</h2>
-                        <div class="">
-                            <div class="" style="background-image: url(\'${imageSource}\')"></div>
-                            <div class="property-info">
-                                <p class="address"> ${thisRestaurant.location.address1}</p>                                
-                                <p class="">Cuisine: <strong> ${categoriesStr}</strong></p>
-                                <p class="">Price: <strong> ${thisRestaurant.price}</strong></p>
-                                <button class="btn btn-success" data-id="${thisRestaurant.yelp_id}">Show Details</button>
-                            </div>
-                        </div>
-                    </div>`;
-
-                    infowindow.setContent(contentString);
-                    infowindow.open(map, marker);
-                }
-            })(marker, restuarant));
-            markers.push(marker);
-        }     
-        
-        let listener = await google.maps.event.addListener(map, "idle", function () {
-            fitMarkersInBounds(map, markers);
-            google.maps.event.removeListener(listener);
+        let marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            icon: image,
+            title: restuarant.name,                
+            property_id: restuarant.id
         });
 
-        panToRestaurantClick(map, markers); //When restaurant div is clicked, move tha map's focus and zoom into it
-    }
+        await google.maps.event.addListener(marker, 'click', (function (marker, thisRestaurant) {
+
+            return function () {
+                //get info window content for particular restaurant
+                if (thisRestaurant.image_url !== null) {
+                    imageSource = thisRestaurant.image_url;
+                } else {
+                    imageSource = "";//'/Images/info_window_fallback.png';
+                }
+                console.log(thisRestaurant);
+                
+                let categoriesStr = "cusisines";
+                // let categoriesStr = thisRestaurant.categories.map(e =>{                        
+                //     return e.title;
+                // }).join(", ");                   
+                
+                let contentString =
+                `<div class="maps-info-pane"> 
+                    <h2 class="restaurant-name"> ${thisRestaurant.name}</h2>
+                    <div class="">
+                        <div class="" style="background-image: url(\'${imageSource}\')"></div>
+                        <div class="restaurant-info">
+                            <h4 class="address"> ${JSON.parse(thisRestaurant.address).address1}</h4>                                
+                            <p class="">Cuisine: <strong> ${categoriesStr}</strong></p>
+                            <p class="">Price: <strong> ${thisRestaurant.price}</strong></p>
+                            <p class="">Rating: <strong> ${thisRestaurant.rating}</strong></p>
+                            <button class="btn btn-success" data-id="${thisRestaurant.yelp_id}">Show Details</button>
+                        </div>
+                    </div>
+                </div>`;
+
+                infowindow.setContent(contentString);
+                infowindow.open(map, marker);
+            }
+        })(marker, restuarant));
+        markers.push(marker);
+    }     
+    
+    let listener = await google.maps.event.addListener(map, "idle", function () {
+        fitMarkersInBounds(map, markers);
+        google.maps.event.removeListener(listener);
+    });
+
+    panToRestaurantClick(map, markers); //When restaurant div is clicked, move tha map's focus and zoom into it
 }
 
 function fitMarkersInBounds(map, markers) {
@@ -126,10 +137,7 @@ function fitMarkersInBounds(map, markers) {
 
 function panToRestaurantClick(map, markers) {
     let elements = document.getElementsByClassName("restaurantContrainer");
-
-    let panelWidth = $("#listColumn").outerWidth();
-    let mapWidth = $("#map").outerWidth();
-    
+   
     for (let i = 0; i < elements.length; i++) {
         elements[i].setAttribute("markerIndex", i);
 
