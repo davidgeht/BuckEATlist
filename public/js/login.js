@@ -24,7 +24,7 @@ $(document).ready(function(){
         .then(function () {
             window.location.replace("/home");        
         }).catch(err => {
-            alert.text(err);
+            alert.text("invalid username or password");
             alert.show();
         });
     });
