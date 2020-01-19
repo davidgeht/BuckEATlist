@@ -1,4 +1,4 @@
-const connection =require("../../config/connection");
+const connection = require("../../config/connection");
 
 class Bucketlist{
     constructor(){
@@ -16,15 +16,29 @@ class Bucketlist{
     }
     getBucketList(user_id){
         return new Promise((resolve, reject)=>{
-            let query =`SELECT rest_id FROM Bucketlist WHERE user_id ='${user_id}' AND visited = 0;`
+            let query =`SELECT * FROM Bucketlist WHERE user_id ='${user_id}' AND visited = 0;`
 
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
                 // this.connection.end();
                 resolve(res);
-            })
-        })
+            });
+        });
 
+    }
+
+    getBucketListExpanded(user_id){
+        return new Promise((resolve, reject)=>{
+            let query =`SELECT B.id, rest_id, visited, added_at, name, yelp_id, rating, price, lon, lat, city_name, address, website, review_count FROM bucketlist as B
+            left join restaurant as R on B.rest_id = R.id
+            WHERE user_id = ${user_id} AND visited = 0;`;
+
+            this.connection.query(query,(err,res)=>{
+                if(err) throw err;
+                // this.connection.end();
+                resolve(res);
+            });
+        });
     }
 
     getVisitedList(user_id){

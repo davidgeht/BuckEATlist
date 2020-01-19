@@ -23,8 +23,8 @@ function setMarkers(restuarantList, map) {
     async function createMarkers(restaurants, map) {
         for (const restuarant of restaurants) {
             let imageSource = '';
-            let mlat = parseFloat(restuarant.coordinates.latitude);
-            let mlng = parseFloat(restuarant.coordinates.longitude);
+            let mlat = parseFloat(restuarant.lat);
+            let mlng = parseFloat(restuarant.lon);
             let position = { lat: mlat, lng: mlng };
 
             let infowindow = new google.maps.InfoWindow({ minWidth: 400 });
@@ -87,20 +87,24 @@ function fitMarkersInBounds(map, markers) {
     
     let coordArray = [];
     
-    let latArr = coordArray.map(function (p) { return p.lat });
-    let lngArr = coordArray.map(function (p) { return p.lng });
+    for(const marker of markers){
+        bounds.extend(marker.position);
+    }
 
-    let minCoords = {
-        lat: Math.min.apply(null, latArr),
-        lng: Math.min.apply(null, lngArr)
-    };
-    let maxCoords = {
-        lat: Math.max.apply(null, latArr),
-        lng: Math.max.apply(null, lngArr)
-    };
+    // let latArr = coordArray.map(function (p) { return p.lat });
+    // let lngArr = coordArray.map(function (p) { return p.lng });
 
-    bounds.extend(minCoords);
-    bounds.extend(maxCoords);
+    // let minCoords = {
+    //     lat: Math.min.apply(null, latArr),
+    //     lng: Math.min.apply(null, lngArr)
+    // };
+    // let maxCoords = {
+    //     lat: Math.max.apply(null, latArr),
+    //     lng: Math.max.apply(null, lngArr)
+    // };
+
+    // bounds.extend(minCoords);
+    // bounds.extend(maxCoords);
 
     if (markers.length === 1) {
         map.panTo(markers[0].getPosition());
@@ -110,7 +114,7 @@ function fitMarkersInBounds(map, markers) {
         map.fitBounds(bounds,
             { //padding
                 top: 30,
-                left: panelWidth,
+                left: 10, //panelWidth
                 bottom: 10,
                 right: 10
             });

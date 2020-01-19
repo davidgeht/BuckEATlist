@@ -12,7 +12,7 @@ CREATE TABLE Users (
   firstname varchar(255),
   lastname varchar(255),
   fullname varchar(255),
-  created_at timestamp,
+  created_at timestamp default CURRENT_TIMESTAMP,
   homecity_id int
 );
 
