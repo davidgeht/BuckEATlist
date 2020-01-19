@@ -16,7 +16,9 @@ class Bucketlist{
     }
     getBucketList(user_id){
         return new Promise((resolve, reject)=>{
-            let query =`SELECT rest_id FROM Bucketlist WHERE user_id ='${user_id}' AND visited = 0;`
+            let query =`SELECT yelp_id FROM Bucketlist b 
+            JOIN restaurant r ON b.rest_id = r.id
+            WHERE b.user_id ='${user_id}' AND b.visited = 0;`
 
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
