@@ -52,13 +52,22 @@ $(document).ready(async function (){
     });
 
     $("button.checkoff").on("click", function(event){
-        event.stopPropagation();       
+        event.stopPropagation();   
+            
     });
 });
 
+function checkOffRestaurant(){
+    $.post(`/api/checkoffRestaurant/${id}`,body)
+    .then(res => {
+
+    });
+}
+
+
 function loadMapMarkers(restaurants){
     
-    setMarkers(restaurants, map);    
+    setMarkers(restaurants, map, true);    
 }
 
 function populateRestaurantModal(restaurant){
