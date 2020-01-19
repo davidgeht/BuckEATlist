@@ -17,7 +17,7 @@ class User {
     };
    getUserByID(id){
         return new Promise((resolve,reject)=>{
-            let query=`SELECT U.id, username, encrypted_pw, emailaddress, 
+            let query=`SELECT U.id, username, encypted_pw, emailaddress, 
             fullname, homecity_id from Users as u where U.id = ${id};`;
 
             this.connection.query(query, (err,res)=> {

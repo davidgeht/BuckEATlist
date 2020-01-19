@@ -21,11 +21,15 @@ $(document).ready(function(){
         };
         
         $.post("/api/login", loginObj)
-        .then(function () {
+        .then(function (response) {
+            console.log('And the response is:... ',response)
             window.location.replace("/home");        
         }).catch(err => {
-            alert.text(err);
-            alert.show();
+            console.log(err.status);
+            if (err.status === 401) {
+                //console.log('ready to send error')
+                window.alert('Invalid user or password');
+            }
         });
     });
 });

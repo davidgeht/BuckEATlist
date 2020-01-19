@@ -1,9 +1,6 @@
 class Bucketlist{
-    constructor(id, user_id,rest_id,visited){
-        this.id=id,
-        this.user_id=user_id,
-        this.rest_id=rest_id,
-        this.visited=visited
+    constructor(){
+        
     }
     addNew(user_id,rest_id,visited){
         return new Promise((resolve,reject)=>{
