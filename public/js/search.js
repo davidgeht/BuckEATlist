@@ -14,9 +14,11 @@ $("#searchForm").submit( event => {
         radius: 500    
     };
     
-    $.post('/api/search/restaurantsnearby',body)
-    .then(function(data){
+    $.post('/api/search/restaurantsNearby',body)
+    .then(function(data){    
         renderResults(data);
+    }).catch(err=>{
+
     });     
    
 });
@@ -39,7 +41,8 @@ function renderResults(data){
     $("#results").html(contentStr);
 
     $(".addToList").on('click', function(event){                
-        let restaurant = $(event.currentTarget).data("restaurant");        
+        let restaurant = $(event.currentTarget).data("restaurant"); 
+        console.log(restaurant);       
         $.post(`/api/buckeatlist/add`, restaurant)
         .then();            
     });

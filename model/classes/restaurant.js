@@ -1,24 +1,24 @@
 const connection =require("../../config/connection");
 
-class Resturant {
+class Restaurant {
     constructor(connection){
         this.connection=connection
     }
-    addNew(name,yelp_id,rating, price, lang, lat, cuisine, city_id, address, website, review_count, hoursOfOp,){
+    addNew(name,yelp_id,rating, price, long, lat, city_name, address, website, review_count){
         return new Promise((resolve,reject)=>{
-            let query =`INSERT INTO Resturant(name, yelp_id,rating, price, lang, lat, cuisine, menu, city_id, address,website, review_count, hoursOfOp)
-            VALUES('${name}','${yelp_id}','${rating}','${price}','${lang}','${lat}','${cuisine}','${city_id}','${address}','${website}','${review_count}','${hoursOfOp}');`;
+            let query =`INSERT INTO Restaurant(name, yelp_id,rating, price, long, lat, city_name, address,website, review_count)
+            VALUES('${name}','${yelp_id}','${rating}','${price}','${long}','${lat}', '${city_name}','${address}','${website}','${review_count}');`;
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
                 // this.connection.end();
                 resolve(res);
-                console.log("New resturant record inserted");
+                console.log("New restaurant record inserted");
             })
         })
     }
     getALLById(rest_id){
         return new Promise((resolve,reject)=>{
-            let query=`SELECT * FROM Resturant WHERE id='${rest_id}';`;
+            let query=`SELECT * FROM Restaurant WHERE id='${rest_id}';`;
 
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
@@ -30,7 +30,7 @@ class Resturant {
     }
     GetAllByLikeName(name){
         return new Promise((resolve,reject)=>{
-            let query=`SELECT * FROM Resturant WHERE name LIKE %'${name}'%;`;
+            let query=`SELECT * FROM Restaurant WHERE name LIKE %'${name}'%;`;
             this.connection.query(query,(err,res)=>{
                 if (err) throw err;
                 this.connection.end();
@@ -40,7 +40,7 @@ class Resturant {
     }
     getByCityId(city_id){
         return new Promise((resolve, reject)=>{
-            let query=`SELECT * FROM Resturant WHERE city_id='${city_id}';`;
+            let query=`SELECT * FROM Restaurant WHERE city_id='${city_id}';`;
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
                 this.connection.end();
@@ -51,7 +51,7 @@ class Resturant {
 
     getRestIdByName(name){
         return new Promise ((resolve, reject)=>{
-        let query=`SELECT id FROM RESTURANT WHERE name LIKE %'${name}'%;`;
+        let query=`SELECT id FROM RESTAURANT WHERE name LIKE %'${name}'%;`;
         this.connection.query(query,(err,res)=>{
             if(err) throw err;
             this.connection.end();
@@ -62,7 +62,7 @@ class Resturant {
 
     getRating(rest_id){
     return new Promise((resolve, reject)=>{
-        let query=`SELECT rating FROM Resturant WHERE rest_id='${rest_id}';`;
+        let query=`SELECT rating FROM Restaurant WHERE rest_id='${rest_id}';`;
         this.connection.query(query,(err,res)=>{
             if(err) throw err;
             // this.connection.end();
@@ -73,18 +73,18 @@ class Resturant {
 
     getByCuisine(cuisine){
         return new Promise((resolve,reject)=>{
-            let query=`SELECT * FROM Resturant WHERE cuisine='${cuisine}';`
+            let query=`SELECT * FROM Restaurant WHERE cuisine='${cuisine}';`
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
             //    this.connection.end()
-                console.log(`All resturants based on ${cuisine}:`, res);
+                console.log(`All restaurants based on ${cuisine}:`, res);
                 return;
             })
         })
     }
     getByPriceRang(min,max){
         return new Promise((resolve,reject)=>{
-            let query=`SELECT * FROM Resturant WHERE Price > '${min}' AND Price < '${max}';`;
+            let query=`SELECT * FROM Restaurant WHERE Price > '${min}' AND Price < '${max}';`;
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
                 // this.connection.end()
@@ -99,4 +99,4 @@ class Resturant {
 
 
 }
-module.exports = Resturant;
+module.exports = Restaurant;
