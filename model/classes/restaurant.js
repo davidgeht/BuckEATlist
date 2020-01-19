@@ -30,7 +30,7 @@ class Restaurant {
     }
     GetAllByLikeName(name){
         return new Promise((resolve,reject)=>{
-            let query=`SELECT * FROM Restaurant WHERE name LIKE %'${name}'%;`;
+            let query=`SELECT * FROM Restaurant WHERE name LIKE '%${name}%';`;
             this.connection.query(query,(err,res)=>{
                 if (err) throw err;
                 this.connection.end();

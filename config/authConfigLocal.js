@@ -21,7 +21,7 @@ passport.use(new LocalStrategy(
         }
         if (!result) {
           //console.log('got into !result');
-          done(null, false, {message: 'Incorrect email or password'});
+            done(null, false, {message: 'Incorrect email or password'});
           } else {
             //console.log('userInfo[0] passed to done: ', userInfo[0]);
             done(null, userInfo[0]);

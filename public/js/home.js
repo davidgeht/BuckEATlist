@@ -17,7 +17,7 @@ $(document).ready(async function (){
     
     //let id = await $.get('/api/user').id; //better way to get logged in user?
     let id = 22;
-    $.post(`/api/users/${id}/buckeatlist`)
+    $.get(`/api/users/buckeatlist`)
     .then(data=>{        
         loadMapMarkers(data);
     });    
