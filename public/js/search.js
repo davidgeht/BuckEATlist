@@ -15,8 +15,14 @@ $("#searchForm").submit( event => {
     };
     
     $.post('/api/search/restaurantsNearby',body)
+<<<<<<< HEAD
     .then(function(data){
+=======
+    .then(function(data){    
+>>>>>>> 9027c42dc5a9868a8413874cdb8b4aa84332daf0
         renderResults(data);
+    }).catch(err=>{
+
     });     
    
 });
@@ -39,7 +45,8 @@ function renderResults(data){
     $("#results").html(contentStr);
 
     $(".addToList").on('click', function(event){                
-        let restaurant = $(event.currentTarget).data("restaurant");        
+        let restaurant = $(event.currentTarget).data("restaurant"); 
+        console.log(restaurant);       
         $.post(`/api/buckeatlist/add`, restaurant)
         .then();            
     });

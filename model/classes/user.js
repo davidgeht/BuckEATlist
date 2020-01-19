@@ -17,7 +17,11 @@ class User {
      getUserByID(id){
         return new Promise((resolve,reject)=>{
             let query=`SELECT U.id, username, encypted_pw, emailaddress, 
+<<<<<<< HEAD
             fullname, homecity_id from Users as u where U.id = ${id};`;
+=======
+            fullname, homecity_id from Users as u where U.id = '${id}';`;
+>>>>>>> 9027c42dc5a9868a8413874cdb8b4aa84332daf0
 
             this.connection.query(query, (err,res)=> {
                 if(err) throw err;

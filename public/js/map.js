@@ -9,19 +9,19 @@ function initMap() {
 
 function setMarkers(restuarantList, map) {
     let markers = [];
-    let restuarants = [];   
+    let restaurants = [];   
     let image = {
         //url: "/Images/office-building-marker.png"
     };
 
     if (restuarantList.length > 0) {
-        restuarants = restuarantList;
+        restaurants = restuarantList;
     }    
     
-    createMarkers(restuarants, map);
+    createMarkers(restaurants, map);
 
-    async function createMarkers(restuarants, map) {
-        for (const restuarant of restuarants) {
+    async function createMarkers(restaurants, map) {
+        for (const restuarant of restaurants) {
             let imageSource = '';
             let mlat = parseFloat(restuarant.coordinates.latitude);
             let mlng = parseFloat(restuarant.coordinates.longitude);
@@ -53,7 +53,7 @@ function setMarkers(restuarantList, map) {
 
                     let contentString =
                     `<div class="maps-info-pane"> 
-                        <h2 class="resturant-name"> ${thisRestaurant.name}</h2>
+                        <h2 class="restaurant-name"> ${thisRestaurant.name}</h2>
                         <div class="">
                             <div class="" style="background-image: url(\'${imageSource}\')"></div>
                             <div class="property-info">

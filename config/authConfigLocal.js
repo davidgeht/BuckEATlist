@@ -14,10 +14,17 @@ passport.use(new LocalStrategy(
         if (userInfo.length < 1) {
           result = false;
         } else {
+<<<<<<< HEAD
           //console.log(userInfo);
           //console.log(userInfo[0].encypted_pw);
           result = await bcrypt.compare(password, userInfo[0].encypted_pw);
           //console.log(result);
+=======
+          // console.log(userInfo);
+          // console.log(userInfo[0].encypted_pw);
+          result = await bcrypt.compare(password, userInfo[0].encypted_pw);
+          // console.log(result);
+>>>>>>> 9027c42dc5a9868a8413874cdb8b4aa84332daf0
         }
         if (!result) {
           //console.log('got into !result');
@@ -35,16 +42,16 @@ passport.use(new LocalStrategy(
 
 
 passport.serializeUser(function(user, done) {
-  console.log('user.id in serialize: ', user.id)
+  //console.log('user.id in serialize: ', user.id)
   done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
-  console.log('id in deserialize: ', id);
+  //console.log('id in deserialize: ', id);
   user.getUserByID(id)
   .then(function(result){
     let userObj = result[0];
-    console.log('ready to send userObj: ', userObj)
+    //console.log('ready to send userObj: ', userObj)
     done(null, userObj);
   })
   .catch()

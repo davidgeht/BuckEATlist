@@ -90,6 +90,7 @@ apiRoutes.post('/api/search/restaurantsNearby', async function(req, res, next){
     let lat = req.body.latitude;
     let lon = req.body.longitude;
     let radius = req.body.radius;
+<<<<<<< HEAD
     let results = await yelp.searchRestoByCoord(lat, lon, radius);
     //console.log(results.data);
     res.json(results.data.businesses);
@@ -115,6 +116,20 @@ apiRoutes.post('/api/buckeatlist/add', async function(req, res){
     let id = newRecord.id;
     await bucketlist.addNew(userId, id, 0);
     res.status('200').send('Item added');
+=======
+    let results = await yelp.searchRestoByCoord(lat, lon, radius);    
+    res.json(results.data.businesses);
+});
+
+apiRoutes.post('/api/buckeatlist/add', function(req, res){
+    //console.log(req.user);
+    console.log(req.body);
+    // let restaurantId = req.id;
+    // let userId = req.userId;
+    // bucketlist.addNew(userId, restaurantId, 0)
+    // .then(function(response){res.status('200').send('Item added')})
+    // .catch(function(error){res.status('500').send(error)});
+>>>>>>> 9027c42dc5a9868a8413874cdb8b4aa84332daf0
 });
 
 
