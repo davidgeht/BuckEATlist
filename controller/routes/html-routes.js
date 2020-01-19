@@ -21,19 +21,18 @@ htmlRoutes.get('/signup', function(req, res){
     res.sendFile(signupPage);
 });
 
-htmlRoutes.get('/home', 
-//isAuthenticated, 
+htmlRoutes.get('/home', isAuthenticated, 
 function(req, res, next){
     let homeObj = {};
     homeObj.buckeatList = [];
     homeObj.user = {};
     homeObj.title = '';
+    console.log('trying to call homepage')
     res.render('home', homeObj);
     //res.send('MAIN PAGE');
 });
 
-htmlRoutes.get('/search', 
-//isAuthenticated, 
+htmlRoutes.get('/search', isAuthenticated, 
 function(req, res, next){
     res.render('search');
     //res.send('MAIN PAGE');

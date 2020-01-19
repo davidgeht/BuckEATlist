@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 let user = new User();
 //var db = require("../models"); TBD
 
-passport.use(new LocalStrategy(
+passport.use(new LocalStrategy( 
     function(username, password, done) {
       user.getUserByEmail(username)
       .then(async function(userInfo){
@@ -20,10 +20,12 @@ passport.use(new LocalStrategy(
           console.log(result);
         }
         if (!result) {
-            return done(null, false, {message: 'Incorrect email or password'});
+          console.log('got into !result');
+          done(null, false, {message: 'Incorrect email or password'});
           } else {
-            return done(null, user);
-          }
+            console.log('userInfo[0] passed to done: ', userInfo[0]);
+            done(null, userInfo[0]);
+          } 
       })
       .catch(function(err){
         throw err;
@@ -31,14 +33,21 @@ passport.use(new LocalStrategy(
     })); 
 
 
-// TBD do I need this?
 
-passport.serializeUser(function(user, cb) {
-  cb(null, user);
+passport.serializeUser(function(user, done) {
+  console.log('user.id in serialize: ', user.id)
+  done(null, user.id);
 });
 
-passport.deserializeUser(function(obj, cb) {
-  cb(null, obj);
+passport.deserializeUser(function(id, done) {
+  console.log('id in deserialize: ', id);
+  user.getUserByID(id)
+  .then(function(result){
+    let userObj = result[0];
+    console.log('ready to send userObj: ', userObj)
+    done(null, userObj);
+  })
+  .catch()
 });
 
 // Exporting our configured passport

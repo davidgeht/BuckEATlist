@@ -4,6 +4,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const path = require("path");
 const User = require("../../model/classes/user"); // TBD the model files
+const Bucketlist = require("../../model/classes/bucketlist");
 const Zomato = require("../../api/zomato"); // TBD for API file
 const Yelp = require("../../api/yelp");
 //const City = require("TBD"); // TBD the city file
@@ -11,6 +12,7 @@ const Yelp = require("../../api/yelp");
 const passport = require("../../config/authConfigLocal");
 const saltRounds = 10;
 let user = new User();
+let bucketlist = new Bucketlist();
 //let city = new City();
 let zomato = new Zomato();
 let yelp = new Yelp();
@@ -41,15 +43,18 @@ let test = async function(){
     let result1 = await zomato.searchRestaurantsByCoord(-79.413449,43.778126,100);
     console.log('result1');
     console.log(result1.data.restaurants);
-
-
 }
 
 var apiRoutes = express.Router();
 
-apiRoutes.post('/api/login', passport.authenticate("local"), function(req, res){
-    res.status(200).send('User authenticated successfully');
-})
+apiRoutes.post('/api/login', passport.authenticate("local", {failureMessage: 'Incorrect user name or password'}), function(req, res){
+    res.send('Success');
+});
+
+apiRoutes.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/login');
+});
 
 apiRoutes.post('/api/signup', checkUserExists, async function(req, res){
     console.log('ready to insert');
@@ -58,7 +63,7 @@ apiRoutes.post('/api/signup', checkUserExists, async function(req, res){
     user.addNew(firstName, lastName, email, hashed)
     .then(function(response) {res.send('200')})
     .catch(function(err) {res.status(500).send('There was an error creating user: '+err)});
-})
+});
 
 apiRoutes.get('/api/search/cities', async function(req, res, next){
     let cities = await city.findLike(req.body.city);
@@ -67,46 +72,60 @@ apiRoutes.get('/api/search/cities', async function(req, res, next){
     } else {
         res.json(cities);
     }
-})
+});
 
 apiRoutes.get('/api/search/city', function(req, res, next){
     let searchSrt = req.body.searchStr;
     let result = zomato.searchCity(searchSrt);
 
-})
+});
 
 apiRoutes.get('/api/search/restaurants', function(req, res, next){
     
-})
+});
+
+apiRoutes.get('/api/search/restaurantsNearby', function(req, res, next){
+    
+});
+
+apiRoutes.get('/api/buckeatlist/add', function(req, res){
+    console.log(req.user);
+    // let restaurantId = req.id;
+    // let userId = req.userId;
+    // bucketlist.addNew(userId, restaurantId, 0)
+    // .then(function(response){res.status('200').send('Item added')})
+    // .catch(function(error){res.status('500').send(error)});
+});
+
 
 apiRoutes.get('/api/users/:id/buckeatlist/', function(req, res, next){
-    let id = req.params.id;
-    let allRest = {};
-    //allRest = user.getBuckeatlistExt(id);
-    let coords = {};
-    // TBD get coordinates only from the result
-    res.json(coords);
+    let userId = req.params.id;
+    bucketlist.getBucketList(userId)
+    .then(function(allRest){
+        res.send(allRest);
+    })
+    .catch(function(error){})
 })
 
-apiRoutes.post('/api/search/location', async function(req, res){
-    let searchStr = req.body.location;
-    let allCities = await zomato.searchCities(searchStr);
-    let response = [];
-    for (city of allCities){
-        let c = {
-            id: city.id,
-            name: city.name,
-            countryId: city.country_id,
-            countryName: city.country_name,
-            countryFlagUrl: city.country_flag_url,
-            stateId: city.state_id,
-            stateCode: city.state_code
-        };
-        response.push(c);
-    }
-    test();
-    res.json(response);
-})
+// apiRoutes.post('/api/search/location', async function(req, res){
+//     let searchStr = req.body.location;
+//     let allCities = await zomato.searchCities(searchStr);
+//     let response = [];
+//     for (city of allCities){
+//         let c = {
+//             id: city.id,
+//             name: city.name,
+//             countryId: city.country_id,
+//             countryName: city.country_name,
+//             countryFlagUrl: city.country_flag_url,
+//             stateId: city.state_id,
+//             stateCode: city.state_code
+//         };
+//         response.push(c);
+//     }
+//     test();
+//     res.json(response);
+// })
 
 apiRoutes.post('/api/search/restaurants', async function(req, res){
     let location = req.body.location;
@@ -174,12 +193,6 @@ apiRoutes.post('/api/search/business', async function(req, res){
     res.json(response.data);
 })
 
-apiRoutes.get('/api/search/:locId/:cuisineId', async function(req, res){
-    let locId = req.params.locId;
-    let cuisineId = req.params.cuisineId;
-    let restaurants = await zomato.searchRestaurants(locId, cuisineId);
-    res.json(restaurants);
-})
 
 
 

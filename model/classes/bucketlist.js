@@ -1,7 +1,12 @@
 const connection =require("../../config/connection");
 class Bucketlist{
+<<<<<<< HEAD
+    constructor(){
+        
+=======
     constructor(connection){
         this.connection=connection
+>>>>>>> e6df7c383969885523c064cab29c086c46ed0132
     }
     addNew(user_id,rest_id,visited){
         return new Promise((resolve,reject)=>{
