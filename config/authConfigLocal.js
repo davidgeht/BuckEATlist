@@ -14,17 +14,10 @@ passport.use(new LocalStrategy(
         if (userInfo.length < 1) {
           result = false;
         } else {
-<<<<<<< HEAD
           //console.log(userInfo);
           //console.log(userInfo[0].encypted_pw);
           result = await bcrypt.compare(password, userInfo[0].encypted_pw);
           //console.log(result);
-=======
-          // console.log(userInfo);
-          // console.log(userInfo[0].encypted_pw);
-          result = await bcrypt.compare(password, userInfo[0].encypted_pw);
-          // console.log(result);
->>>>>>> 9027c42dc5a9868a8413874cdb8b4aa84332daf0
         }
         if (!result) {
           //console.log('got into !result');

@@ -90,8 +90,8 @@ apiRoutes.post('/api/search/restaurantsNearby', async function(req, res, next){
     let lat = req.body.latitude;
     let lon = req.body.longitude;
     let radius = req.body.radius;
-<<<<<<< HEAD
     let results = await yelp.searchRestoByCoord(lat, lon, radius);
+    // TODO: make a call for the user, and verify if he alrady has a resto in the bucketlist. Add a boolean to the output.
     //console.log(results.data);
     res.json(results.data.businesses);
 });
@@ -111,32 +111,28 @@ apiRoutes.post('/api/buckeatlist/add', async function(req, res){
     let address = JSON.stringify(req.body.location);
     let website = req.body.url;
     let reviewCount = req.body.review_count;
-    await restaurant.addNew(name, yelpId, rating, price, lon, lat, city, address, website, reviewCount)
-    let newRecord = await restaurant.getAllByYelpId(yelpId);
-    let id = newRecord.id;
+    let storedRest = await restaurant.getAllByYelpId(yelpId);
+    let id;
+    if (storedRest.length < 1) {
+        await restaurant.addNew(name, yelpId, rating, price, lon, lat, city, address, website, reviewCount)
+        let newRecord = await restaurant.getAllByYelpId(yelpId);
+        id = newRecord[0].id;
+    } else {
+        console.log(storedRest);
+        id = storedRest[0].id;
+        console.log(id);
+    }
+    console.log('id = ', id);
     await bucketlist.addNew(userId, id, 0);
     res.status('200').send('Item added');
-=======
-    let results = await yelp.searchRestoByCoord(lat, lon, radius);    
-    res.json(results.data.businesses);
-});
-
-apiRoutes.post('/api/buckeatlist/add', function(req, res){
-    //console.log(req.user);
-    console.log(req.body);
-    // let restaurantId = req.id;
-    // let userId = req.userId;
-    // bucketlist.addNew(userId, restaurantId, 0)
-    // .then(function(response){res.status('200').send('Item added')})
-    // .catch(function(error){res.status('500').send(error)});
->>>>>>> 9027c42dc5a9868a8413874cdb8b4aa84332daf0
 });
 
 
-apiRoutes.get('/api/users/:id/buckeatlist/', function(req, res, next){
-    let userId = req.params.id;
+apiRoutes.get('/api/users/buckeatlist/', function(req, res){
+    let userId = req.user.id;
     bucketlist.getBucketList(userId)
     .then(function(allRest){
+        console.log(allRest)
         res.send(allRest);
     })
     .catch(function(error){})

@@ -1,13 +1,13 @@
-const connection =require("../../config/connection");
+const connection = require("../../config/connection");
 
 class Restaurant {
-    constructor(connection){
-        this.connection=connection
+    constructor(){
+        this.connection = connection
     }
     addNew(name,yelp_id,rating, price, lon, lat, city_name, address, website, review_count){
         return new Promise((resolve,reject)=>{
-            let query =`INSERT INTO Restaurant(name, yelp_id,rating, price, long, lat, city_name, address,website, review_count)
-            VALUES('${name}','${yelp_id}','${rating}','${price}','${lon}','${lat}', '${city_name}','${address}','${website}','${review_count}');`;
+            let query =`INSERT INTO Restaurant(name, yelp_id,rating, price, lon, lat, city_name, address,website, review_count)
+            VALUES('${name}','${yelp_id}',${rating},'${price}',${lon},${lat}, '${city_name}','${address}','${website}',${review_count});`;
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
                 // this.connection.end();
@@ -96,10 +96,9 @@ class Restaurant {
 
     getAllByYelpId(yelpId){
         return new Promise((resolve,reject)=>{
-            let query=`SELECT * FROM Resturant WHERE yelp_id='${yelpId}';`;
+            let query=`SELECT * FROM Restaurant WHERE yelp_id='${yelpId}';`;
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
-                this.connection.end();
                 resolve(res);
             })
 

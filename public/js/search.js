@@ -15,11 +15,7 @@ $("#searchForm").submit( event => {
     };
     
     $.post('/api/search/restaurantsNearby',body)
-<<<<<<< HEAD
     .then(function(data){
-=======
-    .then(function(data){    
->>>>>>> 9027c42dc5a9868a8413874cdb8b4aa84332daf0
         renderResults(data);
     }).catch(err=>{
 
