@@ -27,8 +27,10 @@ $(document).ready(async function (){
     $("button.info").on("click", async function(event){
         event.stopPropagation();
         let yelp_id = $(event.currentTarget).data("yelpid");
+        let added_at = $(event.currentTarget).data("addedat");
         console.log(yelp_id);
-        loadInfoModal(yelp_id);
+        console.log(added_at);
+        loadInfoModal(yelp_id,added_at);
     });
 
     $("button.checkoff").on("click", function(event){
@@ -37,12 +39,12 @@ $(document).ready(async function (){
     });
 });
 
-function loadInfoModal(yelp_id){
+function loadInfoModal(yelp_id, added_at){
 
-    $.get(`/api/restaurants/${yelp_id}`)
+    $.post(`/api/search/business`,{location:yelp_id})
     .then(data =>{
 
-        populateRestaurantModal(data);
+        populateRestaurantModal(data,added_at);
 
         $("#restInfoModal").modal({show:true,focus:true});
 
@@ -63,13 +65,25 @@ function loadMapMarkers(restaurants){
     let image = {
         url: "../content/images/bucket-map-icon.png"
     };
-
     setMarkers(restaurants, map, image);    
 }
 
-function populateRestaurantModal(restaurant){
+function populateRestaurantModal(restaurant, added_at){
     
-    $("#modalAddtoList").on('click',function (event) {
+    let modal = $("#restInfoModal");
+
+    modal.find("h5.modal-title").text(restaurant.name);
+    modal.find(".restImg").attr("src",restaurant.image_url);
+    modal.find("p.categories").text(restaurant.categories.map(e=>{return e.title}).join(', '));
+    modal.find("span.price").text(restaurant.price);
+    modal.find("p.address").text(restaurant.location.display_address.join("\n"));
+    modal.find("span.phoneNumber").text(restaurant.display_phone);
+    modal.find("span.rating").text(`${restaurant.rating}/5`);
+    modal.find("span.openNow").text(restaurant.hours.is_open_now? "Yes":"No");    
+    modal.find("p.addedAt").text(moment(Date.parse(added_at)).format("MMMM D, YYYY"));
+    modal.find("span.link a").attr("href",restaurant.url);
+
+    $("#checkOffList").on('click',function (event) {
         $.post(`/api/user/${userId}/buckeatlist/add`, restaurant)
         .then();
     });

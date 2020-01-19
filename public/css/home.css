@@ -1,0 +1,10 @@
+p.address{
+    white-space: pre-line;
+}
+
+.restImg{
+    height: 150px;
+}
+label{
+    font-weight: bold;
+}

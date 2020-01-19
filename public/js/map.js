@@ -70,22 +70,6 @@ async function createMarkers(restaurants, map, image) {
                 // let categoriesStr = thisRestaurant.categories.map(e =>{                        
                 //     return e.title;
                 // }).join(", ");                   
-
-                //let contentString =
-                `<div class="maps-info-pane"> 
-                    <h2 class="restaurant-name"> ${thisRestaurant.name}</h2>
-                    <div class="">
-                        <div class="" style="background-image: url(\'${imageSource}\')"></div>
-                        <div class="restaurant-info">
-                            <h4 class="address"> ${JSON.parse(thisRestaurant.address).address1}</h4>                                
-                            <p class="">Cuisine: <strong> ${categoriesStr}</strong></p>
-                            <p class="">Price: <strong> ${thisRestaurant.price}</strong></p>
-                            <p class="">Rating: <strong> ${thisRestaurant.rating}</strong></p>
-                            <button class="btn btn-success info" data-yelpid="${thisRestaurant.yelp_id}">Show Details</button>
-                        </div>
-                    </div>
-                </div>`;
-                
                 
                 let contentDiv = $("<div>").addClass("maps-info-pane")
                     .append($("<h2>").addClass("restaurant-name").text(thisRestaurant.name),
@@ -102,13 +86,12 @@ async function createMarkers(restaurants, map, image) {
                                                     console.log("hi");
                                                     let yelp_id = $(event.currentTarget).data("yelpid");
                                                     //console.log(yelp_id);
-                                                    loadInfoModal(yelp_id);
+                                                    loadInfoModal(yelp_id, thisRestaurant.added_at);
                                                 })
                                     )
                             )
                     );
-                console.log(contentDiv);                            
-                console.log(contentDiv.get());
+              
                 infowindow.setContent(contentDiv.clone(true)[0]);
                 infowindow.open(map, marker);
 
