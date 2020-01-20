@@ -4,6 +4,8 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const path = require("path");
 const User = require("../../model/classes/user"); // TBD the model files
+const Bucketlist = require("../../model/classes/bucketlist");
+const Restaurant = require("../../model/classes/restaurant");
 const Zomato = require("../../api/zomato"); // TBD for API file
 const Yelp = require("../../api/yelp");
 //const City = require("TBD"); // TBD the city file
@@ -11,15 +13,17 @@ const Yelp = require("../../api/yelp");
 const passport = require("../../config/authConfigLocal");
 const saltRounds = 10;
 let user = new User();
+let bucketlist = new Bucketlist();
 //let city = new City();
 let zomato = new Zomato();
 let yelp = new Yelp();
+let restaurant = new Restaurant();
 
 let checkUserExists = function(req, res, next){
     let email = req.body.email;
     let emailExists = user.emailExists(email);
     emailExists.then(function(response){
-        console.log('response = ',response);
+        //console.log('response = ',response);
         if (!response) {
             next();
         } else {
@@ -41,15 +45,18 @@ let test = async function(){
     let result1 = await zomato.searchRestaurantsByCoord(-79.413449,43.778126,100);
     console.log('result1');
     console.log(result1.data.restaurants);
-
-
 }
 
 var apiRoutes = express.Router();
 
-apiRoutes.post('/api/login', passport.authenticate("local"), function(req, res){
-    res.status(200).send('User authenticated successfully');
-})
+apiRoutes.post('/api/login', passport.authenticate("local", {failureMessage: 'Incorrect user name or password'}), function(req, res){
+    res.send('Success');
+});
+
+apiRoutes.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/login');
+});
 
 apiRoutes.post('/api/signup', checkUserExists, async function(req, res){
     console.log('ready to insert');
@@ -58,128 +65,142 @@ apiRoutes.post('/api/signup', checkUserExists, async function(req, res){
     user.addNew(firstName, lastName, email, hashed)
     .then(function(response) {res.send('200')})
     .catch(function(err) {res.status(500).send('There was an error creating user: '+err)});
-})
+});
 
-apiRoutes.get('/api/search/cities', async function(req, res, next){
-    let cities = await city.findLike(req.body.city);
-    if (!cities) {
-        res.send("No cities found");
+
+apiRoutes.post('/api/search/restaurantsNearby', async function(req, res, next){
+    let lat = req.body.latitude;
+    let lon = req.body.longitude;
+    let radius = req.body.radius;
+    let term = req.body.term;
+    let response;
+    if (!term || term.length < 1) {
+        console.log('request without term')
+        response = await yelp.searchRestoByCoord(lat, lon, radius);
     } else {
-        res.json(cities);
+        console.log('request with term')
+        response = await yelp.searchRestoByCoordAndTerm(lat, lon, radius, term);
+    };
+    let results = response.data.businesses;
+    //  make a call for the user, and verify if he alrady has a resto in the bucketlist. Add a boolean to the output.
+    let userId = req.user.id;   
+    let userBuckL = await bucketlist.getBucketlist(userId);
+    let buckIds = [];
+    for (buckItem of userBuckL) {
+        buckIds.push(buckItem.yelp_id)
     }
-})
-
-apiRoutes.get('/api/search/city', function(req, res, next){
-    let searchSrt = req.body.searchStr;
-    let result = zomato.searchCity(searchSrt);
-
-})
-
-apiRoutes.get('/api/search/restaurants', function(req, res, next){
-    
-})
-
-apiRoutes.get('/api/users/:id/buckeatlist/', function(req, res, next){
-    let id = req.params.id;
-    let allRest = {};
-    //allRest = user.getBuckeatlistExt(id);
-    let coords = {};
-    // TBD get coordinates only from the result
-    res.json(coords);
-})
-
-apiRoutes.post('/api/search/location', async function(req, res){
-    let searchStr = req.body.location;
-    let allCities = await zomato.searchCities(searchStr);
-    let response = [];
-    for (city of allCities){
-        let c = {
-            id: city.id,
-            name: city.name,
-            countryId: city.country_id,
-            countryName: city.country_name,
-            countryFlagUrl: city.country_flag_url,
-            stateId: city.state_id,
-            stateCode: city.state_code
-        };
-        response.push(c);
+    for (result of results) {
+        if (buckIds.includes(result.id)) {
+            result.inBucketlist = true;
+        } else {
+            result.inBucketlist = false;
+        }
     }
-    test();
-    res.json(response);
-})
+    //console.log(results.data);
+    res.json(results);
+});
+
 
 apiRoutes.post('/api/search/restaurants', async function(req, res){
     let location = req.body.location;
-    let response = await yelp.searchRestoByLocation(location);
-    // let response = [];
-    // for (city of allCities){
-    //     let c = {
-    //         id: city.id,
-    //         name: city.name,
-    //         countryId: city.country_id,
-    //         countryName: city.country_name,
-    //         countryFlagUrl: city.country_flag_url,
-    //         stateId: city.state_id,
-    //         stateCode: city.state_code
-    //     };
-    //     response.push(c);
-    // }
-    // test();
-    console.log(response.data);
-    res.json(response.data);
-})
-
-apiRoutes.post('/api/search/nearby', async function(req, res){
-    let lat = 43.77809705059161 // req.body.lat;
-    let lon = -79.41342294216157 // req.body.lon;
-    let radius = 500;
-    let response = await yelp.searchRestoByCoord(lat, lon, radius);
-    // let response = [];
-    // for (city of allCities){
-    //     let c = {
-    //         id: city.id,
-    //         name: city.name,
-    //         countryId: city.country_id,
-    //         countryName: city.country_name,
-    //         countryFlagUrl: city.country_flag_url,
-    //         stateId: city.state_id,
-    //         stateCode: city.state_code
-    //     };
-    //     response.push(c);
-    // }
-    // test();
-    console.log(response.data);
-    res.json(response.data);
-})
+    let term = req.body.term;
+    let response;
+    if (!term || term.length < 1) {
+        console.log('request without term');
+        response = await yelp.searchRestoByLocation(location);
+    } else {
+        console.log('request with term');
+        response = await yelp.searchRestoByLocationAndTerm(location, term);
+    }
+    //console.log(response.data.businesses);
+    let results = response.data.businesses;
+    // call to check if the rest is already in the bucketlist
+    let userId = req.user.id;   
+    let userBuckL = await bucketlist.getBucketlist(userId);
+    let buckIds = [];
+    for (buckItem of userBuckL) {
+        buckIds.push(buckItem.yelp_id)
+    }
+    for (result of results) {
+        if (buckIds.includes(result.id)) {
+            result.inBucketlist = true;
+        } else {
+            result.inBucketlist = false;
+        }
+    }
+    console.log('Sending the response');
+    res.json(results);
+});
 
 
-apiRoutes.post('/api/search/business', async function(req, res){
-    let businessId = req.body.location // req.body.businessId;
+apiRoutes.post('/api/buckeatlist/add', async function(req, res){
+    
+    let userId = req.user.id;
+    let name = req.body.name.replace("'","''");
+    let yelpId = req.body.id;
+    let rating = req.body.rating;
+    let price = req.body.price;
+    let lon = req.body.coordinates.longitude;
+    let lat = req.body.coordinates.latitude;
+    let cuisine = JSON.stringify(req.body.categories);
+    let city = req.body.location.city;
+    let address = JSON.stringify(req.body.location);
+    let website = req.body.url;
+    let reviewCount = req.body.review_count;
+    let storedRest = await restaurant.getAllByYelpId(yelpId);
+    let id;
+    if (storedRest.length < 1) {
+        await restaurant.addNew(name, yelpId, rating, price, lon, lat, city, address, website, reviewCount)
+        let newRecord = await restaurant.getAllByYelpId(yelpId);
+        id = newRecord[0].id;
+    } else {
+        console.log(storedRest);
+        id = storedRest[0].id;
+        console.log(id);
+    }
+    console.log('id = ', id);
+    await bucketlist.addNew(userId, id, 0);    
+    res.status('200').send('Item added');
+});
+
+
+apiRoutes.get('/api/users/buckeatlist', function(req, res){
+    let userId = req.user.id;
+    bucketlist.getBucketlistExpanded(userId)
+    .then(function(allRest){
+        //console.log(allRest)
+        res.send(allRest);
+    })
+    .catch(function(error){})
+});
+
+
+apiRoutes.get('/api/user/visited', async function(req, res){
+    let userId = req.user.id;
+    let response = await bucketlist.getVisited(userId);
+    console.log(response);
+    res.json(response);
+});
+
+
+apiRoutes.get('/api/restaurants/:id', async function(req, res){
+    let businessId = req.params.id;
     let response = await yelp.getRestoDetail(businessId);
-    // let response = [];
-    // for (city of allCities){
-    //     let c = {
-    //         id: city.id,
-    //         name: city.name,
-    //         countryId: city.country_id,
-    //         countryName: city.country_name,
-    //         countryFlagUrl: city.country_flag_url,
-    //         stateId: city.state_id,
-    //         stateCode: city.state_code
-    //     };
-    //     response.push(c);
-    // }
-    // test();
     console.log(response.data);
     res.json(response.data);
-})
+});
 
-apiRoutes.get('/api/search/:locId/:cuisineId', async function(req, res){
-    let locId = req.params.locId;
-    let cuisineId = req.params.cuisineId;
-    let restaurants = await zomato.searchRestaurants(locId, cuisineId);
-    res.json(restaurants);
-})
+apiRoutes.post('/api/checkoffRestaurant/:id', async function(req, res){
+    let dbId = req.params.id;
+    await bucketlist.updateRes(dbId);
+    res.status('200').send('Updated successfully');
+});
+
+apiRoutes.post('/api/deleteRestaurant/:id', async function(req, res){
+    let dbId = req.params.id;
+    await bucketlist.delRest(dbId);
+    res.status('200').send('Deleted successfully');
+});
 
 
 

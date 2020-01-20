@@ -10,12 +10,20 @@
 body {
     color: var(--txt-color-global);
 }
+
+a{
+    color:unset;
+    text-decoration: underline;
+}
+a:visited{
+    color:unset;
+}
 header.main{
-    padding: 10px 0;
+    padding: 10px 0 20px 0;
     background-color: var(--bg-color-header);
     border-bottom: 3px solid gold;
     text-align: center; 
-    margin-bottom:20px;
+    /* margin-bottom:20px; */
 }
 .btn.btn-submit{
     background-color: var(--btn-color-submit);
@@ -32,14 +40,23 @@ header .profile{
     white-space:pre-line;
     color:red;
 }
+#listColumn{
+    padding-right:0;
+}
+#restList{      
+    overflow-y: auto;   
+}
+#mapColumn{
+    padding:0;
+}
 
-.restaurantContrainer{
+.restaurantContainer{
     margin-bottom: 5px;
     border: 2px solid rgb(206, 206, 206);
     border-radius: 5px;
     padding: 10px 0 10px 20px;    
 }
-.restaurantContrainer:hover{
+.restaurantContainer:hover{
     border-color: green;
     cursor: pointer;
 }
@@ -47,9 +64,15 @@ header .profile{
 .restName{
     text-align:left;
     margin-right:20px;
-    padding-left:0;
-    overflow-x: hidden;
+    padding-left:0;    
 }
-.restaurantContrainer button{
+.restaurantContainer button{
     margin-right: 15px;
+}
+
+.navbar-nav:first-child{
+    border-left: 1px solid lightgrey;
+}
+.nav-item{
+    border-right: 1px solid lightgrey;
 }

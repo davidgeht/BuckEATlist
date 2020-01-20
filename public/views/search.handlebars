@@ -7,19 +7,31 @@
                     <li class="nav-item"><a class="nav-link" href="/home">My buckEATlist</a></li>
                     <li class="nav-item"><a class="nav-link" href="/noms-map">My Noms Map</a></li>
                     <li class="nav-item active"><a class="nav-link" href="#">Search</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">My Reviews</a></li>
                 </ul>
             </div>
         </nav>
         <form class="col-4" id="searchForm">
             <div class="form-group">
-                <label for="location">Email Address</label>
+                <label for="location">What</label>
+                <input type="text" class="form-control" id="nameInput" placeholder="Joe's">
+                {{!-- <label for="location">Type</label>
+                <input type="text" class="form-control" id="typeInput" placeholder="Ukrainian"> --}}
+                <label for="location">Where</label>
                 <input type="text" class="form-control" id="locationInput" placeholder="Toronto, ON">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="nearbyChbox">
+                    <label class="form-check-label" for="nearbyChbox">Search near me</label>
+                </div>
+                {{!-- <button type="submit" class="btn btn-submit" id="btnSearchNearby">Search Nearby</button> --}}
             </div>            
             <button type="submit" class="btn btn-submit" id="btnSearchSubmit">Search</button>
         </form>
-        <div id="results"></div>
-        {{> searchResults}}          
+        <div id="results"></div>                  
     </div>
 </div>
-<script src="../js/search.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjXmP2cdd3qe_9TnbZfMldDE7_K1MtPwk" defer></script>
+<script src="../js/map.js" type="text/javascript" defer></script>
+<script src="../js/search.js" type="text/javascript" defer></script>
+
   

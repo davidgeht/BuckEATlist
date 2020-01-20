@@ -1,0 +1,11 @@
+p.address{
+    white-space: pre-line;
+}
+
+.restImg{
+    height: 150px;
+    max-width: 250px;
+}
+label{
+    font-weight: bold;
+}

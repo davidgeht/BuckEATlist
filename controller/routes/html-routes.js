@@ -3,8 +3,9 @@
 const express = require("express");
 const path = require("path");
 const isAuthenticated = require("../isAuthenticated");
+const Bucketlist = require("../../model/classes/bucketlist");
 
-
+let mbuckeatlist = new Bucketlist();
 var htmlRoutes = express.Router();
 
 htmlRoutes.get('/', function(req, res){
@@ -21,34 +22,34 @@ htmlRoutes.get('/signup', function(req, res){
     res.sendFile(signupPage);
 });
 
-htmlRoutes.get('/home', 
-//isAuthenticated, 
-function(req, res, next){
+htmlRoutes.get('/home', isAuthenticated, 
+async function(req, res, next){
     let homeObj = {};
-    homeObj.buckeatList = [];
-    homeObj.user = {};
-    homeObj.title = '';
+    console.log(req.user);
+    homeObj.restaurants = await mbuckeatlist.getBucketlistExpanded(req.user.id);
+    homeObj.username = req.user.firstname;
+    homeObj.title = 'My buckEATlist';
+    console.log('trying to call homepage');
     res.render('home', homeObj);
-    //res.send('MAIN PAGE');
+    
 });
 
-htmlRoutes.get('/search', 
-//isAuthenticated, 
+htmlRoutes.get('/noms-map', isAuthenticated, 
+async function(req, res, next){
+    let modelObj = {};
+    
+    modelObj.restaurants = await mbuckeatlist.getVisited(req.user.id);
+    modelObj.username = req.user.firstname;
+    modelObj.title = 'My Noms Map';
+    
+    res.render('visited', modelObj);
+    
+});
+
+htmlRoutes.get('/search', isAuthenticated, 
 function(req, res, next){
     res.render('search');
-    //res.send('MAIN PAGE');
+    
 });
-
-htmlRoutes.get('/api/login', function(req, res, next){
-    
-})
-
-htmlRoutes.get('/api/login', function(req, res, next){
-    
-})
-
-htmlRoutes.get('/api/login', function(req, res, next){
-    
-})
 
 module.exports = htmlRoutes;
