@@ -61,8 +61,7 @@ function populateRestaurantModal(restaurant){
 
     modal.find("h5.modal-title").text(restaurant.name);
     modal.find("p.rewview").text(restaurant.user_review);
-    modal.find("p.rating").html(generateRatingGraphic(restaurant.user_rating));
-    modal.find("span.openNow").text(restaurant.hours.is_open_now? "Yes":"No");    
+    modal.find("p.rating").html(generateRatingGraphic(restaurant.user_rating));  
     modal.find("p.addedAt").text(moment(Date.parse(restaurant.date_visited)).format("MMMM D, YYYY"));
     
 }
