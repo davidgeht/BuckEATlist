@@ -10,26 +10,36 @@ $('#nearbyChbox').click(event => {
     }
 });
 
-$("#searchForm").submit(event => {
+
+$("#searchForm").submit(async function (event) {
     event.preventDefault();
 
     if ($('#nearbyChbox').is(":checked")) {
         console.log("Searching nearby");
-        let location = $("#locationInput").val().trim();     
-        let term = $("#nameInput").val();
-        let body = {
-            latitude: 43.779256,
-            longitude: -79.415713,
-            radius: 500,
-            term: term  
-        };
         
-        $.post('/api/search/restaurantsNearby',body)
-        .then(function(data){
-            renderResults(data);
-        }).catch(err=>{
-    
-        });     
+
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(position =>{
+                
+                let location = $("#locationInput").val().trim();     
+                let term = $("#nameInput").val();
+                let body = {
+                    latitude: position.coords.latitude || 43.779256,
+                    longitude: position.coords.longitude || -79.415713,
+                    radius: 500,
+                    term: term  
+                };
+                
+                $.post('/api/search/restaurantsNearby',body)
+                .then(function(data){
+                    renderResults(data);
+                }).catch(err=>{
+            
+                });     
+                
+            }
+            ,null,{enableHighAccuracy: true});  
+        }   
        
     } else {
         let location = $("#locationInput").val();
@@ -52,7 +62,7 @@ $("#searchForm").submit(event => {
 function renderResults(data){
     $("#results").empty();
     let contentStr = $('<h3>').text('Search Results');
-    let resultList = $('<ul>').attr('class', 'restaurantContrainer list-group');
+    let resultList = $('<ul>').attr('class', 'list-group');
 
     if(data.length === 0){
         return `<span>0 results found</span>`;
@@ -60,15 +70,17 @@ function renderResults(data){
 
     for(const restaurant of data){ 
         console.log('getting restaurant details');
-        let item = $('<li>').attr({'class': 'list-group-item d-flex justify-content-between align-items-top', style: "width:750px;"});
-        let restocard = $('<div>').attr({'class': 'd-flex justify-content-left flex-column', style: "width:80%;padding:1rem;"});
+        let item = $('<li>').attr({'class': 'list-group-item d-flex justify-content-start align-items-top restaurantContainer', style: "width:750px;"});
+        let restocard = $('<div>').attr({'class': 'd-flex justify-content-left flex-column', style: "padding:1rem;"});
         let resto = $('<h5>').attr('class', 'restName').text(restaurant.name);
-        let img = $('<img>').attr({'src': restaurant.image_url, style: "width:150px;height:150px;"});
+        
+        let img = $("<div>").attr("style","width:150px").append($('<img>').attr({'src': restaurant.image_url, style: "max-width:150px;height:150px;"}));
+        
         let toDisable = restaurant.inBucketlist;        
-        let button = $('<button>').attr({'class': 'addToList btn btn-primary', 
+        let button = $('<button>').attr({'class': 'addToList btn btn-primary ml-auto', 
                         'data-restaurant': encodeJsonForHTML(restaurant), 
                         'data-yelpid':restaurant.id,
-                        'disabled': toDisable
+                        'disabled': toDisable,
                     });
         let i = $('<i>').attr('class', 'fas fa-plus');
         button.append(i);
@@ -90,6 +102,7 @@ function renderResults(data){
     }
     
     $("#results").append(contentStr);
+    $("#results").append($("<h4>").text(`${data.length} result(s) found`));
     $("#results").append(resultList);
 
     $(".addToList").on('click', function(event){                

@@ -176,7 +176,7 @@ apiRoutes.get('/api/users/buckeatlist', isAuthenticated, function(req, res){
 });
 
 
-apiRoutes.get('/api/user/:id/visited', isAuthenticated, async function(req, res){
+apiRoutes.get('/api/user/visited', isAuthenticated, async function(req, res){
     let userId = req.user.id;
     let response = await bucketlist.getVisited(userId);
     console.log(response);

@@ -1,8 +1,6 @@
 // MySQL connection 
-
 const mysql = require("mysql");
 let connection;
-
 if(process.env.JAWSDB_URL){
     connection = mysql.createPool(process.env.JAWSDB_URL)
 }else {      
@@ -20,7 +18,6 @@ if(process.env.JAWSDB_URL){
     connection = mysql.createPool(require('./testDB'));
   }
 };
-
 // make connection
 // connection.connect(function(err){
 //     if(err){
@@ -29,5 +26,4 @@ if(process.env.JAWSDB_URL){
 //     }
 //     console.log("connected as id " + connection.threadId);
 // });
-
 module.exports = connection;
