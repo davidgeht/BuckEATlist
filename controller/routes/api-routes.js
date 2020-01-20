@@ -42,11 +42,6 @@ let hash = async function(password) {
     return hash;
 }
 
-let test = async function(){
-    let result1 = await zomato.searchRestaurantsByCoord(-79.413449,43.778126,100);
-    console.log('result1');
-    console.log(result1.data.restaurants);
-}
 
 var apiRoutes = express.Router();
 
@@ -85,7 +80,7 @@ apiRoutes.post('/api/search/restaurantsNearby', isAuthenticated, async function(
     let results = response.data.businesses;
     //  make a call for the user, and verify if he alrady has a resto in the bucketlist. Add a boolean to the output.
     let userId = req.user.id;   
-    let userBuckL = await bucketlist.getBucketlist(userId);
+    let userBuckL = await bucketlist.getBucketlistAll(userId);
     let buckIds = [];
     for (buckItem of userBuckL) {
         buckIds.push(buckItem.yelp_id)
@@ -117,7 +112,7 @@ apiRoutes.post('/api/search/restaurants', isAuthenticated, async function(req, r
     let results = response.data.businesses;
     // call to check if the rest is already in the bucketlist
     let userId = req.user.id;   
-    let userBuckL = await bucketlist.getBucketlist(userId);
+    let userBuckL = await bucketlist.getBucketlistAll(userId);
     let buckIds = [];
     for (buckItem of userBuckL) {
         buckIds.push(buckItem.yelp_id)
