@@ -13,6 +13,13 @@ $('#nearbyChbox').click(event => {
 
 $("#searchForm").submit(async function (event) {
     event.preventDefault();
+    let alert = $("label.alert");
+    alert.hide();
+    if(!$("#nearbyChbox").is(":checked") && !$("#locationInput").val() &&  !$("#nameInput").val() ){
+        alert.text("please input at least one search parameter");
+        alert.show();
+        return;
+    }
 
     if ($('#nearbyChbox').is(":checked")) {
         console.log("Searching nearby");
@@ -85,7 +92,7 @@ function renderResults(data){
         let i = $('<i>').attr('class', 'fas fa-plus');
         button.append(i);
         restocard.append(resto);
-        restocard.append($(`<p>Rating: ${restaurant.rating}</p>
+        restocard.append($(`<p>Rating: ${generateRatingGraphic(restaurant.rating).get()[0].outerHTML}</p>
                             <p>Price: ${restaurant.price}</p>
                             <p>Address: ${restaurant.location.display_address}</p>
                             <p>Phone: ${restaurant.display_phone}</p>
