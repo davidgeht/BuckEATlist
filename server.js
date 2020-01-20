@@ -1,4 +1,6 @@
 const express = require("express");
+const multer = require('multer');
+const upload = multer({storage: multer.memoryStorage()});
 const path = require("path");
 const passport = require("passport");
 const apiRoutes = require("./controller/routes/api-routes");
