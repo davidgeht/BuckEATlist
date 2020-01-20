@@ -51,7 +51,7 @@ class Restaurant {
 
     getRestIdByName(name){
         return new Promise ((resolve, reject)=>{
-        let query=`SELECT id FROM RESTAURANT WHERE name LIKE %'${name}'%;`;
+        let query=`SELECT id FROM Restaurant WHERE name LIKE %'${name}'%;`;
         this.connection.query(query,(err,res)=>{
             if(err) throw err;
             this.connection.end();
