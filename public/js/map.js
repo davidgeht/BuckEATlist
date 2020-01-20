@@ -131,7 +131,7 @@ function fitMarkersInBounds(map, markers) {
 }
 
 function panToRestaurantClick(map, markers) {
-    let elements = document.getElementsByClassName("restaurantContrainer");
+    let elements = document.getElementsByClassName("restaurantContainer");
    
     for (let i = 0; i < elements.length; i++) {
 
