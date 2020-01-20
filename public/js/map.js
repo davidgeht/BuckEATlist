@@ -66,7 +66,7 @@ async function createMarkers(restaurants, map, image) {
                 }
                 console.log(thisRestaurant);
                 
-                let categoriesStr = "cusisines";
+                let categoriesStr = "cuisines";
                 // let categoriesStr = thisRestaurant.categories.map(e =>{                        
                 //     return e.title;
                 // }).join(", ");                   
