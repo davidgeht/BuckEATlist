@@ -4,21 +4,20 @@ let lastOpenedInfoWindow = null;
 
 function initMap() {
      
+    map = new google.maps.Map(document.getElementById("map"));
+
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(initMapWithPosition); 
         return;
     }
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 43.651070, lng: -79.347015},
-        zoom: 13
-    });
+    
+    map.setCenter({lat: 43.651070, lng: -79.347015});
+    map.setZoom(13);
 }
 
 function initMapWithPosition(position){
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: position.coords.latitude, lng: position.coords.longitude},
-        zoom: 13
-    });    
+    map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
+    map.setZoom(13);    
 }
 
 function setMarkers(restuarantList, image) {
