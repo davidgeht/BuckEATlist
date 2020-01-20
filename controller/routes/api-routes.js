@@ -171,7 +171,7 @@ apiRoutes.get('/api/users/buckeatlist', function(req, res){
         //console.log(allRest)
         res.send(allRest);
     })
-    .catch(function(error){})
+    .catch(function(error){});
 });
 
 

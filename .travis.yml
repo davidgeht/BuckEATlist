@@ -3,8 +3,7 @@ node_js:
 - stable
 deploy:
   provider: heroku
-  app:
-    name: buckeatlist
+  app: buckeatlist
   on:
     repo: davidgeht/untitled-project2
     branch: master
