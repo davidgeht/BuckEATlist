@@ -172,7 +172,7 @@ apiRoutes.get('/api/users/buckeatlist', isAuthenticated, function(req, res){
         //console.log(allRest)
         res.send(allRest);
     })
-    .catch(function(error){})
+    .catch(function(error){});
 });
 
 
@@ -191,11 +191,9 @@ apiRoutes.get('/api/restaurants/:id', isAuthenticated, async function(req, res){
     res.json(response.data);
 });
 
-apiRoutes.post('/api/checkoffRestaurant/:id', isAuthenticated, async function(req, res){
-    let dbId = req.params.id;
-    let review = req.body.review;
-    let rating = req.body.rating;
-    let photo = req.body.photo;
+apiRoutes.post('/api/checkoffRestaurant/:bucketid', async function(req, res){
+    let dbId = req.params.bucketid;
+    console.log("got id:" + dbId)
     await bucketlist.updateRes(dbId);
     res.status('200').send('Updated successfully');
 });

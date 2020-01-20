@@ -79,7 +79,7 @@ async function createMarkers(restaurants, image) {
                                     .append($("<h4>").addClass("address").text(JSON.parse(thisRestaurant.address).address1),
                                              $("<p>").addClass("").html(`Cuisine: <strong>${categoriesStr}</strong>`),
                                              $("<p>").addClass("").html(`Price: <strong>${thisRestaurant.price}</strong>`),
-                                             $("<p>").addClass("").html(`Rating: <strong>${thisRestaurant.rating}</strong>`),
+                                             $("<p>").addClass("").html(`Rating: <strong>${generateRatingGraphic(thisRestaurant.rating).get()[0].outerHTML}</strong>`),
                                              $("<button>").addClass("btn btn-success").attr("data-yelpid",thisRestaurant.yelp_id).text("Show Details")
                                                 .on('click', async function(event){
                                                    
@@ -131,7 +131,7 @@ function fitMarkersInBounds(map, markers) {
 }
 
 function panToRestaurantClick(map, markers) {
-    let elements = document.getElementsByClassName("restaurantContrainer");
+    let elements = document.getElementsByClassName("restaurantContainer");
    
     for (let i = 0; i < elements.length; i++) {
 
