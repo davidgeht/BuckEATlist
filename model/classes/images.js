@@ -1,14 +1,14 @@
 import { promises } from "dns";
 
 class Image{
-    constructor(connection){
+    constructor(c){
         this.connection
 
     }
     addNew(user_id,rest_id, img_location){
         return new Promise((resolve,reject)=>{
-            let query=`INSERT INTO Image(user_id,rest_id,img_location)
-            VALUES('${user_id}','${rest_id}','${img_location}');`;
+            let query=`INSERT INTO Image(bucketlist_id, user_id,rest_id, img_location)
+            VALUES('${bucketlist_id}','${user_id}','${rest_id}','${img_location}');`;
             this.connection.query(query,(err,res)=>{
                 if (err) throw err;
                 // this.connection.end();
@@ -24,6 +24,16 @@ class Image{
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
                 // this.connection.end();
+                resolve(res);
+            })
+        })
+    }
+
+    getImageLocation(id){
+        return new Promise((resolve,reject)=>{
+            let query=`SELECT img_location FROM Image WHERE id='${id}';`;
+            this.connection.query(query,(err,res)=>{
+                if(err) throw err;
                 resolve(res);
             })
         })
