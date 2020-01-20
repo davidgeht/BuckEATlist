@@ -54,14 +54,6 @@ function loadInfoModal(yelp_id, added_at){
     
 }
 
-function checkOffRestaurant(){
-    $.post(`/api/checkoffRestaurant/${id}`,body)
-    .then(res => {
-
-    });
-}
-
-
 function loadMapMarkers(restaurants){
     
     let image = {
@@ -110,7 +102,8 @@ function loadCheckOffModal(name,bucketID){
         let formData = new FormData();
         
         for(file of files){
-            formData.append("files[]", file);
+           
+            formData.append("files", file);
         }
         formData.append("review", review);
         formData.append("date", date);
@@ -119,6 +112,7 @@ function loadCheckOffModal(name,bucketID){
         $.ajax({
             url:`/api/checkoffRestaurant/${bucketID}`,
             method:"POST",
+            enctype: 'multipart/form-data',
             data:formData,
             contentType: false,
             processData: false            

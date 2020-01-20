@@ -15,15 +15,20 @@
     </div>
     <div class="col-md-4"id="listColumn">
         <h3>My Noms Map</h3>
+        <div id="restList">
         {{#each restaurants}}
             
-            <div class="restaurantContainer row align-items-center">
-                <span class="restName col">{{name}}</span>
-                <button class="btn btn-success col-2" data-restID="{{zamatoId}}">Info</button>
-                <button class="btn btn-success col-2" data-ID="{{id}}">Visited</button>
-            </div>
+            <div class="restaurantContainer row align-items-center">                               
+                    <span class="restName col">{{name}}</span>
+                    <div class="d-flex flex-row">
+                        <button type="button" class="btn btn-success info" data-toggle="modal" data-target="#restInfoModal" data-yelpid="{{yelp_id}}" data-addedat="{{added_at}}">Info</button>
+                        {{!-- <button class="btn btn-success checkoff" data-name="{{name}}" data-id="{{id}}">Check off list</button>
+                        <button class="btn btn-danger remove" data-id="{{id}}"><i class="fas fa-times"></i></button> --}}
+                    </div>
+                </div>
             
-        {{/each}}           
+        {{/each}}
+        </div>           
     </div>
 </div>
 <!-- restaurant info modal-->

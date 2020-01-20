@@ -1,6 +1,8 @@
 // Controller code
 
 const express = require("express");
+const multer = require('multer');
+const upload = multer({storage: multer.memoryStorage()});
 const bcrypt = require("bcryptjs");
 const path = require("path");
 const isAuthenticated = require("../isAuthenticated");
@@ -186,9 +188,27 @@ apiRoutes.get('/api/restaurants/:id', isAuthenticated, async function(req, res){
     res.json(response.data);
 });
 
-apiRoutes.post('/api/checkoffRestaurant/:bucketid', async function(req, res){
+apiRoutes.post('/api/checkoffRestaurant/:bucketid',upload.array('files',5), async function(req, res){
     let dbId = req.params.bucketid;
-    console.log("got id:" + dbId)
+    let review = req.body.review;
+    let date = new Date(req.body.date);
+    let rating = parseInt(req.body.rating);
+    let files = [];
+    
+    for(const file of req.files){
+        if(!file.mimetype.includes("image")) break;
+        let photo = {size: file.size, name: file.originalname, type: file.mimetype};
+        file.push(photo);
+    } 
+    
+    if(files.length > 0){
+        //upload photos to AWS
+        //then
+        //add to DB
+    }
+
+    //save review
+
     await bucketlist.updateRes(dbId);
     res.status('200').send('Updated successfully');
 });
