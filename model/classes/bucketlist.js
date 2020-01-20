@@ -82,7 +82,7 @@ class Bucketlist{
     }
     delRest(id){
         return new Promise((resolve, reject)=>{
-            let query =`DELETE FROM Bucketlist WHERE rest_id=${id};`;
+            let query =`DELETE FROM Bucketlist WHERE id=${id};`;
             this.connection.query(query,(err,res)=>{
                 if (err) throw err;
                 // this.connection.end();

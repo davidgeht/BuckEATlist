@@ -4,6 +4,7 @@ p.address{
 
 .restImg{
     height: 150px;
+    max-width: 250px;
 }
 label{
     font-weight: bold;

@@ -17,8 +17,8 @@ $(document).ready(async function (){
         let id = button.data("id");
 
         $.ajax({
-            method: "DELETE",
-            url: `/api/users/buckeatlist/${id}`
+            method: "POST",
+            url: `/api/deleteRestaurant/${id}`
         }).then(data =>{
             window.location.reload();
         });
@@ -28,22 +28,8 @@ $(document).ready(async function (){
         event.stopPropagation();
         let yelp_id = $(event.currentTarget).data("yelpid");
         let added_at = $(event.currentTarget).data("addedat");
-        console.log(yelp_id);
-<<<<<<< HEAD
-        console.log(added_at);
-        loadInfoModal(yelp_id,added_at);
-=======
-        $.get(`/api/restaurants/${yelp_id}`)
-        .then(data =>{
-
-            populateRestaurantModal(data);
-
-            $("#restInfoModal").modal({show:true,focus:true});
-
-        });
-        $("#restInfoModal").modal({show:true,focus:true});
         
->>>>>>> 43828975d36e8c3ecf927c43f0d31bd393d15e5e
+        loadInfoModal(yelp_id,added_at);
     });
 
     $("button.checkoff").on("click", function(event){
@@ -54,7 +40,7 @@ $(document).ready(async function (){
 
 function loadInfoModal(yelp_id, added_at){
 
-    $.post(`/api/search/business`,{location:yelp_id})
+    $.get(`/api/restaurants/${yelp_id}`)
     .then(data =>{
 
         populateRestaurantModal(data,added_at);
