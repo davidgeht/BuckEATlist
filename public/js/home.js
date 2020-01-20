@@ -1,22 +1,11 @@
-//fix margin for the full job column
-//$("#mapColumn").css("margin-right",$("#listColumn").css("width"));
-$("#map").css("height",$(window).innerHeight()-$("#navbar").outerHeight(true)-$("#mapColumn .navbar").outerHeight(true)-10); 
-//set job card column height
-$("#listColumn").css("height",$(document).innerHeight() - $("#navbar").outerHeight(true));
-
-//fixing page element dimensions on resize
-$(window).on('resize',function(){
-    //$("#mapColumn").css("margin-right",$("#listColumn").css("width"));   
-    $("#listColumn").css("height",$(document).innerHeight() - $("#navbar").outerHeight(true));
-   
-    $("#map").css("height",$(window).innerHeight() 
-    - $("#navbar").outerHeight(true)-10); 
-});
 
 $(document).ready(async function (){
     
+    //map.js
+    initMap();
+
     //let id = await $.get('/api/user').id; //better way to get logged in user?
-    let id = 22;
+    
     $.get(`/api/users/buckeatlist`)
     .then(data=>{        
         loadMapMarkers(data);
@@ -38,7 +27,12 @@ $(document).ready(async function (){
     $("button.info").on("click", async function(event){
         event.stopPropagation();
         let yelp_id = $(event.currentTarget).data("yelpid");
+        let added_at = $(event.currentTarget).data("addedat");
         console.log(yelp_id);
+<<<<<<< HEAD
+        console.log(added_at);
+        loadInfoModal(yelp_id,added_at);
+=======
         $.get(`/api/restaurants/${yelp_id}`)
         .then(data =>{
 
@@ -49,6 +43,7 @@ $(document).ready(async function (){
         });
         $("#restInfoModal").modal({show:true,focus:true});
         
+>>>>>>> 43828975d36e8c3ecf927c43f0d31bd393d15e5e
     });
 
     $("button.checkoff").on("click", function(event){
@@ -56,6 +51,19 @@ $(document).ready(async function (){
             
     });
 });
+
+function loadInfoModal(yelp_id, added_at){
+
+    $.post(`/api/search/business`,{location:yelp_id})
+    .then(data =>{
+
+        populateRestaurantModal(data,added_at);
+
+        $("#restInfoModal").modal({show:true,focus:true});
+
+    });
+    $("#restInfoModal").modal({show:true,focus:true});
+}
 
 function checkOffRestaurant(){
     $.post(`/api/checkoffRestaurant/${id}`,body)
@@ -67,12 +75,28 @@ function checkOffRestaurant(){
 
 function loadMapMarkers(restaurants){
     
-    setMarkers(restaurants, map, true);    
+    let image = {
+        url: "../content/images/bucket-map-icon.png"
+    };
+    setMarkers(restaurants, map, image);    
 }
 
-function populateRestaurantModal(restaurant){
+function populateRestaurantModal(restaurant, added_at){
     
-    $("#modalAddtoList").on('click',function (event) {
+    let modal = $("#restInfoModal");
+
+    modal.find("h5.modal-title").text(restaurant.name);
+    modal.find(".restImg").attr("src",restaurant.image_url);
+    modal.find("p.categories").text(restaurant.categories.map(e=>{return e.title}).join(', '));
+    modal.find("span.price").text(restaurant.price);
+    modal.find("p.address").text(restaurant.location.display_address.join("\n"));
+    modal.find("span.phoneNumber").text(restaurant.display_phone);
+    modal.find("span.rating").text(`${restaurant.rating}/5`);
+    modal.find("span.openNow").text(restaurant.hours.is_open_now? "Yes":"No");    
+    modal.find("p.addedAt").text(moment(Date.parse(added_at)).format("MMMM D, YYYY"));
+    modal.find("span.link a").attr("href",restaurant.url);
+
+    $("#checkOffList").on('click',function (event) {
         $.post(`/api/user/${userId}/buckeatlist/add`, restaurant)
         .then();
     });

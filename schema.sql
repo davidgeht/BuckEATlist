@@ -7,7 +7,7 @@ USE buckeatlist_db;
 CREATE TABLE Users (
   id int PRIMARY KEY AUTO_INCREMENT,
   username varchar(255),
-  encypted_pw varchar(255),
+  encrypted_pw varchar(255),
   emailaddress varchar(255),
   firstname varchar(255),
   lastname varchar(255),

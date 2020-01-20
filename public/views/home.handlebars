@@ -7,25 +7,28 @@
                     <li class="nav-item active"><a class="nav-link" href="#">My buckEATlist</a></li>
                     <li class="nav-item"><a class="nav-link" href="/noms-map">My Noms Map</a></li>
                     <li class="nav-item"><a class="nav-link" href="/search">Search</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">My Reviews</a></li>
                 </ul>
             </div>
         </nav>
         <div id="map"></div>
     </div>
     <div class="col-md-4"id="listColumn">
-        <h3>My buckEATlist</h3>        
-        {{#each restaurants}}          
-            <div class="restaurantContrainer row align-items-center">                               
-                <span class="restName col">{{name}}</span>
-                <div class="d-flex flex-row">
-                    <button type="button" class="btn btn-success info" data-toggle="modal" data-target="#restInfoModal" data-yelpid="{{yelp_id}}">Info</button>
-                    <button class="btn btn-success checkoff" data-id="{{id}}">Check off list</button>
-                    <button class="btn btn-danger remove" data-id="{{id}}"><i class="fas fa-times"></i></button>
+        <h3>My buckEATlist</h3>
+        <div id="restList">
+            {{#each restaurants}}          
+                <div class="restaurantContrainer row align-items-center">                               
+                    <span class="restName col">{{name}}</span>
+                    <div class="d-flex flex-row">
+                        <button type="button" class="btn btn-success info" data-toggle="modal" data-target="#restInfoModal" data-yelpid="{{yelp_id}}" data-addedat="{{added_at}}">Info</button>
+                        <button class="btn btn-success checkoff" data-id="{{id}}">Check off list</button>
+                        <button class="btn btn-danger remove" data-id="{{id}}"><i class="fas fa-times"></i></button>
+                    </div>
                 </div>
-            </div>
-        {{else}}
-            <span>you have no restaurants, go add some!</span>
-        {{/each}}         
+            {{else}}
+                <span>you have no restaurants, go add some!</span>
+            {{/each}}         
+        </div>        
     </div>
 </div>
 
@@ -40,17 +43,78 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Modal body text goes here.</p>                    
+                <div class="row pb-2">
+                    <div class="col-md-4">
+                        <img class="restImg"/>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="categories">Cuisines:</label>
+                        <p name="categories" class="categories"></p>    
+                    </div>
+                    <div class="col-md-4">
+                        <label for="price">Price:</label>
+                        <span name="price" class="price"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="address">Address:</label>
+                        <p name="address" class="address"></p>                   
+                    </div>
+                    <div class="col-md-4">
+                        <label for="phoneNumber">Phone:</label>
+                        <span name="phoneNumber" class="phoneNumber"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="rating">Rating:</label>
+                        <span name="rating" class="rating"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="openNow">Open now:</label>
+                        <span name="openNow" class="openNow"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="addedAt">On your list since:</label>
+                        <p name="addedAt" class="addedAt"></p>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="link">Yelp Link:</label>
+                        <span name="link" class="link"><a target="_blank" rel="nofollow noopener">See it on Yelp</a></span>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="modalAddtoList">Check off my list</button>
+                <button type="button" class="btn btn-primary" id="checkOffList">Check off my list</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div> 
+
+<!-- check off list modal-->
+<div id="restCheckOffModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Modal body text goes here.</p>                    
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="modalAddtoList">Submit</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div> 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjXmP2cdd3qe_9TnbZfMldDE7_K1MtPwk" defer></script>
 <script src="../js/map.js" type="text/javascript" defer></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjXmP2cdd3qe_9TnbZfMldDE7_K1MtPwk&callback=initMap" defer></script>
 <script src="../js/home.js" type="text/javascript" defer></script>
 
 

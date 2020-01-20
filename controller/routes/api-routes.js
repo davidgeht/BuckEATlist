@@ -159,7 +159,7 @@ apiRoutes.post('/api/buckeatlist/add', async function(req, res){
         console.log(id);
     }
     console.log('id = ', id);
-    await bucketlist.addNew(userId, id, 0);
+    await bucketlist.addNew(userId, id, 0);    
     res.status('200').send('Item added');
 });
 
