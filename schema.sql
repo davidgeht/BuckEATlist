@@ -6,10 +6,7 @@ USE et85mzsa1tojmca9;
 
 CREATE TABLE Users (
   id int PRIMARY KEY AUTO_INCREMENT,
-<<<<<<< HEAD
-=======
   username varchar(255),
->>>>>>> ea0335ce1f11ac4452da32e595df58d6697fe63f
   encrypted_pw varchar(255),
   emailaddress varchar(255),
   firstname varchar(255),
@@ -44,7 +41,10 @@ CREATE TABLE Bucketlist (
   id int PRIMARY KEY AUTO_INCREMENT,
   user_id int,
   rest_id int,
-  visited boolean,
+  visited boolean NOT NULL ,
+  user_rating int,
+  user_review varchar(4000),
+  date_visited DATE,
   added_at timestamp DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -64,6 +64,7 @@ CREATE TABLE Restaurant (
 
 CREATE TABLE Image (
   id int PRIMARY KEY AUTO_INCREMENT,
+  bucketlist_id int,
   user_id int,
   rest_id int,
   created_at timestamp default current_timestamp,
@@ -77,6 +78,7 @@ alias varchar (255)
 );
 
 
+ALTER TABLE Image ADD FOREIGN key (Bucketlist_id) REFERENCES Bucketlist (id);
 
 ALTER TABLE Users ADD FOREIGN KEY (homecity_id) REFERENCES Cities (id);
 
@@ -87,10 +89,12 @@ ALTER TABLE Cities ADD FOREIGN KEY (province_id) REFERENCES Provinces (id);
 CREATE TABLE Cuisine (
   id int PRIMARY KEY AUTO_INCREMENT,
   rest_id int not null,
+  catergory_id int not null,
   alias varchar(255) not null,
   title varchar(255) not null,
   created_at timestamp default CURRENT_TIMESTAMP
 );
+ALTER TABLE Cuisine ADD FOREIGN KEY (catergory_id) REFERENCES Categories (id);
 
 ALTER TABLE Bucketlist ADD FOREIGN KEY (user_id) REFERENCES Users (id);
 
