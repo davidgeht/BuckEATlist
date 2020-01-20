@@ -95,15 +95,6 @@ class Bucketlist{
 
         })
     }
-    updateReviewRating(review,rating){
-        return new Promise((resolve,reject)=>{
-            let query =`UPDATE Bucketlist SET user_review='${review}' AND user_rating='${rating}' ;`;
-            this.connection.query(query,(err,res)=>{
-                if(err) throw err;
-                resolve(res);
-            })
-        })
-    }
     delRest(id){
         return new Promise((resolve, reject)=>{
             let query =`DELETE FROM Bucketlist WHERE id=${id};`;
