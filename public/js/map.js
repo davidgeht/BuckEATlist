@@ -5,7 +5,7 @@ let lastOpenedInfoWindow = null;
 function initMap() {
      
     if(navigator.geolocation){
-        (navigator.geolocation.getCurrentPosition(initMapWithPosition)); 
+        navigator.geolocation.getCurrentPosition(initMapWithPosition); 
         return;
     }
     map = new google.maps.Map(document.getElementById('map'), {
@@ -21,19 +21,19 @@ function initMapWithPosition(position){
     });    
 }
 
-function setMarkers(restuarantList, map, image) {
+function setMarkers(restuarantList, image) {
    
     let restaurants = [];
 
     if (restuarantList.length > 0) {
         restaurants = restuarantList;        
     
-        createMarkers(restaurants, map, image);
+        createMarkers(restaurants, image);
     }
     
 }
 
-async function createMarkers(restaurants, map, image) {
+async function createMarkers(restaurants, image) {
     let markers = [];
     for (const restuarant of restaurants) {
         let imageSource = '';
