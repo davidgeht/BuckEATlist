@@ -40,7 +40,7 @@ class User {
     addNew(firstName, lastName, email, password){
         return new Promise((resolve, reject)=>{
 
-            let query =`INSERT into Users(encrypted_pw, emailaddress, firstname, lastname, fullname) 
+            let query =`INSERT into Users(encrypted_pw, emailaddress, firstname, lastname) 
             VALUES ('${password}','${email}','${firstName}','${lastName}','${firstName} ${lastName}');`;
 
             this.connection.query(query,(err,res)=>{

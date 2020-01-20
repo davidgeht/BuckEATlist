@@ -1,7 +1,7 @@
 const connection = require("../../config/connection");
 
 class Cities{
-    constructor(connection){
+    constructor(){
         this.connection=connection
         
     }
@@ -17,7 +17,7 @@ class Cities{
             })
         })
     }
-    FindByName(name){
+    findByName(name){
         return new Promise((resolve, reject)=>{
             let query =`Select * FROM Cities WHERE name LIKE %'${name}'%;`;
 
