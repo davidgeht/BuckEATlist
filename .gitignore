@@ -105,6 +105,6 @@ dist
 
 #dev testing server file for UI
 testserver.js
-config/testDB.js
+/config/testDB.js
 # random mac file
 .DS_Store

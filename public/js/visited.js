@@ -23,10 +23,10 @@ $(document).ready(async function (){
 
     $("button.info").on("click", async function(event){
         event.stopPropagation();
-        let yelp_id = $(event.currentTarget).data("yelpid");
+        let id = $(event.currentTarget).data("id");
         let added_at = $(event.currentTarget).data("addedat");
         console.log(yelp_id);
-        loadInfoModal(yelp_id,added_at);
+        loadInfoModal(id);
     });
 
     $("button.checkoff").on("click", function(event){
@@ -43,9 +43,9 @@ function loadMapMarkers(restaurants){
     setMarkers(restaurants, image);    
 }
 
-function loadInfoModal(yelp_id, added_at){
+function loadInfoModal(id){
 
-    $.get(`/api/restaurants/${yelp_id}`)
+    $.get(`/api/bucketlist/${id}`)
     .then(data =>{
 
         populateRestaurantModal(data,added_at);
@@ -53,14 +53,16 @@ function loadInfoModal(yelp_id, added_at){
         $("#restInfoModal").modal({show:true,focus:true});
 
     });
-    $("#restInfoModal").modal({show:true,focus:true});
+    
 }
 
 function populateRestaurantModal(restaurant){
-    
-    $("#modalAddtoList").on('click',function (event) {
-        $.post(`/api/user/${userId}/buckeatlist/add`, restaurant)
-        .then();
-    });
+    let modal = $("#restInfoModal");
+
+    modal.find("h5.modal-title").text(restaurant.name);
+    modal.find("p.rewview").text(restaurant.user_review);
+    modal.find("p.rating").html(generateRatingGraphic(restaurant.user_rating));
+    modal.find("span.openNow").text(restaurant.hours.is_open_now? "Yes":"No");    
+    modal.find("p.addedAt").text(moment(Date.parse(restaurant.date_visited)).format("MMMM D, YYYY"));
     
 }
