@@ -4,7 +4,7 @@ const rewire = require('rewire');
 const assert = require('assert');
 const expect = require('chai').expect;
 
-const app = rewire('../public/js/helpers/validateSignup.js');
+const app = rewire('../public/js/common/validateSignup.js');
 
 let validateInput = app.__get__('ValidateInput');
 let testEmail = app.__get__('testEmail');

@@ -190,8 +190,9 @@ apiRoutes.get('/api/restaurants/:id', async function(req, res){
     res.json(response.data);
 });
 
-apiRoutes.post('/api/checkoffRestaurant/:id', async function(req, res){
-    let dbId = req.params.id;
+apiRoutes.post('/api/checkoffRestaurant/:bucketid', async function(req, res){
+    let dbId = req.params.bucketid;
+    console.log("got id:" + dbId)
     await bucketlist.updateRes(dbId);
     res.status('200').send('Updated successfully');
 });

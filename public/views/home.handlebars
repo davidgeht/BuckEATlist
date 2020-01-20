@@ -21,7 +21,7 @@
                     <span class="restName col">{{name}}</span>
                     <div class="d-flex flex-row">
                         <button type="button" class="btn btn-success info" data-toggle="modal" data-target="#restInfoModal" data-yelpid="{{yelp_id}}" data-addedat="{{added_at}}">Info</button>
-                        <button class="btn btn-success checkoff" data-id="{{id}}">Check off list</button>
+                        <button class="btn btn-success checkoff" data-name="{{name}}" data-id="{{id}}">Check off list</button>
                         <button class="btn btn-danger remove" data-id="{{id}}"><i class="fas fa-times"></i></button>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                     </div>
                     <div class="col-md-4">
                         <label for="rating">Rating:</label>
-                        <span name="rating" class="rating"></span>
+                        <p name="rating" class="rating"></p>
                     </div>
                 </div>
                 <div class="row">
@@ -104,10 +104,57 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Modal body text goes here.</p>                    
+                <div>
+                    <label class="alert" id="checkOffAlert"></label>
+                </div> 
+                <form id="checkOffRestaurantForm">
+                    <div class="row">
+                        <div class="col-6">                    
+                            <label class="d-block" for="rating">Your Rating:&nbsp;&nbsp;</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="ratingRadioOptions" id="ratingRadio1" value="1" checked>
+                                <label class="form-check-label" for="ratingRadio1">1</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="ratingRadioOptions" id="ratingRadio2" value="2">
+                                <label class="form-check-label" for="ratingRadio2">2</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="ratingRadioOptions" id="ratingRadio3" value="3">
+                                <label class="form-check-label" for="ratingRadio3">3</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="ratingRadioOptions" id="ratingRadio4" value="4">
+                                <label class="form-check-label" for="ratingRadio4">4</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="ratingRadioOptions" id="ratingRadio5" value="5">
+                                <label class="form-check-label" for="ratingRadio5">5</label>
+                            </div>
+                        </div>
+                        <div class="input-group date col-6" data-provide="datepicker">
+                            <label>Date Visited:&nbsp;&nbsp;</label>
+                            <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                                
+                                <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
+                                <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fas fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>           
+                    </div>    
+                    <div class="form-group">
+                        <label for="review">Write A Review</label>
+                        <textarea style="min-height:200px;" id="reviewArea" class="form-control" name="review" aria-label="review"></textarea>         
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="customFile" multiple>
+                        <label class="custom-file-label" for="customFile">Upload pictures</label>
+                    </div>
+                </form>         
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="modalAddtoList">Submit</button>
+                <button type="button" class="btn btn-primary" id="btnCheckOffSubmit">Submit</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>

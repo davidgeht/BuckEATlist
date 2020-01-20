@@ -33,8 +33,11 @@ $(document).ready(async function (){
     });
 
     $("button.checkoff").on("click", function(event){
-        event.stopPropagation();   
-            
+        event.stopPropagation();
+        let name = $(event.currentTarget).data("name");  
+        let id = $(event.currentTarget).data("id");   
+        
+        loadCheckOffModal(name, id);
     });
 });
 
@@ -48,7 +51,7 @@ function loadInfoModal(yelp_id, added_at){
         $("#restInfoModal").modal({show:true,focus:true});
 
     });
-    $("#restInfoModal").modal({show:true,focus:true});
+    
 }
 
 function checkOffRestaurant(){
@@ -77,13 +80,66 @@ function populateRestaurantModal(restaurant, added_at, bucketID){
     modal.find("span.price").text(restaurant.price);
     modal.find("p.address").text(restaurant.location.display_address.join("\n"));
     modal.find("span.phoneNumber").text(restaurant.display_phone);
-    modal.find("span.rating").text(`${restaurant.rating}/5`);
+    modal.find("p.rating").html(generateRatingGraphic(restaurant.rating));
     modal.find("span.openNow").text(restaurant.hours.is_open_now? "Yes":"No");    
     modal.find("p.addedAt").text(moment(Date.parse(added_at)).format("MMMM D, YYYY"));
     modal.find("span.link a").attr("href",restaurant.url);
 
     $("#checkOffList").attr("data-id",bucketID).on('click',function (event) {
+        modal.modal('hide');
+        loadCheckOffModal(restaurant,bucketID);
         
     });
     
 }
+
+function loadCheckOffModal(name,bucketID){
+    
+    populateCheckOffModal(name,bucketID);
+
+    $("#restCheckOffModal").modal({show:true,focus:true});
+
+    $("#btnCheckOffSubmit").on('click', async function(event){
+        let review = $("#reviewArea").val();
+        let bucketID = $(event.currentTarget).data("bucketid");
+        let rating = $("input[type=radio]:checked").val();
+        let date = $("input.datetimepicker-input").val();
+        let files = $("#customFile").get()[0].files;
+        
+        console.log("grabbed inputs");
+        let formData = new FormData();
+        
+        for(file of files){
+            formData.append("files[]", file);
+        }
+        formData.append("review", review);
+        formData.append("date", date);
+        formData.append("rating", rating);
+
+        $.ajax({
+            url:`/api/checkoffRestaurant/${bucketID}`,
+            method:"POST",
+            data:formData,
+            contentType: false,
+            processData: false            
+        }).then(response =>{
+            $("#restCheckOffModal").modal('hide');
+            window.location.reload();
+        }).catch(err=>{
+            let alert = $("#checkOffAlert");
+            alert.text(err);
+            alert.show();
+        });
+
+    });
+}
+
+function populateCheckOffModal(name, bucketID){
+    let modal = $("#restCheckOffModal");
+    modal.find("#checkOffRestaurantForm").trigger('reset');
+    $("#checkOffAlert").hide();
+    modal.find("h5.modal-title").text(name);
+    modal.find("#btnCheckOffSubmit").attr("data-bucketid",bucketID);
+   
+}
+
