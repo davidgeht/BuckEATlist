@@ -42,10 +42,9 @@ CREATE TABLE Bucketlist (
   user_id int,
   rest_id int,
   visited boolean NOT NULL ,
-  user_rating int,
+  user_rating float,
   user_review varchar(4000),
-  date_visited DATE,
-  added_at timestamp DEFAULT CURRENT_TIMESTAMP
+  date_visited DATE defualt CURRENT_DATE
 );
 
 CREATE TABLE Restaurant (
@@ -89,7 +88,6 @@ ALTER TABLE Cities ADD FOREIGN KEY (province_id) REFERENCES Provinces (id);
 CREATE TABLE Cuisine (
   id int PRIMARY KEY AUTO_INCREMENT,
   rest_id int not null,
-  catergory_id int not null,
   alias varchar(255) not null,
   title varchar(255) not null,
   created_at timestamp default CURRENT_TIMESTAMP
