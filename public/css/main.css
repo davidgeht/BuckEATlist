@@ -13,6 +13,7 @@ body {
 
 a{
     color:unset;
+    text-decoration: underline;
 }
 a:visited{
     color:unset;
@@ -49,13 +50,13 @@ header .profile{
     padding:0;
 }
 
-.restaurantContrainer{
+.restaurantContainer{
     margin-bottom: 5px;
     border: 2px solid rgb(206, 206, 206);
     border-radius: 5px;
     padding: 10px 0 10px 20px;    
 }
-.restaurantContrainer:hover{
+.restaurantContainer:hover{
     border-color: green;
     cursor: pointer;
 }
@@ -63,10 +64,9 @@ header .profile{
 .restName{
     text-align:left;
     margin-right:20px;
-    padding-left:0;
-    overflow-x: hidden;
+    padding-left:0;    
 }
-.restaurantContrainer button{
+.restaurantContainer button{
     margin-right: 15px;
 }
 

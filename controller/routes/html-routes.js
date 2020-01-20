@@ -34,6 +34,18 @@ async function(req, res, next){
     
 });
 
+htmlRoutes.get('/noms-map', isAuthenticated, 
+async function(req, res, next){
+    let modelObj = {};
+    
+    modelObj.restaurants = await mbuckeatlist.getVisited(req.user.id);
+    modelObj.username = req.user.firstname;
+    modelObj.title = 'My Noms Map';
+    
+    res.render('visited', modelObj);
+    
+});
+
 htmlRoutes.get('/search', isAuthenticated, 
 function(req, res, next){
     res.render('search');

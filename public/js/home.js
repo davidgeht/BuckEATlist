@@ -64,10 +64,10 @@ function loadMapMarkers(restaurants){
     let image = {
         url: "../content/images/bucket-map-icon.png"
     };
-    setMarkers(restaurants, map, image);    
+    setMarkers(restaurants, image);    
 }
 
-function populateRestaurantModal(restaurant, added_at){
+function populateRestaurantModal(restaurant, added_at, bucketID){
     
     let modal = $("#restInfoModal");
 
@@ -82,9 +82,8 @@ function populateRestaurantModal(restaurant, added_at){
     modal.find("p.addedAt").text(moment(Date.parse(added_at)).format("MMMM D, YYYY"));
     modal.find("span.link a").attr("href",restaurant.url);
 
-    $("#checkOffList").on('click',function (event) {
-        $.post(`/api/user/${userId}/buckeatlist/add`, restaurant)
-        .then();
+    $("#checkOffList").attr("data-id",bucketID).on('click',function (event) {
+        
     });
     
 }
