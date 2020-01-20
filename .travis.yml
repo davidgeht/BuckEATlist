@@ -9,4 +9,4 @@ deploy:
     repo: davidgeht/untitled-project2    
     branch: master
   api_key:
-    secure: HEROKU_API_KEY
+    secure: 298dc1a0-741c-416b-af69-25746a817a18
