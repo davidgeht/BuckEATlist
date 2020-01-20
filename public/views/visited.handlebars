@@ -7,16 +7,17 @@
                     <li class="nav-item"><a class="nav-link" href="/home">My buckEATlist</a></li>
                     <li class="nav-item active"><a class="nav-link" href="#">My Noms Map</a></li>
                     <li class="nav-item"><a class="nav-link" href="/search">Search</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">My Reviews</a></li>
                 </ul>
             </div>
         </nav>
-        <div id="map"><center>GOOGLE MAP GOES HERE</center></div>
+        <div id="map"></div>
     </div>
     <div class="col-md-4"id="listColumn">
         <h3>My Noms Map</h3>
         {{#each restaurants}}
             
-            <div class="restaurantContrainer row align-items-center">
+            <div class="restaurantContainer row align-items-center">
                 <span class="restName col">{{name}}</span>
                 <button class="btn btn-success col-2" data-restID="{{zamatoId}}">Info</button>
                 <button class="btn btn-success col-2" data-ID="{{id}}">Visited</button>
@@ -45,7 +46,7 @@
         </div>
     </div>
 </div> 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjXmP2cdd3qe_9TnbZfMldDE7_K1MtPwk" defer></script>
 <script src="../js/map.js" type="text/javascript" defer></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDjXmP2cdd3qe_9TnbZfMldDE7_K1MtPwk&callback=initMap" defer></script>
 <script src="../js/visited.js" type="text/javascript" defer></script>
   

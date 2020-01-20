@@ -6,6 +6,10 @@ USE et85mzsa1tojmca9;
 
 CREATE TABLE Users (
   id int PRIMARY KEY AUTO_INCREMENT,
+<<<<<<< HEAD
+=======
+  username varchar(255),
+>>>>>>> ea0335ce1f11ac4452da32e595df58d6697fe63f
   encrypted_pw varchar(255),
   emailaddress varchar(255),
   firstname varchar(255),

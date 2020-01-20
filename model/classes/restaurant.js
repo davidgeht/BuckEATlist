@@ -6,7 +6,7 @@ class Restaurant {
     }
     addNew(name,yelp_id,rating, price, lon, lat, city_name, address, website, review_count){
         return new Promise((resolve,reject)=>{
-            let query =`INSERT INTO Restaurant(name, yelp_id,rating, price, lon, lat, city_name, address,website, review_count)
+            let query =`INSERT INTO Restaurant (name, yelp_id,rating, price, lon, lat, city_name, address,website, review_count)
             VALUES('${name}','${yelp_id}',${rating},'${price}',${lon},${lat}, '${city_name}','${address}','${website}',${review_count});`;
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
@@ -51,7 +51,7 @@ class Restaurant {
 
     getRestIdByName(name){
         return new Promise ((resolve, reject)=>{
-        let query=`SELECT id FROM RESTAURANT WHERE name LIKE %'${name}'%;`;
+        let query=`SELECT id FROM Restaurant WHERE name LIKE %'${name}'%;`;
         this.connection.query(query,(err,res)=>{
             if(err) throw err;
             this.connection.end();

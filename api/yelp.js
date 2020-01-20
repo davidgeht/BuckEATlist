@@ -19,8 +19,8 @@ class Yelp {
         return res; 
     }
 
-    async getRestoDetail(businessId) {
-        let res = await axios.get(`https://api.yelp.com/v3/businesses/${businessId}`, config) 
+    async searchRestoByCoordAndTerm(lat, lon, radius, term) {
+        let res = await axios.get(`https://api.yelp.com/v3/businesses/search?term=${term}&latitude=${lat}&longitude=${lon}&radius=${radius}&categories=restaurants`, config) 
         return res; 
     }
 
@@ -28,6 +28,14 @@ class Yelp {
         let res = await axios.get(`https://api.yelp.com/v3/businesses/${businessId}`, config) 
         return res; 
     }
+
+    async searchRestoByLocationAndTerm(location, term) {
+        let res = await axios.get(`https://api.yelp.com/v3/businesses/search?location=${location}&term=${term}&categories=restaurants`, config) 
+        return res; 
+    }
+
+
+
 }    
 
 module.exports = Yelp;

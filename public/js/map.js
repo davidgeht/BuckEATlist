@@ -1,48 +1,39 @@
-var map;
+let map;
 
+let lastOpenedInfoWindow = null;
+
+function initMap() {
+     
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(initMapWithPosition); 
+        return;
+    }
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 43.651070, lng: -79.347015},
+        zoom: 13
+    });
+}
 
 function initMapWithPosition(position){
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: position.coords.latitude, lng: position.coords.longitude},
         zoom: 13
-    });
+    });    
 }
 
-function initMap() {
-     
-    if(navigator.geolocation){
-        (navigator.geolocation.getCurrentPosition(initMapWithPosition)); 
-        return;
-    }
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 43.651070, lng: -79.347015},
-        zoom: 8
-    });
-}
-
-function setMarkers(restuarantList, map, isBucket) {
+function setMarkers(restuarantList, image) {
    
-    let restaurants = [];   
-    let image = {};
-    if(isBucket){
-        image = {
-            url: "../content/images/bucket-map-icon.png"
-        };
-    }else{
-        image ={
-            url: "../content/images/bucket-map-icon.png"
-        };
-    }
+    let restaurants = [];
+
     if (restuarantList.length > 0) {
         restaurants = restuarantList;        
     
-        createMarkers(restaurants, map, image);
+        createMarkers(restaurants, image);
     }
-
     
 }
 
-async function createMarkers(restaurants, map, image) {
+async function createMarkers(restaurants, image) {
     let markers = [];
     for (const restuarant of restaurants) {
         let imageSource = '';
@@ -60,10 +51,14 @@ async function createMarkers(restaurants, map, image) {
             property_id: restuarant.id
         });
 
-        await google.maps.event.addListener(marker, 'click', (function (marker, thisRestaurant) {
+        google.maps.event.addListener(marker, 'click', (function (marker, thisRestaurant) {
 
             return function () {
                 //get info window content for particular restaurant
+
+                if (lastOpenedInfoWindow){
+                    lastOpenedInfoWindow.close();
+                }
                 if (thisRestaurant.image_url !== null) {
                     imageSource = thisRestaurant.image_url;
                 } else {
@@ -71,79 +66,80 @@ async function createMarkers(restaurants, map, image) {
                 }
                 console.log(thisRestaurant);
                 
-                let categoriesStr = "cusisines";
+                let categoriesStr = "cuisines";
                 // let categoriesStr = thisRestaurant.categories.map(e =>{                        
                 //     return e.title;
                 // }).join(", ");                   
                 
-                let contentString =
-                `<div class="maps-info-pane"> 
-                    <h2 class="restaurant-name"> ${thisRestaurant.name}</h2>
-                    <div class="">
-                        <div class="" style="background-image: url(\'${imageSource}\')"></div>
-                        <div class="restaurant-info">
-                            <h4 class="address"> ${JSON.parse(thisRestaurant.address).address1}</h4>                                
-                            <p class="">Cuisine: <strong> ${categoriesStr}</strong></p>
-                            <p class="">Price: <strong> ${thisRestaurant.price}</strong></p>
-                            <p class="">Rating: <strong> ${thisRestaurant.rating}</strong></p>
-                            <button class="btn btn-success" data-id="${thisRestaurant.yelp_id}">Show Details</button>
-                        </div>
-                    </div>
-                </div>`;
-
-                infowindow.setContent(contentString);
+                let contentDiv = $("<div>").addClass("maps-info-pane")
+                    .append($("<h2>").addClass("restaurant-name").text(thisRestaurant.name),
+                            $("<div>").addClass("")
+                            .append($("<div>").addClass("").attr("style",`background-image: url("${imageSource}")'`),
+                                    $("<div>").addClass("restaurant-info")
+                                    .append($("<h4>").addClass("address").text(JSON.parse(thisRestaurant.address).address1),
+                                             $("<p>").addClass("").html(`Cuisine: <strong>${categoriesStr}</strong>`),
+                                             $("<p>").addClass("").html(`Price: <strong>${thisRestaurant.price}</strong>`),
+                                             $("<p>").addClass("").html(`Rating: <strong>${thisRestaurant.rating}/5</strong>`),
+                                             $("<button>").addClass("btn btn-success").attr("data-yelpid",thisRestaurant.yelp_id).text("Show Details")
+                                                .on('click', async function(event){
+                                                   
+                                                    console.log("hi");
+                                                    let yelp_id = $(event.currentTarget).data("yelpid");
+                                                    //console.log(yelp_id);
+                                                    loadInfoModal(yelp_id, thisRestaurant.added_at);
+                                                })
+                                    )
+                            )
+                    );
+              
+                infowindow.setContent(contentDiv.clone(true)[0]);
                 infowindow.open(map, marker);
+
+                lastOpenedInfoWindow = infowindow;
             }
         })(marker, restuarant));
         markers.push(marker);
     }     
     
-    let listener = await google.maps.event.addListener(map, "idle", function () {
+    // let listener = await google.maps.event.addListener(map, "idle", function () {
+    //     fitMarkersInBounds(map, markers);
+    //     google.maps.event.removeListener(listener);
+    // });
+    if(markers.length > 0 ){
         fitMarkersInBounds(map, markers);
-        google.maps.event.removeListener(listener);
-    });
-
-    panToRestaurantClick(map, markers); //When restaurant div is clicked, move tha map's focus and zoom into it
+        panToRestaurantClick(map, markers); //When restaurant div is clicked, move tha map's focus and zoom into it
+    }
 }
 
 function fitMarkersInBounds(map, markers) {
-    let propertiesLatLng = [];
-    let bounds = new google.maps.LatLngBounds();
     
-    let coordArray = [];
+    let bounds = new google.maps.LatLngBounds();
     
     for(const marker of markers){
         bounds.extend(marker.position);
     }
-    if(markers.length > 0){
-        if (markers.length === 1) {
-            map.panTo(markers[0].getPosition());
-            map.setZoom(14);
 
-        } else if ($(window).width() > 550) {
-            map.fitBounds(bounds,
-                { //padding
-                    top: 30,
-                    left: 10, //panelWidth
-                    bottom: 10,
-                    right: 10
-                });
-            map.panToBounds(bounds);
-        } else {
-            map.fitBounds(bounds);
-        }
-    }
+    map.fitBounds(bounds,
+        { //padding
+            top: 30,
+            left: 10, //panelWidth
+            bottom: 10,
+            right: 10
+        });
+    map.panToBounds(bounds);        
+    
 }
 
 function panToRestaurantClick(map, markers) {
-    let elements = document.getElementsByClassName("restaurantContrainer");
+    let elements = document.getElementsByClassName("restaurantContainer");
    
     for (let i = 0; i < elements.length; i++) {
-        elements[i].setAttribute("markerIndex", i);
 
+        elements[i].setAttribute("markerIndex", i);
         elements[i].addEventListener("click", function (e) {
             google.maps.event.trigger(markers[e.currentTarget.getAttribute("markerIndex")], 'click');
             map.setZoom(15);
+            
             map.panTo(markers[e.currentTarget.getAttribute("markerIndex")].getPosition());
             // if ($(window).width() > 550) {
             //     map.panBy(((mapWidth / 2) - ((mapWidth - panelWidth) / 2)), 0);
@@ -151,8 +147,6 @@ function panToRestaurantClick(map, markers) {
         });
     }
 }
-
-
 
 
 

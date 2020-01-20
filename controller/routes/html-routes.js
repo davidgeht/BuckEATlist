@@ -26,11 +26,23 @@ htmlRoutes.get('/home', isAuthenticated,
 async function(req, res, next){
     let homeObj = {};
     console.log(req.user);
-    homeObj.restaurants = await mbuckeatlist.getBucketListExpanded(req.user.id);
+    homeObj.restaurants = await mbuckeatlist.getBucketlistExpanded(req.user.id);
     homeObj.username = req.user.firstname;
     homeObj.title = 'My buckEATlist';
     console.log('trying to call homepage');
     res.render('home', homeObj);
+    
+});
+
+htmlRoutes.get('/noms-map', isAuthenticated, 
+async function(req, res, next){
+    let modelObj = {};
+    
+    modelObj.restaurants = await mbuckeatlist.getVisited(req.user.id);
+    modelObj.username = req.user.firstname;
+    modelObj.title = 'My Noms Map';
+    
+    res.render('visited', modelObj);
     
 });
 

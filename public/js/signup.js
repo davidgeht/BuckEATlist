@@ -7,7 +7,7 @@ $("#signupForm").on("submit", event => {
     let firstName = $("#firstname-input").val().trim();
     let lastName = $("#lastname-input").val().trim();
     
-    let alert = $("#alert");
+    let alert = $("label.alert");
 
     if(!email || !pw || !firstName || !lastName){
         alert.text("Please enter all required information");
