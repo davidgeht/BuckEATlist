@@ -48,7 +48,8 @@ async function(req, res, next){
 
 htmlRoutes.get('/search', isAuthenticated, 
 function(req, res, next){
-    res.render('search');
+    let modelObj = {username: req.user.firstname, title: "Search"};
+    res.render('search', modelObj);
     
 });
 
