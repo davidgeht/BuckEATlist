@@ -1,4 +1,4 @@
-USE DATABASE buckeatlist_db;
+USE DATABASE et85mzsa1tojmca9;
 
 
 INSERT INTO Categories(title,alias) VALUES ('African','african');
