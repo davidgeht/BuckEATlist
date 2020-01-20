@@ -25,11 +25,11 @@ htmlRoutes.get('/signup', function(req, res){
 htmlRoutes.get('/home', isAuthenticated, 
 async function(req, res, next){
     let homeObj = {};
-    console.log(req.user);
+
     homeObj.restaurants = await mbuckeatlist.getBucketlistExpanded(req.user.id);
     homeObj.username = req.user.firstname;
     homeObj.title = 'My buckEATlist';
-    console.log('trying to call homepage');
+   
     res.render('home', homeObj);
     
 });
