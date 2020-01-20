@@ -5,17 +5,21 @@ let connection;
 
 if(process.env.JAWSDB_URL){
     connection = mysql.createConnection(process.env.JAWSDB_URL)
-  } 
-    else {
+}else {      
+  if(!require('./testDB')){
+    //local db
       connection = mysql.createConnection({
         host: "localhost",
         port: 3306,
         user: "root",
-        password: "30112055",
+        password: "mqEl3Ar4pQi^JcE4",
         database: "buckeatlist_db"
       });
-    };
-
+  }else{
+    //test DB
+    connection = mysql.createConnection(require('./testDB'));
+  }
+};
 // make connection
 connection.connect(function(err){
     if(err){

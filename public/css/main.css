@@ -27,3 +27,33 @@ header logo{
 header .profile{
     padding-right: 10px;
 }
+#alert{
+    display:none;
+    white-space:pre-line;
+    color:red;
+}
+
+.listColumn{
+    overflow-y: auto;
+}
+
+.restaurantContrainer{
+    margin-bottom: 5px;
+    border: 2px solid rgb(206, 206, 206);
+    border-radius: 5px;
+    padding: 10px 0 10px 20px;    
+}
+.restaurantContrainer:hover{
+    border-color: green;
+    cursor: pointer;
+}
+
+.restName{
+    text-align:left;
+    margin-right:20px;
+    padding-left:0;
+    overflow-x: hidden;
+}
+.restaurantContrainer button{
+    margin-right: 15px;
+}

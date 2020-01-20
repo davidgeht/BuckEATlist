@@ -12,9 +12,9 @@
     
 	<body> 
         <header class="navbar navbar-expand flex-column flex-md-row main">
-            <logo class="col-2">
-                <img src="" alt="buckEATlist">
-            </logo>
+            <logo class="">
+                <a href="/home"><img src="" alt="buckEATlist"></a>
+             </logo>
             <h2 class="offset-2 col-4">Welcome to buckEATlist</h2>
         </header>
 
@@ -23,24 +23,24 @@
               <div class="col-md-6 offset-md-3">
                     <h2>Member Signup</h2>
                     <div>
-                        <label id="alert" hidden="true"></label>
+                        <label id="alert"></label>
                     </div>
-                    <form class="signup">
+                    <form class="signup" id="signupForm">
                         <div class="form-group">
                             <label for="signupEmail">Email Address</label>
-                            <input type="email" class="form-control" id="email-input" placeholder="Email">
+                            <input type="email" class="form-control" id="email-input" placeholder="Email" required>
                         </div>
                         <div class="form-group">
                             <label form="signupFirstName">First Name</label>
-                            <input type="text" class="form-control" id="firstname-input" placeholder="John">
+                            <input type="text" class="form-control" id="firstname-input" placeholder="John" required>
                         </div>                        
                         <div class="form-group">
                             <label form="signupFirstName">Last Name</label>
-                            <input type="text" class="form-control" id="lastname-input" placeholder="Smith">
+                            <input type="text" class="form-control" id="lastname-input" placeholder="Smith" required>
                         </div>
                         <div class="form-group">
                             <label for="signupPassword">Password</label>
-                            <input type="password" class="form-control" id="password-input" placeholder="Password">
+                            <input type="password" class="form-control" id="password-input" placeholder="Password" required>
                         </div>
                         <button type="submit" class="btn btn-submit">Sign Up</button>
                     </form>
@@ -50,6 +50,7 @@
                 </div>
             </div>
         </div>
-
+        <script src="../js/helpers/validateSignup.js"></script>
+        <script src="../js/signup.js"></script>
 	</body>
 </html>

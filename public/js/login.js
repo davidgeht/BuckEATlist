@@ -16,16 +16,21 @@ $(document).ready(function(){
         }
 
         let loginObj = {
-            email: email,
+            username: email,
             password: pw
         };
         
         $.post("/api/login", loginObj)
-        .then(function () {
+        .then(function (response) {
+            console.log('And the response is:... ',response)
             window.location.replace("/home");        
         }).catch(err => {
-            alert.text(err);
-            alert.show();
+            console.log(err.status);
+            if (err.status === 401) {
+                //console.log('ready to send error')
+                alert.text('Invalid user or password');
+                alert.show();
+            }
         });
     });
 });

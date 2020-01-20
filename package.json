@@ -4,7 +4,7 @@
   "description": "Restaurant bucket list ",
   "main": "server.js",
   "scripts": {
-    "test": "mocha"
+    "test": "node ./node_modules/mocha/bin/mocha"
   },
   "repository": {
     "type": "git",
@@ -17,18 +17,26 @@
   },
   "homepage": "https://github.com/davidgeht/untitled-project2#readme",
   "dependencies": {
+    "aws-sdk": "^2.603.0",
+    "axios": "^0.19.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "chai-http": "^4.3.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0",
-    "dotenv": "^8.2.0",
+    "express-session": "^1.17.0",
+    "mysql": "^2.17.1",
+    "mysql2": "^2.1.0",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
     "zomato-api": "^0.1.2"
-    "aws-sdk": "^2.603.0",
-    "mysql2": "^2.1.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "eslint": "^6.8.0",
+    "jquery": "^3.4.1",
+    "jsdom": "^16.0.0",
     "mocha": "^7.0.0",
     "rewire": "^4.0.1"
   }
