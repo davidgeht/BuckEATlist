@@ -44,7 +44,7 @@ CREATE TABLE Bucketlist (
   visited boolean NOT NULL ,
   user_rating float,
   user_review varchar(4000),
-  date_visited DATE defualt CURRENT_DATE
+  date_visited DATE default CURRENT_DATE
 );
 
 CREATE TABLE Restaurant (

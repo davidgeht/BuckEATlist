@@ -29,6 +29,21 @@ class Bucketlist{
 
     }
 
+    getBucketlistAll(user_id){
+        return new Promise((resolve, reject)=>{
+            let query =`SELECT yelp_id FROM Bucketlist b 
+            JOIN Restaurant r ON b.rest_id = r.id
+            WHERE b.user_id ='${user_id}';`
+
+            this.connection.query(query,(err,res)=>{
+                if(err) throw err;
+                // this.connection.end();
+                resolve(res);
+            });
+        });
+
+    }
+
     getBucketlistExpanded(user_id){
         return new Promise((resolve, reject)=>{
             let query =`SELECT B.id, rest_id, visited, added_at, name, yelp_id, rating, price, lon, lat, city_name, address, website, review_count FROM Bucketlist as B
@@ -69,9 +84,9 @@ class Bucketlist{
             })
         })
     }
-    updateRes(id){
+    updateRes(id,review,rating,date){
         return new Promise((resolve, reject)=>{
-            let query =`UPDATE Bucketlist SET visited = 1 WHERE id=${id};`;
+            let query =`UPDATE Bucketlist SET visited = 1, user_review='${review}',user_rating='${rating}' , date_visited='${date}' WHERE id=${id};`;
             this.connection.query(query,(err,res)=>{
                 if (err) throw err;
                 // this.connection.end();
