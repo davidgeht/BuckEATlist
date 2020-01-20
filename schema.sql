@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS buckeatlist_db ;
+DROP DATABASE IF EXISTS et85mzsa1tojmca9;
 
-CREATE DATABASE buckeatlist_db;
+CREATE DATABASE et85mzsa1tojmca9;
 
-USE buckeatlist_db;
+USE et85mzsa1tojmca9;
 
 CREATE TABLE Users (
   id int PRIMARY KEY AUTO_INCREMENT,
@@ -34,15 +34,17 @@ CREATE TABLE Provinces (
   id int PRIMARY KEY AUTO_INCREMENT,
   name varchar(255),
   country_id int,
-  created_at timestamp
+  created_at timestamp DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Bucketlist (
   id int PRIMARY KEY AUTO_INCREMENT,
   user_id int,
   rest_id int,
-  visited boolean,
-  added_at timestamp DEFAULT CURRENT_TIMESTAMP
+  visited boolean NOT NULL ,
+  user_rating float,
+  user_review varchar(4000),
+  date_visited DATE default CURRENT_DATE
 );
 
 CREATE TABLE Restaurant (
@@ -61,11 +63,27 @@ CREATE TABLE Restaurant (
 
 CREATE TABLE Image (
   id int PRIMARY KEY AUTO_INCREMENT,
+  bucketlist_id int,
   user_id int,
   rest_id int,
-  created_at timestamp,
+  created_at timestamp default current_timestamp,
   img_location varchar(255)
 );
+
+CREATE TABLE Categories(
+id int PRIMARY KEY AUTO_INCREMENT,
+title varchar (255),
+alias varchar (255)
+);
+
+
+ALTER TABLE Image ADD FOREIGN key (Bucketlist_id) REFERENCES Bucketlist (id);
+
+ALTER TABLE Users ADD FOREIGN KEY (homecity_id) REFERENCES Cities (id);
+
+ALTER TABLE Provinces ADD FOREIGN KEY (country_id) REFERENCES Countries (id);
+
+ALTER TABLE Cities ADD FOREIGN KEY (province_id) REFERENCES Provinces (id);
 
 CREATE TABLE Cuisine (
   id int PRIMARY KEY AUTO_INCREMENT,
@@ -74,6 +92,7 @@ CREATE TABLE Cuisine (
   title varchar(255) not null,
   created_at timestamp default CURRENT_TIMESTAMP
 );
+ALTER TABLE Cuisine ADD FOREIGN KEY (catergory_id) REFERENCES Categories (id);
 
 ALTER TABLE Bucketlist ADD FOREIGN KEY (user_id) REFERENCES Users (id);
 

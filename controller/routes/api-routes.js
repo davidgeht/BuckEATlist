@@ -5,6 +5,7 @@ const multer = require('multer');
 const upload = multer({storage: multer.memoryStorage()});
 const bcrypt = require("bcryptjs");
 const path = require("path");
+const isAuthenticated = require("../isAuthenticated");
 const User = require("../../model/classes/user"); // TBD the model files
 const Bucketlist = require("../../model/classes/bucketlist");
 const Restaurant = require("../../model/classes/restaurant");
@@ -43,11 +44,6 @@ let hash = async function(password) {
     return hash;
 }
 
-let test = async function(){
-    let result1 = await zomato.searchRestaurantsByCoord(-79.413449,43.778126,100);
-    console.log('result1');
-    console.log(result1.data.restaurants);
-}
 
 var apiRoutes = express.Router();
 
@@ -70,7 +66,7 @@ apiRoutes.post('/api/signup', checkUserExists, async function(req, res){
 });
 
 
-apiRoutes.post('/api/search/restaurantsNearby', async function(req, res, next){
+apiRoutes.post('/api/search/restaurantsNearby', isAuthenticated, async function(req, res, next){
     let lat = req.body.latitude;
     let lon = req.body.longitude;
     let radius = req.body.radius;
@@ -86,7 +82,7 @@ apiRoutes.post('/api/search/restaurantsNearby', async function(req, res, next){
     let results = response.data.businesses;
     //  make a call for the user, and verify if he alrady has a resto in the bucketlist. Add a boolean to the output.
     let userId = req.user.id;   
-    let userBuckL = await bucketlist.getBucketlist(userId);
+    let userBuckL = await bucketlist.getBucketlistAll(userId);
     let buckIds = [];
     for (buckItem of userBuckL) {
         buckIds.push(buckItem.yelp_id)
@@ -103,7 +99,7 @@ apiRoutes.post('/api/search/restaurantsNearby', async function(req, res, next){
 });
 
 
-apiRoutes.post('/api/search/restaurants', async function(req, res){
+apiRoutes.post('/api/search/restaurants', isAuthenticated, async function(req, res){
     let location = req.body.location;
     let term = req.body.term;
     let response;
@@ -118,7 +114,7 @@ apiRoutes.post('/api/search/restaurants', async function(req, res){
     let results = response.data.businesses;
     // call to check if the rest is already in the bucketlist
     let userId = req.user.id;   
-    let userBuckL = await bucketlist.getBucketlist(userId);
+    let userBuckL = await bucketlist.getBucketlistAll(userId);
     let buckIds = [];
     for (buckItem of userBuckL) {
         buckIds.push(buckItem.yelp_id)
@@ -135,7 +131,7 @@ apiRoutes.post('/api/search/restaurants', async function(req, res){
 });
 
 
-apiRoutes.post('/api/buckeatlist/add', async function(req, res){
+apiRoutes.post('/api/buckeatlist/add', isAuthenticated, async function(req, res){
     
     let userId = req.user.id;
     let name = req.body.name.replace("'","''");
@@ -166,7 +162,7 @@ apiRoutes.post('/api/buckeatlist/add', async function(req, res){
 });
 
 
-apiRoutes.get('/api/users/buckeatlist', function(req, res){
+apiRoutes.get('/api/users/buckeatlist', isAuthenticated, function(req, res){
     let userId = req.user.id;
     bucketlist.getBucketlistExpanded(userId)
     .then(function(allRest){
@@ -177,7 +173,7 @@ apiRoutes.get('/api/users/buckeatlist', function(req, res){
 });
 
 
-apiRoutes.get('/api/user/visited', async function(req, res){
+apiRoutes.get('/api/user/visited', isAuthenticated, async function(req, res){
     let userId = req.user.id;
     let response = await bucketlist.getVisited(userId);
     console.log(response);
@@ -185,7 +181,7 @@ apiRoutes.get('/api/user/visited', async function(req, res){
 });
 
 
-apiRoutes.get('/api/restaurants/:id', async function(req, res){
+apiRoutes.get('/api/restaurants/:id', isAuthenticated, async function(req, res){
     let businessId = req.params.id;
     let response = await yelp.getRestoDetail(businessId);
     console.log(response.data);
@@ -217,7 +213,7 @@ apiRoutes.post('/api/checkoffRestaurant/:bucketid',upload.array('files',5), asyn
     res.status('200').send('Updated successfully');
 });
 
-apiRoutes.post('/api/deleteRestaurant/:id', async function(req, res){
+apiRoutes.post('/api/deleteRestaurant/:id', isAuthenticated, async function(req, res){
     let dbId = req.params.id;
     await bucketlist.delRest(dbId);
     res.status('200').send('Deleted successfully');
