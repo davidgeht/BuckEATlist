@@ -7,7 +7,7 @@ $(document).ready(function(){
         let email = $("#email-input").val().trim();
         let pw = $("#password-input").val().trim();
 
-        let alert = $("#alert");
+        let alert = $("label.alert");
 
         if(!email || !pw){
             alert.text("Please enter your email and password");
