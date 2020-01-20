@@ -3,6 +3,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const path = require("path");
+const isAuthenticated = require("../isAuthenticated");
 const User = require("../../model/classes/user"); // TBD the model files
 const Bucketlist = require("../../model/classes/bucketlist");
 const Restaurant = require("../../model/classes/restaurant");
@@ -68,7 +69,7 @@ apiRoutes.post('/api/signup', checkUserExists, async function(req, res){
 });
 
 
-apiRoutes.post('/api/search/restaurantsNearby', async function(req, res, next){
+apiRoutes.post('/api/search/restaurantsNearby', isAuthenticated, async function(req, res, next){
     let lat = req.body.latitude;
     let lon = req.body.longitude;
     let radius = req.body.radius;
@@ -101,7 +102,7 @@ apiRoutes.post('/api/search/restaurantsNearby', async function(req, res, next){
 });
 
 
-apiRoutes.post('/api/search/restaurants', async function(req, res){
+apiRoutes.post('/api/search/restaurants', isAuthenticated, async function(req, res){
     let location = req.body.location;
     let term = req.body.term;
     let response;
@@ -133,7 +134,7 @@ apiRoutes.post('/api/search/restaurants', async function(req, res){
 });
 
 
-apiRoutes.post('/api/buckeatlist/add', async function(req, res){
+apiRoutes.post('/api/buckeatlist/add', isAuthenticated, async function(req, res){
     
     let userId = req.user.id;
     let name = req.body.name.replace("'","''");
@@ -164,7 +165,7 @@ apiRoutes.post('/api/buckeatlist/add', async function(req, res){
 });
 
 
-apiRoutes.get('/api/users/buckeatlist', function(req, res){
+apiRoutes.get('/api/users/buckeatlist', isAuthenticated, function(req, res){
     let userId = req.user.id;
     bucketlist.getBucketlistExpanded(userId)
     .then(function(allRest){
@@ -175,7 +176,7 @@ apiRoutes.get('/api/users/buckeatlist', function(req, res){
 });
 
 
-apiRoutes.get('/api/user/:id/visited', async function(req, res){
+apiRoutes.get('/api/user/:id/visited', isAuthenticated, async function(req, res){
     let userId = req.user.id;
     let response = await bucketlist.getVisited(userId);
     console.log(response);
@@ -183,20 +184,23 @@ apiRoutes.get('/api/user/:id/visited', async function(req, res){
 });
 
 
-apiRoutes.get('/api/restaurants/:id', async function(req, res){
+apiRoutes.get('/api/restaurants/:id', isAuthenticated, async function(req, res){
     let businessId = req.params.id;
     let response = await yelp.getRestoDetail(businessId);
     console.log(response.data);
     res.json(response.data);
 });
 
-apiRoutes.post('/api/checkoffRestaurant/:id', async function(req, res){
+apiRoutes.post('/api/checkoffRestaurant/:id', isAuthenticated, async function(req, res){
     let dbId = req.params.id;
+    let review = req.body.review;
+    let rating = req.body.rating;
+    let photo = req.body.photo;
     await bucketlist.updateRes(dbId);
     res.status('200').send('Updated successfully');
 });
 
-apiRoutes.post('/api/deleteRestaurant/:id', async function(req, res){
+apiRoutes.post('/api/deleteRestaurant/:id', isAuthenticated, async function(req, res){
     let dbId = req.params.id;
     await bucketlist.delRest(dbId);
     res.status('200').send('Deleted successfully');
