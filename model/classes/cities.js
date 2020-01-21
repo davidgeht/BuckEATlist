@@ -11,7 +11,7 @@ class Cities{
 
             this.connection.query(query,(err,res)=>{
                 if (err) throw err;
-                // this.connection.end();
+              
                 resolve(res)
 
             })
@@ -23,7 +23,7 @@ class Cities{
 
             this.connection.query(query,(err,res)=>{
                 if (err) throw err;
-                // this.connection.end();
+                
                 resolve(res);
             })
         })
@@ -32,12 +32,33 @@ class Cities{
         return new Promise((resolve,reject)=>{
             let query =`SELECT id FROM Cities WHERE name='${name}'; `;
 
-            this.connection.query(query,(err,res)=>{
+            this.connection.query(query,(err,res)=>{ 
             if (err) throw err;
-            // this.connection.end();
+          
             resolve(res);
             })
         }) 
+    }
+    
+    updateById(id,name,province_id){
+        return new Promise((resolve,reject)=>{
+            let query=`UPDATE Cities Set name='${name}',province_id='${province_id}' WHERE id ='${id}';`;
+            this.connection.query(query,(err,res)=>{
+                if (err) throw err;
+                resolve(res);
+            })
+        })
+    }
+    delById(id){
+        return new Promise((resolve,reject)=>{
+            let query=`DELETE FROM Cities WHERE id='${id}';`;
+            this.connection.query(query,(err,res)=>{
+                if (err) throw err;
+                console.log(res +"has been deleted !");
+                resolve(res);
+            })
+
+        })
     }
     
 }

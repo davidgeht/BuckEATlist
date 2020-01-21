@@ -11,9 +11,7 @@ CREATE TABLE Users (
   emailaddress varchar(255),
   firstname varchar(255),
   lastname varchar(255),
-  fullname varchar(255),
   created_at timestamp default CURRENT_TIMESTAMP,
-  homecity_id int
 );
 
 CREATE TABLE Cities (
@@ -44,7 +42,7 @@ CREATE TABLE Bucketlist (
   visited boolean NOT NULL ,
   user_rating float,
   user_review varchar(4000),
-  date_visited DATE default CURRENT_DATE
+  date_visited timestamp default CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Restaurant (
@@ -92,7 +90,6 @@ CREATE TABLE Cuisine (
   title varchar(255) not null,
   created_at timestamp default CURRENT_TIMESTAMP
 );
-ALTER TABLE Cuisine ADD FOREIGN KEY (catergory_id) REFERENCES Categories (id);
 
 ALTER TABLE Bucketlist ADD FOREIGN KEY (user_id) REFERENCES Users (id);
 
