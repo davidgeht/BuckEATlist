@@ -51,6 +51,27 @@ class Cuisine {
             })
         })
     }
+    updateById(id,rest_id,alias,title){
+        return new Promise((resolve,reject)=>{
+            let query=`UPDATE Cuisine SET rest_id='${rest_id}', alias='${alias}',title='${title}' WHERE id='${id}';`;
+            this.connection.query(query,(err,res)=>{
+                if(err) throw err;
+                resolve(res);
+            })
+        })
+    }
+    delById(id){
+        return new Promise((resolve,reject)=>{
+        let query=`DELETE FROM Cuisine WHERE id='${id}';`;
+            this.connection.query(query,(err,res)=>{
+                if (err) throw err;
+                console.log(res +"has been deleted !");
+                resolve(res);
+            })
+
+        })
+
+    }
 }
 
 module.exports = Cuisine;

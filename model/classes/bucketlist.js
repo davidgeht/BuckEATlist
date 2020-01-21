@@ -120,7 +120,6 @@ class Bucketlist{
             let query =`DELETE FROM Bucketlist WHERE id='${id}';`;
             this.connection.query(query,(err,res)=>{
                 if (err) throw err;
-                // this.connection.end();
                 console.log(res +"has been deleted !");
                 resolve(res);
             });

@@ -40,8 +40,8 @@ class User {
     addNew(firstName, lastName, email, password){
         return new Promise((resolve, reject)=>{
 
-            let query =`INSERT into Users(encrypted_pw, emailaddress, firstname, lastname, fullname) 
-            VALUES ('${password}','${email}','${firstName}','${lastName}','${firstName} ${lastName}');`;
+            let query =`INSERT into Users(encrypted_pw, emailaddress, firstname, lastname) 
+            VALUES ('${password}','${email}','${firstName}','${lastName}');`;
 
             this.connection.query(query,(err,res)=>{
                 if (err) reject(err);
@@ -67,7 +67,26 @@ class User {
             });
         });
     }
-  
+    updateById(password,email,firstname,lastname){
+        return new Promise((resolve,reject)=>{
+            let query=`UPDATE Users SET encrypted_pw='${password}', emailaddress='${email}',firstname='${firstname}',lastname='${lastname}' WHERE id='${id}'`;
+            this.connection.query(query,(err,res)=>{
+                if (err) throw err;
+                resolve(res);
+            })
+        })
+    }
+    delById(id){
+        return new Promise((resolve,reject)=>{
+            let query=`DELETE FROM Users WHERE id='${id}';`;
+            this.connection.query(query,(err,res)=>{
+                if (err) throw err;
+                console.log(res +"has been deleted !");
+                resolve(res);
+            })
+
+        })
+    }
 }
 
 module.exports = User;

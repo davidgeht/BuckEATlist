@@ -23,6 +23,26 @@ class Provinces{
             })
         })
     }
+    updateById(id,name,country_id){
+        return new Promise((resolve,reject)=>{
+            let query=`UPDATE Provinces Set name='${name}', country_id ='${country_id}' WHERE id ='${id}';`;
+            this.connection.query(query,(err,res)=>{
+                if (err) throw err;
+                resolve(res);
+            })
+        })
+    }
+    delById(id){
+        return new Promise((resolve,reject)=>{
+            let query=`DELETE FROM Provinces WHERE id='${id}';`;
+            this.connection.query(query,(err,res)=>{
+                if (err) throw err;
+                console.log(res +"has been deleted !");
+                resolve(res);
+            })
+
+        })
+    }
 }
 
 module.exports=Provinces;
