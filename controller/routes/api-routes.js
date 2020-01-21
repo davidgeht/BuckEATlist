@@ -180,13 +180,9 @@ apiRoutes.get('/api/users/buckeatlist', isAuthenticated, async function(req, res
         //console.log('Rest ID: ', restaurant.rest_id);
         let allCuis = await cuisine.getByRest(restaurant.rest_id);
         //console.log('AllCuis: ', allCuis);
-        if (allCuis.length >= 1) {
-            let allCuisStr = allCuis[0].title;
-            for (i = 1; i < allCuis.length; i++) {
-                allCuisStr = allCuisStr + ', ' + allCuis[i].title;
-            }
+        if (allCuis.length > 0) {
             //console.log(allCuisStr);
-            restaurant.cuisines = allCuisStr;
+            restaurant.cuisines = allCuis.join(', ');
         } else {
             restaurant.cuisines = 'No info';
         }

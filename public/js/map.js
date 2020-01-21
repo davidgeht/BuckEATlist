@@ -287,7 +287,7 @@ async function createMarkers(restaurants, image) {
                             .append($("<div>").addClass("").attr("style",`background-image: url("${imageSource}")'`),
                                     $("<div>").addClass("restaurant-info")
                                     .append($("<h4>").addClass("address").text(JSON.parse(thisRestaurant.address).address1),
-                                             $("<p>").addClass("").html(`Cuisine: <strong>${categoriesStr}</strong>`),
+                                             $("<p>").addClass("").html(`Cuisine: <strong>${thisRestaurant.cuisines}</strong>`),
                                              $("<p>").addClass("").html(`Price: <strong>${thisRestaurant.price}</strong>`),
                                              $("<p>").addClass("").html(`Rating: <strong>${generateRatingGraphic(thisRestaurant.rating).get()[0].outerHTML}</strong>`),
                                              $("<button>").addClass("btn btn-success").attr("data-yelpid",thisRestaurant.visited?thisRestaurant.id:thisRestaurant.yelp_id).text("Show Details")
