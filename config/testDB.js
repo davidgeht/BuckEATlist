@@ -3,5 +3,6 @@ module.exports = {
     port: 3306,
     user: "k10z785h59k7vpca",
     password: "abjvtvv1x4faopxc",
-    database: "et85mzsa1tojmca9"
+    database: "et85mzsa1tojmca9",
+    connectionLimit: 100
 };

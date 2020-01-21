@@ -9,6 +9,7 @@ const isAuthenticated = require("../isAuthenticated");
 const User = require("../../model/classes/user"); // TBD the model files
 const Bucketlist = require("../../model/classes/bucketlist");
 const Restaurant = require("../../model/classes/restaurant");
+const Cuisine = require("../../model/classes/cuisine");
 const Zomato = require("../../api/zomato"); // TBD for API file
 const Yelp = require("../../api/yelp");
 //const City = require("TBD"); // TBD the city file
@@ -17,6 +18,7 @@ const passport = require("../../config/authConfigLocal");
 const saltRounds = 10;
 let user = new User();
 let bucketlist = new Bucketlist();
+let cuisine = new Cuisine();
 //let city = new City();
 let zomato = new Zomato();
 let yelp = new Yelp();
@@ -132,7 +134,7 @@ apiRoutes.post('/api/search/restaurants', isAuthenticated, async function(req, r
 
 
 apiRoutes.post('/api/buckeatlist/add', isAuthenticated, async function(req, res){
-    
+    console.log('Adding a restaurant to the bucketlist');
     let userId = req.user.id;
     let name = req.body.name.replace("'","''");
     let yelpId = req.body.id;
@@ -140,17 +142,25 @@ apiRoutes.post('/api/buckeatlist/add', isAuthenticated, async function(req, res)
     let price = req.body.price;
     let lon = req.body.coordinates.longitude;
     let lat = req.body.coordinates.latitude;
-    let cuisine = JSON.stringify(req.body.categories);
+    let cuisines = req.body.categories;
     let city = req.body.location.city;
     let address = JSON.stringify(req.body.location);
     let website = req.body.url;
     let reviewCount = req.body.review_count;
     let storedRest = await restaurant.getAllByYelpId(yelpId);
+    console.log('storedRest: ', storedRest);
     let id;
     if (storedRest.length < 1) {
+        console.log('new restaurant');
         await restaurant.addNew(name, yelpId, rating, price, lon, lat, city, address, website, reviewCount)
         let newRecord = await restaurant.getAllByYelpId(yelpId);
         id = newRecord[0].id;
+        console.log(cuisines);
+        // storing cuisines
+        for (c of cuisines) {
+            console.log('Adding cusine: ', c);
+            await cuisine.addNew(id, c.alias, c.title);
+        }
     } else {
         console.log(storedRest);
         id = storedRest[0].id;
@@ -162,21 +172,34 @@ apiRoutes.post('/api/buckeatlist/add', isAuthenticated, async function(req, res)
 });
 
 
-apiRoutes.get('/api/users/buckeatlist', isAuthenticated, function(req, res){
+apiRoutes.get('/api/users/buckeatlist', isAuthenticated, async function(req, res){
     let userId = req.user.id;
-    bucketlist.getBucketlistExpanded(userId)
-    .then(function(allRest){
-        //console.log(allRest)
-        res.send(allRest);
-    })
-    .catch(function(error){});
+    let allRest = await bucketlist.getBucketlistExpanded(userId);
+    // populating the cuisines (if present)
+    for (let restaurant of allRest) {
+        //console.log('Rest ID: ', restaurant.rest_id);
+        let allCuis = await cuisine.getByRest(restaurant.rest_id);
+        //console.log('AllCuis: ', allCuis);
+        if (allCuis.length >= 1) {
+            let allCuisStr = allCuis[0].title;
+            for (i = 1; i < allCuis.length; i++) {
+                allCuisStr = allCuisStr + ', ' + allCuis[i].title;
+            }
+            //console.log(allCuisStr);
+            restaurant.cuisines = allCuisStr;
+        } else {
+            restaurant.cuisines = 'No info';
+        }
+    }
+    //console.log(allRest);
+    res.send(allRest);
 });
 
 
 apiRoutes.get('/api/user/visited', isAuthenticated, async function(req, res){
     let userId = req.user.id;
     let response = await bucketlist.getVisited(userId);
-    
+    //console.log(response);
     res.json(response);
 });
 
@@ -191,11 +214,11 @@ apiRoutes.get('/api/bucketlist/:bucketid', isAuthenticated, async function(req,r
 apiRoutes.get('/api/restaurants/:id', isAuthenticated, async function(req, res){
     let businessId = req.params.id;
     let response = await yelp.getRestoDetail(businessId);
-   
+    //console.log(response.data);
     res.json(response.data);
 });
 
-apiRoutes.post('/api/checkoffRestaurant/:bucketid',upload.array('files',5), async function(req, res){
+apiRoutes.post('/api/checkoffRestaurant/:bucketid', isAuthenticated, upload.array('files',5), async function(req, res){
     let dbId = req.params.bucketid;
     let review = req.body.review;
     let date = req.body.date;    
