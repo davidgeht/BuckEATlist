@@ -2,7 +2,7 @@ const connection = require("../../config/connection");
 
 class Cuisine {
     constructor(){
-        this.connection = connection
+        this.connection = connection;
     }
     getAll(id){
         return new Promise((resolve,reject)=>{
@@ -41,3 +41,5 @@ class Cuisine {
         })
     }
 }
+
+module.exports = Cuisine;
