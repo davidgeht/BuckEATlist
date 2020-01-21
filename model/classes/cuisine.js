@@ -13,6 +13,17 @@ class Cuisine {
             })
         })
     }
+
+    getByRest(restId){
+        return new Promise((resolve,reject)=>{
+            let query=` SELECT * FROM Cuisine WHERE rest_id=${restId};`;
+            this.connection.query(query,(err,res)=>{
+                if(err) throw err;
+                resolve(res);
+            })
+        })
+    }
+
     getAllUser(id){
         return new Promise((resolve,reject)=>{
             let query =`SELECT C.id, rest_id, title, alias,name, yelp_id, rating, price, lon, lat, city_name, address, website, review_count FROM Cuisine as C 
@@ -28,10 +39,10 @@ class Cuisine {
     }
 
 
-    addNew(rest_id,category_id,alias,title){
+    addNew(rest_id, alias, title){
         return new Promise((resolve, reject)=>{
-            let query=`INSERT INTO Cuisine(rest_id,category_id, alias, title)
-            Values('${rest_id}','${category_id}','${alias}','${title}');`;
+            let query=`INSERT INTO Cuisine(rest_id, alias, title)
+            Values('${rest_id}','${alias}','${title}');`;
 
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
@@ -41,3 +52,5 @@ class Cuisine {
         })
     }
 }
+
+module.exports = Cuisine;
