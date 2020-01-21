@@ -28,10 +28,10 @@ class Cuisine {
     }
 
 
-    addNew(rest_id,category_id,alias,title){
+    addNew(rest_id,alias,title){
         return new Promise((resolve, reject)=>{
-            let query=`INSERT INTO Cuisine(rest_id,category_id, alias, title)
-            Values('${rest_id}','${category_id}','${alias}','${title}');`;
+            let query=`INSERT INTO Cuisine(rest_id, alias, title)
+            Values('${rest_id}','${alias}','${title}');`;
 
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
