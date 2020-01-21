@@ -21,7 +21,7 @@
             <div class="restaurantContainer row align-items-center">                               
                     <span class="restName col">{{name}}</span>
                     <div class="d-flex flex-row">
-                        <button type="button" class="btn btn-success info" data-toggle="modal" data-target="#restInfoModal" data-yelpid="{{yelp_id}}" data-addedat="{{added_at}}">Info</button>
+                        <button type="button" class="btn btn-success info" data-toggle="modal" data-target="#restInfoModal" data-id="{{id}}" data-addedat="{{added_at}}">Info</button>
                         {{!-- <button class="btn btn-success checkoff" data-name="{{name}}" data-id="{{id}}">Check off list</button>
                         <button class="btn btn-danger remove" data-id="{{id}}"><i class="fas fa-times"></i></button> --}}
                     </div>
@@ -42,10 +42,30 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Modal body text goes here.</p>                    
+                <div class="row pb-2">                    
+                    <div class="col-md-6">
+                        <label for="date">Date Visited:</label>
+                        <p name="date" class="date"></p>    
+                    </div>
+                    <div class="col-md-6">
+                        <label for="rating">Your Rating:</label>
+                        <p name="rating" class="rating"></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label for="review">Your Review:</label>
+                        <p name="review" class="review"></p>                   
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="photos">Photos:</label>
+                        <span name="photos" class="photos"></span>
+                    </div>                    
+                </div>                    
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="modalAddtoList">Add to My buckEATlist</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>

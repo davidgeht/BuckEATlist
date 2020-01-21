@@ -203,6 +203,11 @@ apiRoutes.get('/api/user/visited', isAuthenticated, async function(req, res){
     res.json(response);
 });
 
+apiRoutes.get('/api/bucketlist/:bucketid', isAuthenticated, async function(req,res){
+    let id = req.params.bucketid;
+    let response = await bucketlist.getOneEntry(id);
+    res.json(response.data);
+});
 
 apiRoutes.get('/api/restaurants/:id', isAuthenticated, async function(req, res){
     let businessId = req.params.id;
@@ -232,7 +237,7 @@ apiRoutes.post('/api/checkoffRestaurant/:bucketid', isAuthenticated, upload.arra
 
     //save review
 
-    await bucketlist.updateRes(dbId);
+    await bucketlist.updateRes(dbId,review,rating,date);
     res.status('200').send('Updated successfully');
 });
 

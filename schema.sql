@@ -20,14 +20,14 @@ CREATE TABLE Cities (
   id int PRIMARY KEY AUTO_INCREMENT,
   name varchar(255),
   province_id int,
-  created_at timestamp
+  created_at timestamp default CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Countries (
   id int PRIMARY KEY AUTO_INCREMENT,
   name varchar(255),
   currency varchar(255),
-  created_at timestamp
+  created_at timestamp default CURRENT_TIMESTAMP,
 );
 
 CREATE TABLE Provinces (
