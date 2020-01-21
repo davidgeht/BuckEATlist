@@ -18,7 +18,7 @@ class Bucketlist{
         return new Promise((resolve,reject)=>{
             let query=`SELECT user_id, rest_id, visited, user_rating, user_review, date_visited, name, yelp_id, rating, price, lon, lat, city_name, address, website, review_count FROM Bucketlist as B
             left join Restaurant as R on B.rest_id = R.id
-            WHERE id = '${id}'`;
+            WHERE B.id = '${id}'`;
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
                 resolve(res);
@@ -97,7 +97,9 @@ class Bucketlist{
     }
     updateRes(id,review,rating,date){
         return new Promise((resolve, reject)=>{
-            let query =`UPDATE Bucketlist SET visited = 1, user_review='${review}',user_rating='${rating}' , date_visited='${date}' WHERE id='${id}';`;
+           
+            let query =`UPDATE Bucketlist SET visited = 1, user_review='${review}',user_rating=${rating} , date_visited=CONVERT('${date}', DATETIME) WHERE id=${id};`;
+           
             this.connection.query(query,(err,res)=>{
                 if (err) throw err;
                 // this.connection.end();
