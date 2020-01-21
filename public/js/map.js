@@ -290,7 +290,7 @@ async function createMarkers(restaurants, image) {
                                              $("<p>").addClass("").html(`Cuisine: <strong>${categoriesStr}</strong>`),
                                              $("<p>").addClass("").html(`Price: <strong>${thisRestaurant.price}</strong>`),
                                              $("<p>").addClass("").html(`Rating: <strong>${generateRatingGraphic(thisRestaurant.rating).get()[0].outerHTML}</strong>`),
-                                             $("<button>").addClass("btn btn-success").attr("data-yelpid",thisRestaurant.yelp_id).text("Show Details")
+                                             $("<button>").addClass("btn btn-success").attr("data-yelpid",thisRestaurant.visited?thisRestaurant.id:thisRestaurant.yelp_id).text("Show Details")
                                                 .on('click', async function(event){
                                                    
                                                     console.log("hi");

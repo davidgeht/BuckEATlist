@@ -1,5 +1,8 @@
 function generateRatingGraphic(rating){
     if(rating > 5) return;
+    if(!rating ||( rating < 1)){
+        return $("<span>").text("no rating given");
+    }  
     let resultSpan = $("<span>");
     for(let i = 0; i < Math.floor(rating); i++){
         resultSpan.append($("<img>").attr("src","../content/images/bucket-rating-filled.png"));

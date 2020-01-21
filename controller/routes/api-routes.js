@@ -176,27 +176,29 @@ apiRoutes.get('/api/users/buckeatlist', isAuthenticated, function(req, res){
 apiRoutes.get('/api/user/visited', isAuthenticated, async function(req, res){
     let userId = req.user.id;
     let response = await bucketlist.getVisited(userId);
-    console.log(response);
+    
     res.json(response);
 });
 
 apiRoutes.get('/api/bucketlist/:bucketid', isAuthenticated, async function(req,res){
     let id = req.params.bucketid;
+    console.log(id, "i'm in the api call");
     let response = await bucketlist.getOneEntry(id);
-    res.json(response.data);
+    console.log(response);
+    res.json(response[0]);
 });
 
 apiRoutes.get('/api/restaurants/:id', isAuthenticated, async function(req, res){
     let businessId = req.params.id;
     let response = await yelp.getRestoDetail(businessId);
-    console.log(response.data);
+   
     res.json(response.data);
 });
 
 apiRoutes.post('/api/checkoffRestaurant/:bucketid',upload.array('files',5), async function(req, res){
     let dbId = req.params.bucketid;
     let review = req.body.review;
-    let date = new Date(req.body.date);
+    let date = req.body.date;    
     let rating = parseInt(req.body.rating);
     let files = [];
     
