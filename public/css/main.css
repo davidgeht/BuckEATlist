@@ -7,11 +7,23 @@
 .row{
     margin:0;
 }
+
 body {
+    background-position: center;
+    background-size: 95%;
     color: var(--txt-color-global);
     display: block;
-    background-color: #fffff2;
+    background-color: #ffffe0;
 }
+
+.log {
+    background-image: url("../content/images/4.png");
+}
+
+.sign {
+    background-image: url("../content/images/5.png");
+}
+
 
 a{
     color:unset;
@@ -31,6 +43,11 @@ header.main{
     text-shadow: 1px 1px #ff8c8c;
     text-align: justify;
 }
+
+h2 {
+    align-self: center;
+}
+
 .btn.btn-submit{
     background-color: var(--btn-color-submit);
     color: white;
@@ -63,6 +80,8 @@ header .profile{
 }
 
 .container {
+    background-image: url("../content/images/email-pattern.png");
+    text-shadow:1px 1px #bebebe;
     margin-top: 40px;
     display: block;
     padding: 0 55px;
@@ -75,6 +94,7 @@ header .profile{
     padding-right: 0;
     padding-top: 20px;
     padding-bottom: 20px;
+    image-resolution: 320px, 240px;
 }
 
 label.alert{
@@ -86,28 +106,32 @@ label.alert{
     padding-top: 20px;
     padding-bottom: 20px;
     margin-top: 20px;
-    background-color: white;
+    background-image: url("../content/images/Pattern.png");
     border-radius: 20px;
     box-shadow: 0 2px 5px 0 #7a3232, 0 2px 10px 0 #7a3232;
     margin-right: 20px;
     margin-left: 20px;
+    background-color: white;
 }
 #restList{      
     overflow-y: auto;   
 }
+
 #mapColumn{
     margin-top: 5px;
     background-color: white;
     padding:0;
     box-shadow: 0 2px 5px 0 #7a3232, 0 2px 10px 0 #7a3232;
+    margin-left: 10px;
 }
 
 .restaurantContainer{
     margin-bottom: 5px;
-    border: 1px solid rgb(206, 206, 206);
+    border: 1px solid #7a3232;;
     padding: 10px 0 10px 20px;  
     box-shadow: 0 2px 5px 0 rgb(206, 206, 206), 0 2px 10px 0 rgb(206, 206, 206);
-    border-radius: 25px;  
+    border-radius: 25px;
+    background-color: white;  
 }
 .restaurantContainer:hover{
     border-color: green;
@@ -124,10 +148,10 @@ label.alert{
 }
 
 .navbar-nav:first-child{
-    border-left: 1px solid lightgrey;
+    border-left: 1px solid #7a3232;
 }
 .nav-item{
-    border-right: 1px solid lightgrey;
+    border-right: 1px solid #7a3232;
 }
 
 #results{
@@ -142,6 +166,12 @@ label.alert{
 ​
 #searchForm {
     margin-top: 25px;
+}
+
+#searchBody {
+    background-color: #fffff2;
+    display: block;
+    min-height: 664px;
 }
 ​
 .navbar.navbar-expand.flex-md-row.justify-content-start.navbar-light.bg-light {
