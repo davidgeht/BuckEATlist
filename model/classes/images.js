@@ -20,7 +20,7 @@ class Image{
     }
     getImage(id){
         return new promises((resolve,reject)=>{
-            let query=`SELECT * FROM Image WHERE id='${id};`;
+            let query=`SELECT * FROM Image WHERE id='${id}';`;
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
                 // this.connection.end();
@@ -39,3 +39,5 @@ class Image{
         })
     }
 }
+
+module.exports=Image;

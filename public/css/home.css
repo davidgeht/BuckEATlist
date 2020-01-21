@@ -9,3 +9,7 @@ p.address{
 label{
     font-weight: bold;
 }
+
+body {
+    background-image: url("../content/images/3.png");
+}

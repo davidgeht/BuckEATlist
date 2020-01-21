@@ -23,15 +23,13 @@ $(document).ready(async function (){
 
     $("button.info").on("click", async function(event){
         event.stopPropagation();
-        let yelp_id = $(event.currentTarget).data("yelpid");
+        console.log("clicked on info button");
+        let id = $(event.currentTarget).data("id");
         let added_at = $(event.currentTarget).data("addedat");
-        console.log(yelp_id);
-        loadInfoModal(yelp_id,added_at);
+       
+        loadInfoModal(id);
     });
-
-    $("button.checkoff").on("click", function(event){
-        event.stopPropagation();       
-    });
+   
 });
 
 function loadMapMarkers(restaurants){
@@ -43,24 +41,28 @@ function loadMapMarkers(restaurants){
     setMarkers(restaurants, image);    
 }
 
-function loadInfoModal(yelp_id, added_at){
+function loadInfoModal(id){
 
-    $.get(`/api/restaurants/${yelp_id}`)
+    $.get(`/api/bucketlist/${id}`)
     .then(data =>{
+        console.log("got a response");
+        console.log(data);
+        populateRestaurantModal(data);
 
-        populateRestaurantModal(data,added_at);
-
-        $("#restInfoModal").modal({show:true,focus:true});
+        $("#restInfoModal").modal('show');
 
     });
-    $("#restInfoModal").modal({show:true,focus:true});
+    
 }
 
 function populateRestaurantModal(restaurant){
-    
-    $("#modalAddtoList").on('click',function (event) {
-        $.post(`/api/user/${userId}/buckeatlist/add`, restaurant)
-        .then();
-    });
+    let modal = $("#restInfoModal");
+
+    let date = restaurant.date_visited?moment(Date.parse(restaurant.date_visited)).format("MMMM D, YYYY"):"no date given";
+
+    modal.find("h5.modal-title").text(restaurant.name);
+    modal.find("p.review").text(restaurant.user_review || "no review submitted");
+    modal.find("p.rating").html(generateRatingGraphic(restaurant.user_rating));  
+    modal.find("p.date").text(date);
     
 }

@@ -44,7 +44,7 @@ CREATE TABLE Bucketlist (
   visited boolean NOT NULL ,
   user_rating float,
   user_review varchar(4000),
-  date_visited DATE default CURRENT_DATE
+  date_visited timestamp default CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Restaurant (
@@ -92,7 +92,6 @@ CREATE TABLE Cuisine (
   title varchar(255) not null,
   created_at timestamp default CURRENT_TIMESTAMP
 );
-ALTER TABLE Cuisine ADD FOREIGN KEY (catergory_id) REFERENCES Categories (id);
 
 ALTER TABLE Bucketlist ADD FOREIGN KEY (user_id) REFERENCES Users (id);
 

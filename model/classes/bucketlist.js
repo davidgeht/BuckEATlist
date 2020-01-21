@@ -4,6 +4,13 @@ class Bucketlist{
     constructor(){
         this.connection = connection;
     }
+
+    /** @description adds a new bucketlist entry.
+     * @param {number} user_id the id of the user.
+     * @param {number} rest_id local id of the restaurant.
+     * @param {boolean} visited wether or not the restaurant has been visisted.
+     * @return {json}
+     */
     addNew(user_id,rest_id,visited){
         return new Promise((resolve,reject)=>{
             let query=`INSERT into Bucketlist (user_id,rest_id,visited)VALUES(${user_id}, ${rest_id},${visited});`;
@@ -11,19 +18,19 @@ class Bucketlist{
                 if(err) throw err;
                 // this.connection.end();
                 resolve(res);
-            })
-        })
+            });
+        });
     }
     getOneEntry(id){
         return new Promise((resolve,reject)=>{
             let query=`SELECT user_id, rest_id, visited, user_rating, user_review, date_visited, name, yelp_id, rating, price, lon, lat, city_name, address, website, review_count FROM Bucketlist as B
             left join Restaurant as R on B.rest_id = R.id
-            WHERE id = '${id}'`;
+            WHERE B.id = '${id}'`;
             this.connection.query(query,(err,res)=>{
                 if(err) throw err;
                 resolve(res);
-            })
-        })
+            });
+        });
     }
     getBucketlist(user_id){
         return new Promise((resolve, reject)=>{
@@ -92,19 +99,21 @@ class Bucketlist{
                 if(err) throw err;
                 // this.connection.end();
                 resolve(res);
-            })
-        })
+            });
+        });
     }
     updateRes(id,review,rating,date){
         return new Promise((resolve, reject)=>{
-            let query =`UPDATE Bucketlist SET visited = 1, user_review='${review}',user_rating='${rating}' , date_visited='${date}' WHERE id='${id}';`;
+           
+            let query =`UPDATE Bucketlist SET visited = 1, user_review='${review}',user_rating=${rating} , date_visited=CONVERT('${date}', DATETIME) WHERE id=${id};`;
+           
             this.connection.query(query,(err,res)=>{
                 if (err) throw err;
                 // this.connection.end();
                 resolve(res);
-            })
+            });
 
-        })
+        });
     }
     delRest(id){
         return new Promise((resolve, reject)=>{
@@ -114,8 +123,8 @@ class Bucketlist{
                 // this.connection.end();
                 console.log(res +"has been deleted !");
                 resolve(res);
-            })
-        })
+            });
+        });
     }
 
 }

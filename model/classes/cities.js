@@ -11,7 +11,7 @@ class Cities{
 
             this.connection.query(query,(err,res)=>{
                 if (err) throw err;
-                // this.connection.end();
+              
                 resolve(res)
 
             })
@@ -23,7 +23,7 @@ class Cities{
 
             this.connection.query(query,(err,res)=>{
                 if (err) throw err;
-                // this.connection.end();
+                
                 resolve(res);
             })
         })
@@ -34,7 +34,7 @@ class Cities{
 
             this.connection.query(query,(err,res)=>{
             if (err) throw err;
-            // this.connection.end();
+          
             resolve(res);
             })
         }) 

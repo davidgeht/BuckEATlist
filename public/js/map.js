@@ -4,7 +4,218 @@ let lastOpenedInfoWindow = null;
 
 function initMap() {
      
-    map = new google.maps.Map(document.getElementById("map"));
+    map = new google.maps.Map(document.getElementById("map"), {
+          
+        styles: [
+            {
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#ebe3cd"
+                }
+              ]
+            },
+            {
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#fffff2"
+                }
+              ]
+            },
+            {
+              "elementType": "labels.text.stroke",
+              "stylers": [
+                {
+                  "color": "#7a3232"
+                }
+              ]
+            },
+            {
+              "featureType": "poi",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#dfd2ae"
+                }
+              ]
+            },
+            {
+              "featureType": "poi.business",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#fffff3"
+                }
+              ]
+            },
+            {
+              "featureType": "poi.business",
+              "elementType": "labels.text.stroke",
+              "stylers": [
+                {
+                  "color": "#ee7600"
+                }
+              ]
+            },
+            {
+              "featureType": "poi.park",
+              "elementType": "geometry.fill",
+              "stylers": [
+                {
+                  "color": "#a5b076"
+                },
+                {
+                  "visibility": "on"
+                }
+              ]
+            },
+            {
+              "featureType": "road",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#f5f1e6"
+                }
+              ]
+            },
+            {
+              "featureType": "road.arterial",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#fdfcf8"
+                }
+              ]
+            },
+            {
+            "featureType": "road.arterial",
+            "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#0c90ee"
+                }
+              ]
+            },
+            {
+                "featureType": "road.arterial",
+                "elementType": "labels.text.stroke",
+                  "stylers": [
+                    {
+                      "color": "#fffff2"
+                    }
+                  ]
+                },
+            {
+              "featureType": "road.highway",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#f8c967"
+                }
+              ]
+            },
+            {
+              "featureType": "road.highway",
+              "elementType": "geometry.stroke",
+              "stylers": [
+                {
+                  "color": "#e9bc62"
+                }
+              ]
+            },
+            {
+              "featureType": "road.highway.controlled_access",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#e98d58"
+                }
+              ]
+            },
+            {
+              "featureType": "road.highway.controlled_access",
+              "elementType": "geometry.stroke",
+              "stylers": [
+                {
+                  "color": "#7a3232"
+                }
+              ]
+            },
+            {
+              "featureType": "road.local",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#0c90ee"
+                }
+              ]
+            },
+            {
+                "featureType": "road.local",
+                "elementType": "labels.text.stroke",
+                "stylers": [
+                  {
+                    "color": "#ffffe0"
+                  }
+                ]
+              },
+            {
+              "featureType": "transit.line",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#dfd2ae"
+                }
+              ]
+            },
+            {
+              "featureType": "transit.line",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#8f7d77"
+                }
+              ]
+            },
+            {
+              "featureType": "transit.line",
+              "elementType": "labels.text.stroke",
+              "stylers": [
+                {
+                  "color": "#ebe3cd"
+                }
+              ]
+            },
+            {
+              "featureType": "transit.station",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#dfd2ae"
+                }
+              ]
+            },
+            {
+              "featureType": "water",
+              "elementType": "geometry.fill",
+              "stylers": [
+                {
+                  "color": "#b9d3c2"
+                }
+              ]
+            },
+            {
+              "featureType": "water",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#92998d"
+                }
+              ]
+            }
+          ]
+    });
 
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(initMapWithPosition); 
@@ -76,10 +287,10 @@ async function createMarkers(restaurants, image) {
                             .append($("<div>").addClass("").attr("style",`background-image: url("${imageSource}")'`),
                                     $("<div>").addClass("restaurant-info")
                                     .append($("<h4>").addClass("address").text(JSON.parse(thisRestaurant.address).address1),
-                                             $("<p>").addClass("").html(`Cuisine: <strong>${categoriesStr}</strong>`),
+                                             $("<p>").addClass("").html(`Cuisine: <strong>${thisRestaurant.cuisines}</strong>`),
                                              $("<p>").addClass("").html(`Price: <strong>${thisRestaurant.price}</strong>`),
                                              $("<p>").addClass("").html(`Rating: <strong>${generateRatingGraphic(thisRestaurant.rating).get()[0].outerHTML}</strong>`),
-                                             $("<button>").addClass("btn btn-success").attr("data-yelpid",thisRestaurant.yelp_id).text("Show Details")
+                                             $("<button>").addClass("btn btn-success").attr("data-yelpid",thisRestaurant.visited?thisRestaurant.id:thisRestaurant.yelp_id).text("Show Details")
                                                 .on('click', async function(event){
                                                    
                                                     console.log("hi");
