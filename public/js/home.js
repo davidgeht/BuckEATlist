@@ -105,8 +105,9 @@ function loadCheckOffModal(name,bucketID){
            
             formData.append("files", file);
         }
+        
         formData.append("review", review);
-        formData.append("date", date);
+        formData.append("date", moment(date).format());
         formData.append("rating", rating);
 
         $.ajax({
