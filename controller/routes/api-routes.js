@@ -220,6 +220,7 @@ apiRoutes.post('/api/checkoffRestaurant/:bucketid', isAuthenticated, upload.arra
     let dbId = req.params.bucketid;
     let review = req.body.review;
     let date = new Date(req.body.date);
+    console.log('Date: ', date);
     let rating = parseInt(req.body.rating);
     let files = [];
     
