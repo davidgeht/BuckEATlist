@@ -236,7 +236,7 @@ apiRoutes.post('/api/checkoffRestaurant/:bucketid', isAuthenticated, upload.arra
     for(const file of req.files){
         if(!file.mimetype.includes("image")) break;
         let photo = {size: file.size, name: file.originalname, type: file.mimetype};
-        file.push(photo);
+        files.push(photo);
     } 
     
     if(files.length > 0){

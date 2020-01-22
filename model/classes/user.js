@@ -1,7 +1,7 @@
 const connection = require('../../config/connection');
 
 class User {
-    constructor(){
+    constructor(){        
         this.connection = connection;
     }
     getAllUsers(){
@@ -17,7 +17,6 @@ class User {
     getUserByID(id){
         return new Promise((resolve,reject)=>{
             let query=`SELECT * from Users where id = ${id};`;
-
             this.connection.query(query, (err,res)=> {
                 if(err) throw err;
                 resolve(res);
@@ -28,7 +27,7 @@ class User {
     getUserByEmail(email){
         return new Promise((resolve,reject)=>{
             let query=`SELECT * from Users where emailaddress = '${email}';`;
-
+            
             this.connection.query(query, (err,res)=> {
                 if(err) throw err;               
                 resolve(res);
