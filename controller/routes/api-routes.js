@@ -177,13 +177,9 @@ apiRoutes.get('/api/users/buckeatlist', isAuthenticated, async function(req, res
         //console.log('Rest ID: ', restaurant.rest_id);
         let allCuis = await cuisine.getByRest(restaurant.rest_id);
         //console.log('AllCuis: ', allCuis);
-        if (allCuis.length >= 1) {
-            let allCuisStr = allCuis[0].title;
-            for (i = 1; i < allCuis.length; i++) {
-                allCuisStr = allCuisStr + ', ' + allCuis[i].title;
-            };
+        if (allCuis.length > 0) {
             //console.log(allCuisStr);
-            restaurant.cuisines = allCuisStr;
+            restaurant.cuisines = allCuis.map(e=>{return e.title}).join(', ');
         } else {
             restaurant.cuisines = 'No info';
         };
@@ -196,6 +192,18 @@ apiRoutes.get('/api/users/buckeatlist', isAuthenticated, async function(req, res
 apiRoutes.get('/api/user/visited', isAuthenticated, async function(req, res){
     let userId = req.user.id;
     let response = await bucketlist.getVisited(userId);
+    //console.log(response);
+    for (let restaurant of response) {
+        //console.log('Rest ID: ', restaurant.rest_id);
+        let allCuis = await cuisine.getByRest(restaurant.rest_id);
+        //console.log('AllCuis: ', allCuis);
+        if (allCuis.length > 0) {
+            //console.log(allCuisStr);
+            restaurant.cuisines = allCuis.map(e=>{return e.title}).join(', ');
+        } else {
+            restaurant.cuisines = 'No info';
+        }
+    }
     //console.log(response);
     res.json(response);
 });
@@ -225,8 +233,8 @@ apiRoutes.post('/api/checkoffRestaurant/:bucketid', isAuthenticated, upload.arra
     for(const file of req.files){
         if(!file.mimetype.includes("image")) break;
         let photo = {size: file.size, name: file.originalname, type: file.mimetype};
-        file.push(photo);
-    };
+        files.push(photo);
+    } 
     
     if(files.length > 0){
         //upload photos to AWS
