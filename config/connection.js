@@ -11,7 +11,8 @@ if(process.env.JAWSDB_URL){
         port: 3306,
         user: "root",
         password: "mqEl3Ar4pQi^JcE4",
-        database: "buckeatlist_db"
+        database: "buckeatlist_db",
+        connectionLimit: 100
       });
   }else{
     //test DB

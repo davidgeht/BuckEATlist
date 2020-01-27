@@ -1,4 +1,4 @@
-// Controller code
+// Code for api-routes
 
 const express = require("express");
 const multer = require('multer');
@@ -12,14 +12,11 @@ const Restaurant = require("../../model/classes/restaurant");
 const Cuisine = require("../../model/classes/cuisine");
 const Zomato = require("../../api/zomato"); // TBD for API file
 const Yelp = require("../../api/yelp");
-//const City = require("TBD"); // TBD the city file
-//const Restaurant = require("TBD"); // TBD the model files
 const passport = require("../../config/authConfigLocal");
 const saltRounds = 10;
 let user = new User();
 let bucketlist = new Bucketlist();
 let cuisine = new Cuisine();
-//let city = new City();
 let zomato = new Zomato();
 let yelp = new Yelp();
 let restaurant = new Restaurant();
@@ -32,7 +29,7 @@ let checkUserExists = function(req, res, next){
         if (!response) {
             next();
         } else {
-            console.log('sending error');
+            //console.log('sending error');
             res.status('400').send('ERROR: User with this email already exists');
         }
     })
@@ -88,14 +85,14 @@ apiRoutes.post('/api/search/restaurantsNearby', isAuthenticated, async function(
     let buckIds = [];
     for (buckItem of userBuckL) {
         buckIds.push(buckItem.yelp_id)
-    }
+    };
     for (result of results) {
         if (buckIds.includes(result.id)) {
             result.inBucketlist = true;
         } else {
             result.inBucketlist = false;
-        }
-    }
+        };
+    };
     //console.log(results.data);
     res.json(results);
 });
@@ -120,14 +117,14 @@ apiRoutes.post('/api/search/restaurants', isAuthenticated, async function(req, r
     let buckIds = [];
     for (buckItem of userBuckL) {
         buckIds.push(buckItem.yelp_id)
-    }
+    };
     for (result of results) {
         if (buckIds.includes(result.id)) {
             result.inBucketlist = true;
         } else {
             result.inBucketlist = false;
-        }
-    }
+        };
+    };
     console.log('Sending the response');
     res.json(results);
 });
@@ -160,12 +157,12 @@ apiRoutes.post('/api/buckeatlist/add', isAuthenticated, async function(req, res)
         for (c of cuisines) {
             console.log('Adding cusine: ', c);
             await cuisine.addNew(id, c.alias, c.title);
-        }
+        };
     } else {
         console.log(storedRest);
         id = storedRest[0].id;
         console.log(id);
-    }
+    };
     console.log('id = ', id);
     await bucketlist.addNew(userId, id, 0);    
     res.status('200').send('Item added');
@@ -185,8 +182,8 @@ apiRoutes.get('/api/users/buckeatlist', isAuthenticated, async function(req, res
             restaurant.cuisines = allCuis.map(e=>{return e.title}).join(', ');
         } else {
             restaurant.cuisines = 'No info';
-        }
-    }
+        };
+    };
     //console.log(allRest);
     res.send(allRest);
 });
@@ -243,7 +240,7 @@ apiRoutes.post('/api/checkoffRestaurant/:bucketid', isAuthenticated, upload.arra
         //upload photos to AWS
         //then
         //add to DB
-    }
+    };
 
     //save review
 
